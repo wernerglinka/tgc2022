@@ -1,0 +1,49 @@
+.section-home-banner {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 20vh;
+  position: relative;
+
+  h1 {
+    color: #000;
+    font-family: "Roboto Condensed", arial, sans-serif;
+    font-weight: 700;
+    font-size: 10vw;
+    letter-spacing: -0.05em;
+    margin: 0;
+  }
+  .sub-title {
+    color: #717999;
+    font-size: 5vw;
+    font-weight: 700;
+    margin: -100px -50px 0 0;
+    text-align: right;
+  }
+  .scroll-hint {
+    display: block;
+    height: 50px;
+    width: 50px;
+    margin: 0 auto;
+
+    svg {
+      stroke: #DCDEE6;
+    fill: transparent;
+    transition: stroke .5s ease-in-out;
+    }
+    
+
+    &:hover svg {
+      stroke: #717999;
+    }
+  }
+
+  #banner-bottom {
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+  }
+
+}

@@ -1,0 +1,37 @@
+{
+  "menu": [
+    {
+      "icon": "house",
+      "label": "Go Home",
+      "description": "Where it all starts.",
+      "url": "/",
+      "submenuID": "",
+      "submenuClass": "",
+      "isButton": false,
+      "buttonClass": "",
+      "isExternal": false
+    },
+    {
+      "icon": "image",
+      "label": "Components",
+      "description": "Explore all components.",
+      "url": "/components",
+      "submenuID": "",
+      "submenuClass": "",
+      "isButton": false,
+      "buttonClass": "",
+      "isExternal": false
+    },
+    {
+      "icon": "database",
+      "label": "Go Apple",
+      "description": "Example of an external link in the main menu.",
+      "url": "https://apple.com",
+      "submenuID": "",
+      "submenuClass": "",
+      "isButton": false,
+      "buttonClass": "primary",
+      "isExternal": true
+    }
+  ]
+}

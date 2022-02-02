@@ -1,0 +1,2 @@
+[build]
+  environment = { PRISM_THEME="default" }

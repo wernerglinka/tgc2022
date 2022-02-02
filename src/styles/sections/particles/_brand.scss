@@ -1,0 +1,38 @@
+#brand {
+  position: relative;
+  z-index: 3000;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  a {
+    display: block;
+    cursor: pointer;
+    color: #000;
+    font-family: "Roboto Condensed", arial, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+}
+
+// deactivate the home link when on home page
+[pageName="home"] {
+  
+  #brand {
+    cursor: default;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    
+    a {
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+
+  &.is-scrolling #brand {
+    opacity: 1;
+  }
+}
+

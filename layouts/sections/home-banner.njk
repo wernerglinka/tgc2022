@@ -1,0 +1,18 @@
+{% from "../partials/text.njk" import text %}
+{% from "../partials/icon.njk" import icon %}
+
+{# this section receives props params and site #}
+
+<section class="section-home-banner {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  <div class="content">
+    {% set info = params %}
+
+    <div class="prose">
+      {{ text(info)}}
+    </div>
+
+    <a class="scroll-hint" href="#banner-bottom">{{ icon("arrow-down") }}</a>
+
+  </div>
+  <span id="banner-bottom"></span>
+</section>
