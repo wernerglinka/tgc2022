@@ -2,9 +2,18 @@
 @import "./normalize";
 @import "./typography";
 @import "./transitions";
-
-
 @import "./prism";  // overwrites for prism syntax highlights
+
+@import "./sections/particles/ctas";
+@import "./sections/particles/responsive-image";
+@import "./sections/particles/animations";
+@import "./sections/particles/video";
+@import "./sections/particles/audio";
+@import "./sections/particles/overlay";
+@import "./sections/particles/brand";
+@import "./sections/particles/hamburger";
+@import "./sections/particles/overlay";
+@import "./sections/particles/to-top-arrow";
 
 @import "./sections/header";
 @import "./sections/footer";
@@ -16,13 +25,6 @@
 @import "./sections/media";
 @import "./sections/intro";
 @import "./sections/two-columns";
-@import "./sections/particles/ctas";
-@import "./sections/particles/responsive-image";
-@import "./sections/particles/animations";
-@import "./sections/particles/video";
-@import "./sections/particles/audio";
-@import "./sections/particles/overlay";
-@import "./sections/particles/brand";
-@import "./sections/particles/hamburger";
-@import "./sections/particles/overlay";
-@import "./sections/particles/to-top-arrow";
+@import "./sections/customers";
+
+

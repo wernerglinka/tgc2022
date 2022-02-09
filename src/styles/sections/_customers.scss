@@ -1,0 +1,29 @@
+.section-customers {
+  .headline-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  h2 {
+    display: inline-block;
+    font-size: 20px;
+    text-align: center;
+    padding-bottom: 5px;
+    border-bottom: 2px solid red;
+  }
+  .splide__arrows,
+  .splide__pagination {
+    display: none;
+  }
+  .splide__track {
+    height: 100px;
+  }
+  .splide__slide {
+    flex-shrink: 1;
+    height: 100px;
+    white-space: nowrap;
+    padding: 0 30px;
+    font-size: 50px;
+    font-weight: 700;
+  }
+}

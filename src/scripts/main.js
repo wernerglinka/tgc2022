@@ -5,6 +5,7 @@ import loadResponsiveImage from './modules/load-responsive-image';
 import navigation from './modules/navigation';
 import modalVideo from "./modules/modal-video";
 import externalLinks from "./modules/external-links";
+import customerSlider from "./modules/customer-slider";
 
 
 
@@ -30,16 +31,18 @@ function initPage() {
   loadResponsiveImage.init();
   modalVideo.init();
   //externalLinks.init();
+  customerSlider.init();
 };
 
 (function() {
+  /*
   const options = {
     // disable SWUP from intercepting anchor links and external links
     linkSelector:
       'a[href^="/"]:not([data-no-swup]), a[href^="' + window.location.origin + '"]:not([data-no-swup])'
   };
   const swup = new Swup(options);
-
+  */
   initPage();
 
 })();

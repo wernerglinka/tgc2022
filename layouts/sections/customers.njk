@@ -1,0 +1,23 @@
+{% from "../partials/text.njk" import text %}
+{% from "../partials/ctas.njk" import ctas %}
+
+<section class="section-customers {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  <div class="content">
+    {% set info = params %}
+    <div class="headline-wrapper">
+      {{ text(info) }}
+    </div>
+
+    <div class="splide">
+      <div class="splide__track customers-list-wrapper">
+        <ul class="splide__list">
+        {% for customer in customers %}
+          <li class="splide__slide">
+          {{ customer.name }}
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

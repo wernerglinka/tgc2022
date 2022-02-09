@@ -5,14 +5,19 @@
   &.paddingTop {
     padding-top: 40px;
   }
-
   &.paddingBottom {
     padding-bottom: 40px;
   }
 
   .columns {
     justify-content: center;
-    padding-top: 50px;
+
+    h3 {
+      display: inline-block;
+      font-size: 20px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid red;
+    }
     
     > div {
       flex: 0 0 30%;
@@ -24,22 +29,15 @@
 
     .column1 {
       li {
-        font-size: 24px;
+        font-size: 28px;
         padding-bottom: 10px;
+        font-weight: 500;
       }
     } 
 
     ul {
       list-style: none;
       margin: 0;
-
-      > li:before {
-        content: "-";
-        padding-right: 10px;
-      }
     }
   }
-    
-  
-
 }

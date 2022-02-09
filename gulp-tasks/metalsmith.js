@@ -1,7 +1,7 @@
 const Metalsmith = require('metalsmith');
 const assets = require('metalsmith-assets');
 const drafts = require('@metalsmith/drafts');
-const metadata = require('metalsmith-metadata');
+const metadata = require('@metalsmith/metadata');
 const layouts = require('@metalsmith/layouts');
 const inplace = require('metalsmith-in-place');
 const permalinks = require('@metalsmith/permalinks');
@@ -64,8 +64,9 @@ module.exports = function metalsmith(callback) {
     })
 
     .use(metadata({
-      site: "data/siteMetadata.json",
-      nav: "data/siteNavigation.json"
+      site: "./src/content/data/siteMetadata.json",
+      nav: "./src/content/data/siteNavigation.json",
+      customers: "./src/content/data/customers"
     }))
 
     .use(drafts())

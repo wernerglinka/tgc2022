@@ -10,6 +10,8 @@ const processFonts = require('./gulp-tasks/get-google-fonts');
 const processStyles = require('./gulp-tasks/process-styles');
 // get prism styles
 const getPrismStyles = require('./gulp-tasks/get-prism-styles');
+// get slider base styles
+const getSliderBaseStyles = require('./gulp-tasks/get-slider-base-styles');
 // process scripts
 const processScripts = require('./gulp-tasks/process-scripts');
 // clean build folder
@@ -81,6 +83,7 @@ exports.default = gulp.series(
   processFonts,
   processStyles,
   getPrismStyles,
+  getSliderBaseStyles,
   metalsmith,
   watchSite
 );
@@ -91,5 +94,6 @@ exports.buildProd = gulp.series(
   processScripts,
   processStyles,
   getPrismStyles,
+  getSliderBaseStyles,
   metalsmith
 );

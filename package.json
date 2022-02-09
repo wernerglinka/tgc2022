@@ -19,7 +19,10 @@
   "dependencies": {
     "@metalsmith/drafts": "^1.1.1",
     "@metalsmith/layouts": "^2.4.0",
+    "@metalsmith/metadata": "github:metalsmith/metadata",
     "@metalsmith/permalinks": "^2.3.0",
+    "@splidejs/splide": "^3.6.12",
+    "@splidejs/splide-extension-auto-scroll": "^0.3.7",
     "autoprefixer": "^10.4.0",
     "browser-sync": "^2.27.7",
     "cssnano": "^5.0.11",
