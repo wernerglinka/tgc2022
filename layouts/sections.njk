@@ -11,7 +11,7 @@
       {% set params = section %}
       
       <div class="section-wrapper{% if section.inContainer %} inContainer{% endif %}{% if section.marginTop %} marginTop{% endif %}{% if section.marginBottom %} marginBottom{% endif %}">
-        {{ component(name, params, site, customers) }}
+        {{ component(name, params, site, customers, testimonials) }}
       </div>
 
     {% else %}

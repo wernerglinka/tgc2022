@@ -14,5 +14,13 @@
     <a class="scroll-hint" href="#banner-bottom">{{ icon("arrow-down") }}</a>
 
   </div>
+
+  {# site is in scope, was passed via the component macro #}
+  {# assemble the image url #}
+  {% set source1 = site.imagePrefix ~ "w_1000,c_fill,g_auto,f_auto/" ~ params.image1.src %}
+  {% set source2 = site.imagePrefix ~ "w_1000,c_fill,g_auto,f_auto/" ~ params.image2.src %}
+
+  <div class="banner-image1" style="background-image: url('{{ source1 }}');"></div>
+  <div class="banner-image2" style="background-image: url('{{ source2 }}');"></div>
   <span id="banner-bottom"></span>
 </section>

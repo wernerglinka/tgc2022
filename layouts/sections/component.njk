@@ -1,5 +1,5 @@
 {# source: https://www.trysmudford.com/blog/encapsulated-11ty-components/#global-component-macro #}
 
-{% macro component(name, params, site, customers) %}
+{% macro component(name, params, site, customers, testimonials) %}
   {% include "../sections/" + name + ".njk" ignore missing %}
 {% endmacro %}

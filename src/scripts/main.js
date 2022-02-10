@@ -1,12 +1,12 @@
 // NOTE: main.js is called at the end of the document body - no DOMContentLoaded event needed
-import Swup from 'swup';
+//import Swup from 'swup';
 
 import loadResponsiveImage from './modules/load-responsive-image';
 import navigation from './modules/navigation';
 import modalVideo from "./modules/modal-video";
 import externalLinks from "./modules/external-links";
 import customerSlider from "./modules/customer-slider";
-
+import testimonialsSlider from "./modules/testimonials-slider";
 
 
 
@@ -32,6 +32,7 @@ function initPage() {
   modalVideo.init();
   //externalLinks.init();
   customerSlider.init();
+  testimonialsSlider.init();
 };
 
 (function() {
@@ -44,5 +45,4 @@ function initPage() {
   const swup = new Swup(options);
   */
   initPage();
-
 })();

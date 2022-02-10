@@ -1,0 +1,29 @@
+{% from "../partials/text.njk" import text %}
+{% from "../partials/ctas.njk" import ctas %}
+
+<section class="section-testimonials {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  <div class="content">
+    {% set info = params %}
+    <div class="headline-wrapper">
+      {{ text(info) }}
+    </div>
+
+    <div class="splide-testimonials">
+      <div class="splide__track testimonials-list-wrapper">
+        <ul class="splide__list">
+          {% for testimonial in testimonials %}
+          <li class="splide__slide">
+            <blockquote>
+              <div>{{ testimonial.quote }}</div> 
+            </blockquote>
+            <div class="attribution">
+              <p class="quotee">{{ testimonial.name }}</p>
+              <p class="position">{{ testimonial.position }}, {{ testimonial.company }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

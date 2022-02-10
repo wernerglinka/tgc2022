@@ -1,4 +1,6 @@
-.section-customers {
+.section-testimonials {
+  max-width: 700px;
+  margin: 0 auto;
   padding-top: 0;
   padding-bottom: 0;
 
@@ -23,19 +25,29 @@
     padding-bottom: 5px;
     border-bottom: 2px solid red;
   }
-  .splide__arrows,
-  .splide__pagination {
-    display: none;
+  
+  ul {
+    list-style: none;
   }
-  .splide__track {
-    height: 100px;
+
+  blockquote {
+    margin: 0;
+
+    div {
+      font-size: 24px;
+    } 
   }
-  .splide__slide {
-    flex-shrink: 1;
-    height: 100px;
-    white-space: nowrap;
-    padding: 0 30px;
-    font-size: 50px;
+
+  .quotee {
     font-weight: 700;
+    margin-bottom: 0;
+  }
+  .position {
+    margin-top: 0;
+    font-style: italic;
+  }
+
+  .splide__list {
+    height: auto;
   }
 }

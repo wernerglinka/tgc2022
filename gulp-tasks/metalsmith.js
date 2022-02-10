@@ -66,7 +66,8 @@ module.exports = function metalsmith(callback) {
     .use(metadata({
       site: "./src/content/data/siteMetadata.json",
       nav: "./src/content/data/siteNavigation.json",
-      customers: "./src/content/data/customers"
+      customers: "./src/content/data/customers",
+      testimonials: "./src/content/data/testimonials"
     }))
 
     .use(drafts())

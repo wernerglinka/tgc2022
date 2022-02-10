@@ -1,3 +1,5 @@
+{% from "../partials/icon.njk" import icon %}
+
 {% macro ctas(info) %}
   <div class="ctas">
     {% for cta in info.ctas %}
@@ -15,19 +17,39 @@
           {% endif%}
 
         {% else %}
-
+          {# if an icon is specified it will overwrite a label #}
           {# regular case: link is either a button or a link and either an internal or external link #}
           {% if cta.isButton %}
             {% if cta.isExternal %}
+              {% if cta.icon %}  
+              {% set iconSource = cta.icon %}
+              <a class="icon-button {{ cta.buttonStyle }}" href="{{cta.url}}" target="_blank" rel="noopener noreferrer">{{ icon(iconSource) }}</a>
+              {% else %}
               <a class="cta-button {{ cta.buttonStyle }}" href="{{cta.url}}" target="_blank" rel="noopener noreferrer">{{ cta.label}}</a>
+              {% endif %}
             {% else %}
+              {% if cta.icon %}  
+              {% set iconSource = cta.icon %}
+              <a class="icon-button {{ cta.buttonStyle }}" href="{{cta.url}}">{{ icon(iconSource) }}</a>
+              {% else %}
               <a class="cta-button {{ cta.buttonStyle }}" href="{{cta.url}}">{{ cta.label}}</a>
+              {% endif %}
             {% endif %}
           {% else %}
             {% if cta.isExternal %}
+              {% if cta.icon %}  
+              {% set iconSource = cta.icon %}
+              <a class="icon-link" href="{{cta.url}}" target="_blank" rel="noopener noreferrer">{{ icon(iconSource) }}</a>
+              {% else %}
               <a class="cta-link" href="{{cta.url}}" target="_blank" rel="noopener noreferrer">{{ cta.label}}</a>
+              {% endif %}
             {% else %}
+              {% if cta.icon %}  
+              {% set iconSource = cta.icon %}
+              <a class="icon-link" href="{{cta.url}}">{{ icon(iconSource) }}</a>
+              {% else %}
               <a class="cta-link" href="{{cta.url}}">{{ cta.label}}</a>
+              {% endif %}
             {% endif %}
           {% endif %}
 
