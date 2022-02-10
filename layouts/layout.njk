@@ -15,7 +15,9 @@
     {% endblock %}
   </main>
 
-  {% include "partials/footer.njk" %}
+  {% if not disableDefaultFooter %}
+    {% include "partials/footer.njk" %}
+  {% endif %}
   {% include "partials/scripts.njk" %}
 
 </body>

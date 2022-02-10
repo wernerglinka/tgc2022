@@ -18,6 +18,12 @@
     stroke-width: 1px;
     stroke: #333;
   }
+
+  &:hover {
+    g {
+      stroke: red;
+    }
+  }
 }
 
 .is-scrolling .to-top {

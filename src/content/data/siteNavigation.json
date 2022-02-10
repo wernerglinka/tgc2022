@@ -8,8 +8,7 @@
       "submenuID": "",
       "submenuClass": "",
       "isButton": false,
-      "buttonClass": "",
-      "isExternal": false
+      "buttonClass": ""
     },
     {
       "icon": "image",
@@ -19,8 +18,7 @@
       "submenuID": "",
       "submenuClass": "",
       "isButton": false,
-      "buttonClass": "",
-      "isExternal": false
+      "buttonClass": ""
     },
     {
       "icon": "database",
@@ -30,8 +28,7 @@
       "submenuID": "",
       "submenuClass": "",
       "isButton": false,
-      "buttonClass": "primary",
-      "isExternal": true
+      "buttonClass": "primary"
     }
   ]
 }

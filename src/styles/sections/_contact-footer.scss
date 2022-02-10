@@ -1,0 +1,134 @@
+.section-contact-footer {
+  position: relative;
+  padding-top: 200px;
+
+  @media (max-width: 767px) {
+    padding-top: 100px;
+  }
+  @media (max-width: 500px) {
+    padding-top: 0;
+  }
+
+  .footer-info {
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 1;
+    width: 70vw;
+    background-color: #111111;
+    padding: 100px 100px 100px 10%;
+
+    @media (max-width: 1300px) {
+      padding: 100px 50px;
+    }
+    @media (max-width: 767px) {
+      display: block;
+      padding: 20px;
+      width: 100vw;
+      z-index: -1;
+    }
+
+    p {
+      color: #fff;
+    }
+    
+
+    > div {
+      flex: 0 0 50%;
+      
+      @media (max-width: 767px) {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      &:first-of-type {
+        padding-right: 40px;
+
+        @media (max-width: 767px) {
+          padding: 0;
+        }
+      }
+    }
+  }
+  .footer-decoration {
+    position: absolute;
+    right: 0;
+    bottom: 300px;
+    width: 900px;
+
+    @media (max-width: 1000px) {
+      width: 600px;
+      bottom: 500px;
+    }
+    @media (max-width: 767px) {
+      position: relative;
+      bottom: 100px;
+      width: 50%;
+      float: right;
+    }
+    @media (max-width: 500px) {
+      display: none;
+    }
+
+  }
+
+  // form styles
+  .hidden {
+    display: none;
+  }
+  .form-row {
+    padding: 20px 0;
+  }
+  input, textarea {
+    width: 100%;
+    max-width: 400px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    padding: 5px;
+    color: #fff;
+  }
+  textarea {
+    height: 100px;
+    resize: none;
+  }
+  .btn-submit {
+    display: inline-block;
+    border: 1px solid #fff;
+    padding: 10px 30px;
+    width: auto;
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #fff;
+      color: #111;
+    }
+  }
+
+  .ctas {
+    padding: 0 0 50px;
+  }
+
+  .icon-link {
+    svg g {
+      stroke: #fff;
+      transition: stroke 0.5s ease-in-out;
+    }
+
+    &:hover {
+      svg g {
+        stroke: red;
+      }
+    }
+  }
+
+  // copyright
+  .copyright {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  
+}

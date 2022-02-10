@@ -2,6 +2,7 @@
 title: Hello Title ;-)
 layout: sections.njk
 pageName: "home"
+disableDefaultFooter: true
 
 sections:
   - component: home-banner
@@ -54,16 +55,13 @@ sections:
           isVideoTrigger: false
           isButton: false
           buttonStyle: ""
-          isExternal: false
     column2:
       title: "About"
       header: "h2"
       headerClass: "small"
       subTitle: ""
       prose: |-
-          The web is something I work on every day, and it's also something that deeply intrigues me. It's powering a myriad of changes in our own individual lives and is also behind huge shifts in economics, culture and politics. Simply amazing!
-
-          I am a web developer, I build websites for established corporate clients and exciting new start-ups all over the world. I build static websites, use Wordpress and other CMSs. Typically I collaborate on projects with design companies in the role of technical expert and implementer to compliment their creative expertise.
+          My name is Werner Glinka. A Silicon Valley refugee now living in the beautiful St. Croix Valley in Eastern Minnesota. I am a web developer, I build websites for established corporate clients and exciting new start-ups all over the world. I build static websites, use Wordpress and other CMSs. Typically I collaborate on projects with design companies in the role of technical expert and implementer to compliment their creative expertise.
 
           I am an active contributor to the open source project [Metalsmith](https://www.metalsmith.io/), and have authored and maintain several plugins.
 
@@ -77,14 +75,12 @@ sections:
           isVideoTrigger: false
           isButton: false
           buttonStyle: ""
-          isExternal: true
         - label: "Github"
           icon: github
           url: "https://github.com/wernerglinka"
           isVideoTrigger: false
           isButton: false
           buttonStyle: ""
-          isExternal: true
   
   - component: customers
     disabled: false
@@ -93,7 +89,7 @@ sections:
     marginTop: true
     marginBottom: true
     paddingTop: true
-    paddingBottom: true
+    paddingBottom: false
     backgroundColor: ""
     targetId: ""
     title: I have worked with these companies
@@ -107,7 +103,7 @@ sections:
     inContainer: true
     marginTop: true
     marginBottom: true
-    paddingTop: true
+    paddingTop: false
     paddingBottom: true
     backgroundColor: ""
     targetId: ""
@@ -116,39 +112,32 @@ sections:
     headerClass: "small"
     subTitle: ""
 
-  - component: intro
+  - component: contact-footer
     disabled: false
     animateSection: false
-    inContainer: true
+    inContainer: false
     marginTop: false
     marginBottom: false
     paddingTop: false
     paddingBottom: false
     backgroundColor: ""
     targetId: ""
-    title: How is this site build?
-    header: "h2"
-    headerClass: ""
-    subTitle: ""
-    prose: |-
-      Gulp4 is used to process all assets first and then Metalsmith to build the site. Styles are written in SCSS and scripts in Javasript. 
-      Content is written in [Markdown](https://www.markdownguide.org/) and templates are coded with [Nunjucks](https://mozilla.github.io/nunjucks/). 
-
-      Swup is used for page transitions and page prefetching to provide the user with a smooth Single Page App (SPA) experience... or as much as one can do without actually building an SPA.
-
-      Some implementation details to check out:
-      - Page transition with [Swup](https://swup.js.org/).
-      - Page backgrounds with [Gradien Magic](https://www.gradientmagic.com/) CSS.
-      - Simple [Feather](https://feathericons.com/) icons.
-      - Images hosted on [cloudinary.io](https://cloudinary.com/).
-      - All images are loaded with Low Res Placeholders first and then replaced when the image enters the browser viewport (lazy load).
-    hasCtas: false
+    image:
+      src: "v1644512964/tgc2022/worn_xdtvqe.jpg"
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
     ctas:
-      - url: ""
-        icon: ""
-        label: ""
-        isExternal: false
-        isButton: true
-        buttonStyle: "primary"
-  
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
 ---

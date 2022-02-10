@@ -12,6 +12,10 @@
   .columns {
     justify-content: center;
 
+    @media (max-width: 600px) {
+      flex-direction: column-reverse;
+    }
+
     h2 {
       display: inline-block;
       font-size: 20px;
@@ -21,6 +25,13 @@
     
     > div {
       flex: 0 0 30%;
+
+      @media (max-width: 1000px) {
+        flex: 0 0 40%;
+      }
+      @media (max-width: 767px) {
+        flex: 0 0 50%;
+      }
     }
 
     .column1 {
@@ -30,6 +41,13 @@
         font-weight: 500;
       }
     } 
+
+    .column2 {
+      @media (max-width: 600px) {
+        padding-bottom: 60px;
+      }
+    }
+    
 
     ul {
       list-style: none;

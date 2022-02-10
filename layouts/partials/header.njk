@@ -14,16 +14,12 @@
               {% set iconSource = menuItem.icon %}
               {{ icon(iconSource) }}
               <div>
-                {% if menuItem.isExternal %}
-                  <a href={{ menuItem.url}} target="_blank" rel="noopener noreferrer">{{ menuItem.label }}</a>
+                {% if menuItem.url === "/" %}
+                  {% set path = "home" %}
                 {% else %}
-                  {% if menuItem.url === "/" %}
-                    {% set path = "home" %}
-                  {% else %}
-                    {% set path = menuItem.url %}
-                  {% endif %}
-                  <a href={{ menuItem.url}} class="{{ path | trimSlashes }}">{{ menuItem.label }}</a>
+                  {% set path = menuItem.url %}
                 {% endif %}
+                <a href={{ menuItem.url}} class="{{ path | trimSlashes }}">{{ menuItem.label }}</a>
                 <p>{{ menuItem.description }}</p>
               </div>
             </li>
