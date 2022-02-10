@@ -11,20 +11,30 @@
       "buttonClass": ""
     },
     {
-      "icon": "image",
-      "label": "Components",
-      "description": "Explore all components.",
-      "url": "/components",
+      "icon": "grid",
+      "label": "Portfolio",
+      "description": "Samples of my work.",
+      "url": "/portfolio",
       "submenuID": "",
       "submenuClass": "",
       "isButton": false,
       "buttonClass": ""
     },
     {
-      "icon": "database",
-      "label": "Go Apple",
-      "description": "Example of an external link in the main menu.",
-      "url": "https://apple.com",
+      "icon": "layers",
+      "label": "Blog",
+      "description": "A sometimes unfilterred stream of thoughts.",
+      "url": "/blog",
+      "submenuID": "",
+      "submenuClass": "",
+      "isButton": false,
+      "buttonClass": "primary"
+    },
+    {
+      "icon": "settings",
+      "label": "Projects",
+      "description": "Dabbling in Open Source.",
+      "url": "/projects",
       "submenuID": "",
       "submenuClass": "",
       "isButton": false,
