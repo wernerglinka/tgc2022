@@ -2,10 +2,10 @@
   position: relative;
   padding-top: 200px;
 
-  @media (max-width: 767px) {
+  @media (max-width: $tablet-breakpoint) {
     padding-top: 100px;
   }
-  @media (max-width: 500px) {
+  @media (max-width: $small-screen-size) {
     padding-top: 0;
   }
 
@@ -21,7 +21,7 @@
     @media (max-width: 1300px) {
       padding: 100px 50px;
     }
-    @media (max-width: 767px) {
+    @media (max-width: $tablet-breakpoint) {
       display: block;
       padding: 20px;
       width: 100vw;
@@ -36,7 +36,7 @@
     > div {
       flex: 0 0 50%;
       
-      @media (max-width: 767px) {
+      @media (max-width: $tablet-breakpoint) {
         max-width: 400px;
         margin: 0 auto;
       }
@@ -44,7 +44,7 @@
       &:first-of-type {
         padding-right: 40px;
 
-        @media (max-width: 767px) {
+        @media (max-width: $tablet-breakpoint) {
           padding: 0;
         }
       }
@@ -60,13 +60,13 @@
       width: 600px;
       bottom: 500px;
     }
-    @media (max-width: 767px) {
+    @media (max-width: $tablet-breakpoint) {
       position: relative;
       bottom: 100px;
       width: 50%;
       float: right;
     }
-    @media (max-width: 500px) {
+    @media (max-width: $small-screen-size) {
       display: none;
     }
 

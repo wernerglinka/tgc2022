@@ -1,0 +1,12 @@
+{% from "../partials/responsive-image.njk" import responsiveImage %}
+
+{# this section receives props params and site #}
+
+<section class="section-image {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  <div class="container">
+    <div class="outer-image-wrapper">
+      {{ responsiveImage(params.image, site) }}
+    </div>
+    <p class="image-caption">{{params.image.caption}}</p>
+  </div>
+</section>

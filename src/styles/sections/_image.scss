@@ -1,0 +1,30 @@
+.section-image {
+  padding-top: 0;
+  padding-bottom: 0;
+
+  &.paddingTop {
+    padding-top: 40px;
+  }
+
+  &.paddingBottom {
+    padding-bottom: 40px;
+  }
+
+  .outer-image-wrapper {
+    width: 70%;
+    margin: 0 auto;
+
+    @media (max-width: $tablet-breakpoint) {
+      width: 100%;
+    }
+  }
+  .image-caption {
+    text-align: center;
+    font-size: 16px;
+    font-style: italic;
+
+    @media (max-width: $tablet-breakpoint) {
+      font-size: 14px;
+    }
+  }
+}

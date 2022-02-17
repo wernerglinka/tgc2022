@@ -8,7 +8,7 @@ const customerSlider = (function() {
   "use strict"
 
   const init = function () {
-    new Splide( '.splide' ).mount( { AutoScroll } );
+    new Splide( '.js-splide-customers' ).mount( { AutoScroll } );
   };
 
   return {init};

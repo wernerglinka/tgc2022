@@ -27,11 +27,17 @@ function initPage() {
   });
 
   navigation.init();
-  loadResponsiveImage.init();
-  modalVideo.init();
+
+  if (document.querySelector('.js-progressive-image-wrapper')) {
+    loadResponsiveImage.init();
+  }
   //externalLinks.init();
-  customerSlider.init();
-  testimonialsSlider.init();
+  if (document.querySelector('.js-splide-customers')) {
+    customerSlider.init();
+  }
+  if (document.querySelector('.js-splide-testimonials')) {
+    testimonialsSlider.init();
+  }
 };
 
 (function() {

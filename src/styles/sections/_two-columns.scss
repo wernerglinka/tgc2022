@@ -29,7 +29,7 @@
       @media (max-width: 1000px) {
         flex: 0 0 40%;
       }
-      @media (max-width: 767px) {
+      @media (max-width: $tablet-breakpoint) {
         flex: 0 0 50%;
       }
     }

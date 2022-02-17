@@ -39,7 +39,7 @@ ol {
   .prose {
     padding-right: 50px;
 
-    @media (max-width: 767px) {
+    @media (max-width: $tablet-breakpoint) {
       padding: 0;
     }
   }
@@ -51,7 +51,7 @@ ol {
       padding-right: 0;
       padding-left: 50px;
 
-      @media (max-width: 767px) {
+      @media (max-width: $tablet-breakpoint) {
         padding: 0;
       }
     }

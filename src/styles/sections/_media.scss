@@ -13,7 +13,7 @@
   .content {
     padding: 50px 0;
 
-    @media (max-width: 767px) {
+    @media (max-width: $tablet-breakpoint) {
       flex-direction: column-reverse;
       padding-top: 0;
     }

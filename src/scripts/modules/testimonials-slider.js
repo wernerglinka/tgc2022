@@ -7,7 +7,7 @@ const testimonialsSlider = (function() {
   "use strict"
 
   const init = function () {
-    new Splide( '.splide-testimonials', {
+    new Splide( '.js-splide-testimonials', {
       type : 'loop',
       autoHeight: true,
     }).mount();
