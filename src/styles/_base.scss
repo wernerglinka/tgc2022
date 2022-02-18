@@ -18,7 +18,7 @@ html {
 
 ul,
 ol {
-  margin: 0 0 0 40px;
+  margin: 0 0 1em 2em;
   padding: 0;
 }
 
@@ -65,4 +65,10 @@ ol {
   display: block;
   padding-top: 80px;
   margin-top: -80px;
+}
+
+.tech-tags {
+  font-size: 14px;
+  font-weight: 500;
+  color: $tag-color;
 }

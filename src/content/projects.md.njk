@@ -2,7 +2,7 @@
 title: Open Source Projects
 layout: sections.njk
 pageName: "projectsPage"
-disableDefaultFooter: false
+disableDefaultFooter: true
 
 sections:
   - component: intro
@@ -20,7 +20,7 @@ sections:
     headerClass: ""
     subTitle: Dabbling in Open Source
     prose: |-
-      My main area of interest is [Metalsmith](https://www.metalsmith.io/) a static site generator that encourages me to learn more about node. Metalsmith has a by-line _An extremely simple, pluggable static site generator_ but that only tells part of the story. At its core, Metalsmith is an "engine" that reads files from a directory, turns them into a javascript object, exposed the object to plugins for manipulation and finally turns the object back into files and writes them to a destination directory. 
+      My main area of interest is [Metalsmith](https://www.metalsmith.io/) a static site generator that encourages me to learn more about node. Metalsmith has a by-line _An extremely simple, pluggable static site generator_ but that only tells part of the story. At its core, Metalsmith is an "engine" that reads files from a directory, turns them into a javascript object, exposed the object to plugins for manipulation and finally turns the object back into files, then writes them to a destination directory. 
 
     hasCtas: false
     ctas:
@@ -73,11 +73,79 @@ sections:
     ctas:
       - url: "https://www.metalsmith.io/"
         label: Metalsmith website
-        isButton: false
-        buttonStyle: ""
+        isButton: true
+        buttonStyle: "primary"
       - url: "https://github.com/metalsmith"
         label: Metalsmith Github Repsitory
+        isButton: true
+        buttonStyle: "primary"
+
+  - component: intro
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: true
+    marginBottom: false
+    paddingTop: true
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    title: "Plugins"
+    header: "h2"
+    headerClass: ""
+    subTitle: ""
+    prose: |-
+      Over time I have build several plugins that are available to the community on my GitHub repo or via npm.
+
+      #### [Metalsmith Markdown Partials](https://github.com/wernerglinka/metalsmith-markdown-partials)
+      Enables the reuse of markdown partials. These partials are inserted into the contents of a markdown file by replacing an include marker. This allows for modular markdown and promotes reuse of content.
+
+      #### [Metalsmith Blog Lists](https://github.com/wernerglinka/metalsmith-blog-lists)
+      Adds the following lists to the metadata. This makes this data accessible to all pages and may be used to create widgets that promote featured and/or latest blogposts. This plugin requires all blogposts to be located in `blog/` of the content directory.
+
+      - All Blogs
+      - Recent Blogs
+      - Featured Blogs
+      - Annualized Blogs List
+
+      #### [Metalsmith Safe Links](https://github.com/wernerglinka/metalsmith-safe-links)
+      Reformats links, strips the protocal and host name from local links and adds a target and rel attribute to external links. As markdown syntax only allows for alt and title attributes in links, content editors normally must use HTML to add other attributes. This plugin negates the use of HTML for links in a markdown document.
+
+
+      
+    hasCtas: false
+    ctas:
+      - url: ""
+        label: ""
         isButton: false
         buttonStyle: ""
-  
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: "v1644512964/tgc2022/worn_xdtvqe.jpg"
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
 ---

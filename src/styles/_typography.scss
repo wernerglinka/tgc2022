@@ -1,12 +1,12 @@
 body {
-  font-family: "Open Sans", Arial, Tahoma, sans-serif;
+  font-family: $paragraph-fonts;
 }
 p,
 li {
   font-size: 18px;
   font-weight: 300;
   line-height: 1.5;
-  color: #222;
+  color: $paragraph-color;
 
   @media (max-width: $tablet-breakpoint) {
     font-size: 16px;
@@ -20,14 +20,14 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: Montserrat, "Helvetica Neue", Helvetica, sans-serif;
-  font-weight: 500;
+  font-family: $header-fonts;
+  font-weight: $header-weight;
   margin: 0;
-  color: #666;
-  margin-bottom: 0.5em;
+  color: $header-color;
+  margin-bottom: $header-margin;
 
   @media (max-width: $tablet-breakpoint) {
-    margin-top: 0.5em;
+    margin-top: $header-margin;
   }
 }
 
@@ -73,11 +73,20 @@ h4 {
   }
 }
 
+a {
+  color: $link-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover-color;
+  }
+}
+
 .sub-title {
-  margin-top: -0.5rem;
+  margin-top: -$header-margin;
   font-size: 1.2rem;
   font-style: italic;
-  color: #666;
+  color: $sub-title-color;
 
   @media (max-width: $medium-screen-size) {
     font-size: 1.1rem;
