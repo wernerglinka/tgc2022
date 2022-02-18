@@ -1,0 +1,187 @@
+---
+title: Sanitize Marketo forms
+layout: sections-with-sidebar.njk
+pageName: "home"
+disableDefaultFooter: true
+
+blogTitle: "How to Strip Styling from a Marketo Form"
+date: 2018-06-01T12:00:00Z
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 2
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2018-06-01T12:00:00Z
+    title: "How to Strip Styling from a Marketo Form"
+    header: "h1"
+    headerClass: ""
+    subTitle: "And keep your sanity"
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645217047/tgc2022/blogImages/sanitize-marketo-form/styling-marketo-forms_czplhw.jpg"
+      alt: "a Marketo form section"
+      aspectRatio: "25"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Styling a Marketo form is often an exercise of frustration management. When you look at the page source after a form has been loaded you’ll see a stylesheet with base styles and one with theme styles in the head section. In addition you’ll find a style tag as the first element in the form itself and to top it of, inline style attributes on every form element. This is truly maddening.
+
+      Apparently, Marketo doesn’t provide the option to download an html-only form to be styled by a client.
+
+      So you overwrite this mess by adding **!important** to every style rule that you add in your style sheet. Then you have to change your style just a little for another form… and that requires more **!important** rules.
+
+      I have been in this situation more times then I care to remember. Finally I had enough and decided to strip all Marketo styles and start with blank slate.
+
+      Before we get to that point, let’s see what it actually takes to add a form to our page by looking at the code of a [Marketo example form](https://developers.marketo.com/examples/forms2/example1.html).
+
+      ```javascript
+      <script src="//app-sjst.marketo.com/js/forms2/js/forms2.js"></script>
+      <form id="mktoForm_1057"></form>
+      <script>
+          MktoForms2.loadForm("//app-sjst.marketo.com", "785-UHP-775", 1057, function(form){
+              //Add an onSuccess handler
+              form.onSuccess(function(values, followUpUrl){
+                  //get the form's jQuery element and hide it
+                  form.getFormElem().hide();
+                  //return false to prevent the submission handler from taking the lead to the follow up url.
+                  return false;
+              });
+          });
+      </script>
+      ```
+
+      If you copy the form snippet from the Marketo form editor, as it is described [here](https://experienceleague.adobe.com/docs/marketo/using/product-docs/demand-generation/forms/form-actions/embed-a-form-on-your-website.html) you’ll not see the callback in the loadform method but you can add it yourself just like the snippet above shows. This callback is invoked after the form and its assets are fully loaded.
+
+      My form code looks like this. You’ll have to replace `{{ marketo_form_id }}` and `{{ marketo_munchkin_id }}` with your own values. I am using this callback to create a custom event that I can then use to sanitize the form. This code goes into the html right where the form should appear.
+
+      ```javascript
+      <script src="//app-sj13.marketo.com/js/forms2/js/forms2.min.js"></script>
+      <form id="mktoForm_{{ marketo_form_id }}"></form>
+      <script>
+          MktoForms2.loadForm("//app-sj13.marketo.com", “{{ marketo_munchkin_id }}“, {{ marketo_form_id }}, function () {
+              var event = new CustomEvent('mktoFormLoaded');
+              document.dispatchEvent(event);
+          });
+      </script>
+      ```
+
+      And then in my js file:
+
+      ```javascript
+      // function to modify and style according to design all Marketo forms
+      var modifyMarketoForm = {
+          init: function () {
+              var self = this;
+              // custom event 'mktoFormLoaded' is invoked when forms are loaded
+              $(document).on('mktoFormLoaded', function () {
+                  self._removeMarketoCSS();
+              });
+          },
+          _removeMarketoCSS: function () {
+              // remove the external stylesheets
+              var links = window.document.getElementsByTagName('link');
+              $(links).each(function () {
+                  var thisLinkElement = $(this);
+                  var thisLinkURL = thisLinkElement.attr('href');
+                  if (thisLinkURL.indexOf('marketo.com') > 1) {
+                      thisLinkElement.remove();
+                  }
+              });
+              // and the inline styles
+              var marketoForms = $("[id*='mktoForm']");
+              marketoForms.each(function () {
+                  $(this).find('style').remove();
+              });
+              // and the style attributes
+              marketoForms.each(function () {
+                  $(this).find('[style]').removeAttr('style');
+              });
+          }
+      };
+
+
+      //the document ready function
+      $(function () {
+          modifyMarketoForm.init();
+      });
+      ```
+
+      And that is it. Now all Marketo styles have been eliminated and a blank CSS slate is awaiting you.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

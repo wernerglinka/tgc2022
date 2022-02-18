@@ -1,0 +1,37 @@
+{% extends "layout.njk" %}
+
+{% from "./sections/component.njk" import component %}
+
+{% block body %}
+  <div class="container main-columns">
+    <section>
+    {% for section in sections %}
+
+      {% set name = section.component %}
+      {% set params = section %}
+      
+      <div class="section-wrapper{% if section.inContainer %} inContainer{% endif %}{% if section.marginTop %} marginTop{% endif %}{% if section.marginBottom %} marginBottom{% endif %}">
+        {{ component(name, params, site, customers, testimonials) }}
+      </div>
+
+    {% else %}
+      <p class="error-message">There are no sections available</p>
+    {% endfor %}
+    </section>
+
+    <aside>
+      <h3>Featured Posts</h3>
+      <ul class="blog-sidebar-list">
+        {% for post in featuredBlogPosts %}
+        <li>
+          <H4><a href="/{{ post.path }}">{{ post.title }}</a></H4>
+          <time datetime="{{ post.date }}">{{ post.date | niceDate }}</time>
+          {% if post.author %}
+          <p>{{post.author}}</p>
+          {% endif %}
+        </li>
+        {% endfor%}
+      </ul>
+    </aside>
+  </div>
+{% endblock %}s

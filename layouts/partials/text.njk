@@ -14,6 +14,10 @@
     <p class="sub-title">{{ info.subTitle }}</p>
   {% endif %}
 
+  {% if info.date %}
+    <p class="blog-date">{{ info.date | niceDate }}</p>
+  {% endif %}
+
   {% if info.prose %}
     <div>{{ info.prose | mdToHTML | safe }}</div>
   {% endif %}

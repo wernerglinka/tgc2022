@@ -3,18 +3,24 @@ const assets = require('metalsmith-assets');
 const drafts = require('@metalsmith/drafts');
 const metadata = require('@metalsmith/metadata');
 const layouts = require('@metalsmith/layouts');
-const inplace = require('metalsmith-in-place');
+const inplace = require('@metalsmith/in-place');
 const permalinks = require('@metalsmith/permalinks');
 const processLinks = require('metalsmith-safe-links');
 const prism = require('metalsmith-prism');
+const blogLists = require('metalsmith-blog-lists');
+
+//const blogLists = require('../local_modules/metalsmith-blog-lists');
+
+
 const CaptureTag = require('nunjucks-capture');
 const marked = require('marked');
+
 
 // functions to extend Nunjucks environment
 const toUpper = string => string.toUpperCase();
 const spaceToDash = string => string.replace(/\s+/g, '-');
 const condenseTitle = string => string.toLowerCase().replace(/\s+/g, '');
-const UTCdate = date => date.toUTCString();
+const niceDate = string => new Date(string).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 const trimSlashes = string => string.replace(/(^\/)|(\/$)/g, "");
 const mdToHTML = (mdString) => {
   try {
@@ -40,7 +46,7 @@ const templateConfig = {
       spaceToDash,
       condenseTitle,
       mdToHTML,
-      UTCdate,
+      niceDate,
       trimSlashes,
     },
     extensions: {
@@ -71,6 +77,13 @@ module.exports = function metalsmith(callback) {
     }))
 
     .use(drafts())
+
+    .use(blogLists({  
+      featuredQuantity: 3,
+      featuredPostOrder: "desc",
+      fileExtension: ".md.njk",
+      blogDirectoryName: "blog"
+    }))
 
     .use(inplace(templateConfig))
 

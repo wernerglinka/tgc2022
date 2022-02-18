@@ -1,0 +1,25 @@
+{% from "../partials/ctas.njk" import ctas %}
+{% from "../partials/responsive-image.njk" import responsiveImage %}
+{% from "../partials/text.njk" import text %}
+{% from "../partials/video.njk" import video %}
+
+{# this section receives props params and site #}
+
+<section class="section-blog-banner {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  <div class="content">
+    {% set info = params %}
+
+    <div class="prose">
+      {{ text(info) }}
+
+      {% if params.hasCtas %}
+        {{ ctas(info) }}
+      {% endif %}
+    </div>
+
+    <div class="media">
+      {{ responsiveImage(params.image, site) }}
+      <div class="caption">{{ params.image.caption | mdToHTML | safe }}</div>
+    </div>
+  </div>
+</section>

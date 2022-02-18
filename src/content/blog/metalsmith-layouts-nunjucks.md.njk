@@ -1,0 +1,370 @@
+---
+title: Metalsmith, Layouts and Nunjucks
+layout: sections-with-sidebar.njk
+pageName: "home"
+disableDefaultFooter: true
+
+blogTitle: "Metalsmith, Layouts and Nunjucks"
+date: "2018-06-18T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2018-06-18T12:00:00Z
+    title: "Metalsmith, Layouts and Nunjucks"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645220774/tgc2022/blogImages/metalsmith-layouts-nunjucks/layout-options_apwj06.jpg"
+      alt: "a tree"
+      aspectRatio: "25"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      **Update** 2/18/2022 - metalsmith-layout is now [@metalsmith/layouts](https://github.com/metalsmith/layouts) and metalsmith-in-place is now [@metalsmith/in-place](https://github.com/metalsmith/in-place).
+
+      ***
+      
+      When you build static websites with Metalsmith it is very likely that you use the @metalsmith/layout (ML) and @metalsmith/in-place (MIP) plugins. If you are still using the old 1.x.x versions, you may have tried to upgrade at one point to newer versions but found out that it was not a one-to-one replacement. Both plugin versions, starting with 2.x, changed from `consolidation.js` to `jstransformers` for rendering templates. `jstransformers` allow using different template engines through a normalized API.
+
+      In addition, using the `jstransformer-nunjucks` plugin, rather than the Nunjucks node module, changed how to access the Nunjucks environment to extend it.
+
+      As a consequence, configuration for the plugins and the templating engines has changed. To understand the differences let's have a look at both implementations. First let's review the way it worked before the move to jstransformers
+
+      ## The way it was
+      First we look at how we used metalsmith-layouts 1.6.5 and metalsmith-in-place 1.4.4 plus [Nunjucks](https://mozilla.github.io/nunjucks/).
+
+      The file system looks like this:
+
+      ![the old way of using layouts and in-place](https://res.cloudinary.com/glinkaco/image/upload/v1645219356/tgc2022/blogImages/metalsmith-layouts-nunjucks/with-old-plugins_pat242.png)
+
+      _Note that layout files and source files all have HTML extensions._
+
+      **build.js**
+
+      ```javascript
+      const inplace = require('metalsmith-in-place');
+      const layouts = require('metalsmith-layouts');
+      const metalsmith = require('metalsmith');
+      const nunjucks = require("nunjucks");
+
+      nunjucks
+          .configure(["./layouts", "./layouts/partials"], {watch: false, autoescape: false})
+
+          .addFilter("spaceToDash", function (string) {
+              "use strict";
+              return string.replace(/\s+/g, "-");
+          })
+          .addFilter("toUpper", function (string) {
+              "use strict";
+              return string.toUpperCase();
+          });
+
+      const templateConfig = {
+          "engine": "nunjucks",
+          "directory": "./layouts",
+          "partials": "./layouts/partials"
+      };
+
+      metalsmith(__dirname)
+          .source('./src/')
+          .destination('./build/')
+          .clean(true)
+          .use(inplace(templateConfig))
+          .use(layouts(templateConfig))
+          .build(function (err) {
+              if (err) {
+                  throw err;
+              }
+              console.log('Build finished!');
+          });
+      ```
+
+      Pretty straight forward. First we require MIP and ML, then Nunchucks. We then extend the Nunjucks environment and add filters as needed. The configuration for the layouts and in-place plugins includes defining the templating engine and the templates location.
+
+      ## The new way
+      Now lets have a look at using the newer versions of [@metalsmith/layouts](https://github.com/metalsmith/layouts) 2.1.0 and [@metalsmith/in-place](https://github.com/metalsmith/in-place) 4.1.1
+
+      ![the new way of using layouts and in-place](https://res.cloudinary.com/glinkaco/image/upload/v1645219356/tgc2022/blogImages/metalsmith-layouts-nunjucks/with-new-plugins_txdxtr.png)
+
+      _Note that now all files that we want to render with nunjucks have a `.njk` extension._
+
+      Before we can use the new plugin versions we’ll need to install the jstransformers that we want to use, in this case `jstransformer-nunjucks`. The plugins determine which engine to use by file extensions, for Nunjucks it is `.njk`.
+
+      Nunjucks is now wrapped by the `jstransformer-nunjucks` plugin so we don't have direct access to the Nunjucks environment anymore. However, we can access the Nunjucks environment via the `engineOptions` option.
+
+      And this is what it now looks like:
+
+      **build.js**
+
+      ```javascript
+      const toUpper = function (string) {
+          "use strict";
+          return string.toUpperCase();
+      };
+
+      const spaceToDash = function (string) {
+          "use strict";
+          return string.replace(/\s+/g, "-");
+      };
+
+      const inplace = require('@metalsmith/in-place');
+      const layouts = require('@metalsmith/layouts');
+      const metalsmith = require('metalsmith');
+
+      const templateConfig = {
+              engineOptions: {
+                  filters: {
+                      toUpper: toUpper,
+                      spaceToDash: spaceToDash
+                  }
+              }
+          };
+
+      metalsmith(__dirname)
+          .source('./src/')
+          .destination('./build/')
+          .clean(true)
+          .use(inplace(templateConfig))
+          .use(layouts(templateConfig))
+          .build(function(err) {
+          if (err) throw err;
+              console.log('Build finished!');
+          });
+      ```
+
+      The build file has changed as follows:
+
+      - We do not require Nunjucks anymore, this is done automatically by `jstransformer-nunjucks`.
+      - Nunjucks filters are defined as functions and then passed to Nunjucks via the `engineOptions` option of @metalsmith/layouts and @metalsmith/in-place
+      
+      This setup works. I created this [Github repository](https://github.com/wernerglinka/ms-layout-njk) to document my findings. There are four branches in this repository: The **master** branch implements the new way of using these plugins, the **obsolete** branch implements the old way, the **in-place-only** branch shows how to use only @metalsmith/in-place to render our pages and the **with_markdown** branch implements the new way with a markdown source file.
+
+      ## Using `@metalsmith/in-place` only
+
+      Since we are using HTML in our source files and we are using Nunjucks for templating, we can simplify our build process further by only using the @metalsmith/in-place plugin. This requires that we move some Nunjucks syntax from `body.njk` into the source file:
+
+      **src/index.njk**
+
+      ```html
+      ---
+      title: Hello Title ;-)
+
+      footnote: this is a footnote
+      header_text: Vestibulum id ligula porta felis euismod semper. Nullam quis risus eget urna mollis ornare vel eu leo.
+      footer_text: Donec sed odio dui. Maecenas sed diam eget risus varius blandit sit amet non magna.
+      filter_test: I should have dashes between words
+      ---
+
+      {% extends "./layouts/layout.njk" %}
+
+      {% block body %}
+          <section class="main-content">
+              <h2>This is the Content</h2>
+
+              <p>This version uses @metalsmith/layouts 2.1.0 and @metalsmith/in-place 4.1.1</p>
+              <p>{{ filter_test | spaceToDash }}</p>
+              <p><em>{{ footnote | toUpper }}</em></p>
+          </section>
+      {% endblock %}
+      ```
+
+      **layouts/layout.njk**
+
+      ```html
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>{{ title }}</title>
+        </head>
+        <body>
+          {% include "./partials/header.njk" %}
+
+          {% block body %}   
+            This is the default contents
+          {% endblock %}
+
+          {% include "./partials/footer.njk" %}
+        </body>
+      </html>
+      ```
+
+      Our file system now looks like this:
+
+      ![the new way of using layouts and in-place](https://res.cloudinary.com/glinkaco/image/upload/v1645219356/tgc2022/blogImages/metalsmith-layouts-nunjucks/in-place-only_lqazil.png)
+      
+      **build.js**
+
+      ```javascript
+      const toUpper = function (string) {
+          return string.toUpperCase();
+      };
+
+      const spaceToDash = function (string) {
+          return string.replace(/\s+/g, "-");
+      };
+
+      const inplace = require('@metalsmith/in-place');
+      const metalsmith = require('metalsmith');
+
+      const templateConfig = {
+          engineOptions: {
+              filters: {
+                  toUpper: toUpper,
+                  spaceToDash: spaceToDash
+              }
+          }
+      };
+
+      metalsmith(__dirname)
+          .source('./src/')
+          .destination('./build/')
+          .clean(true)
+          .use(inplace(templateConfig))
+          .build(function (err) {
+              if (err) {
+                  throw err;
+              }
+              console.log('Build finished!');
+          });
+      ```
+
+      The `build.js` file is almost identical to the previous one, except that the layouts plugin is gone.
+
+      ## Note on Paths
+
+      Files located in the src folder are transformed by Metalsmith into an object and thus are read from memory and not from disk when processed by Nunjucks. This means that Nunjucks cannot resolve relative paths for files in the `src` folder as it doesn't know where they are on disk. That's why the `extends` tag URL in `./src/index.njk` must be relative to the root of the project: `./layouts/layout.njk`, so that Nunjucks can find the base template.
+
+      Files located outside the src folder are not stored in memory by Metalsmith and thus Nunjucks can resolve relative paths for those files. That's why the include tag URLs in `./layouts/layout.njk` are relative to the `layout.njk` file: `./partials/footer.njk`.
+
+      Note that when using Markdown in your source files, it is simpler to use @metalsmith/layouts and @metalsmith/in-place together as described below, as otherwise **your Nunjucks syntax might conflict with rendering markdown** or vice versa.
+
+      ## Using Markdown
+      
+      ![with markdown source file using layouts and in-place](https://res.cloudinary.com/glinkaco/image/upload/v1645219356/tgc2022/blogImages/metalsmith-layouts-nunjucks/with-markdown_ac6nce.png)
+      
+      _Note that the source file has extension `.md.njk`_
+
+      The above examples use HTML files as source files but if we want to use Markdown we also have to install jstransformer-markdown. How does jstransformer know what transformation to apply? As with Nunjucks, it uses the file extensions!
+
+      Multiple transformations require the use of multiple file extensions. For example if we use a Markdown source file and the Nunjucks templating engine then we must use `index.md.njk`.
+
+      **src/index.md.njk**
+
+      ```markdown
+      ---
+      title: Hello Title ;-)
+      layout: body.njk
+
+      footnote: this is a footnote
+      header_text: Vestibulum id ligula porta felis euismod semper. Nullam quis risus eget urna mollis ornare vel eu leo.
+      footer_text: Donec sed odio dui. Maecenas sed diam eget risus varius blandit sit amet non magna.
+      filter_test: I should have dashes between words
+      ---
+
+      ## This is the Content
+
+      This version uses @metalsmith/layouts 2.1.0 and @metalsmith/in-place 4.1.1
+
+      {{ filter_test | spaceToDash }}
+
+      _{{ footnote | toUpper }}_
+      ```
+
+      First @metalsmith/in-place will use `jstransformer-nunjucks` to perform all inline transformation like `{{ filter_test | spaceToDash }}` and `{{ footnote | toUpper }}`. Then jstransformer will convert markdown into HTML and finally @metalsmith/layouts will apply the page template.
+
+      This approach can be seen in the [with_markdown branch](https://github.com/wernerglinka/ms-layout-njk/tree/with_markdown) at the repository.
+
+      ## When to use `@metalsmith/in-place` and/or `@metalsmith/layouts`
+      
+      When to use @metalsmith/in-place and/or @metalsmith/layouts that is a question often asked but there is no generic answer - the answer depends on your use-case. This blogpost was written to investigate a specific use-case: @metalsmith/in-place, @metalsmith/layouts and Nunjucks.
+
+      In our case, @metalsmith/in-place can be used by itself if we use HTML in our source files. When using Markdown, we found that using layouts is a simple way to resolve conflicts between Markdown and Nunjucks, by separating the Nunjucks syntax from the Markdown syntax.
+
+      - Use @metalsmith/in-place only when the source file uses HTML.
+      - Use @metalsmith/in-place and @metalsmith/layouts as demonstrated in branch **with_markdown** when the source file uses Markdown.
+      
+      Using other templating engines might require changes in your Metalsmith setup. If you are using Metalsmith with a different templating engine you may want to add your use-case to the [Wiki](https://github.com/metalsmith/in-place/wiki) of the @metalsmith/in-place and @metalsmith/layouts GitHub repositories.
+
+      I like to thank the author of @metalsmith/in-place and @metalsmith/layouts [@ismay](https://github.com/ismay) for his suggestions and clarifications for this blogpost.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

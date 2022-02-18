@@ -4,11 +4,15 @@
 
 
   <section class="section-contact-footer">
+    {% set image = params.image %}
+    {# site is in scope, was passed via the component macro #}
+    
+    {% if image.src %}
     <div class="footer-decoration">
-      {% set image = params.image %}
-      {# site is in scope, was passed via the component macro #}
       {{ responsiveImage(image, site) }}
     </div>
+    {% endif %}
+    
     <div class="footer-info">
       <div>
         <h2>Contact</h2>

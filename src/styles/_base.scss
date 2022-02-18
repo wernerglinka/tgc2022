@@ -28,7 +28,7 @@ ol {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
 }
 
@@ -71,4 +71,39 @@ ol {
   font-size: 14px;
   font-weight: 500;
   color: $tag-color;
+}
+
+.caption p, {
+  font-size: 14px;
+  margin: 0.25em 0 ;
+  text-align: right;
+}
+
+.main-columns {
+  display: flex;
+  justify-content: flex-start;
+
+  @media (max-width: $tablet-breakpoint) {
+    display: block;
+  }
+
+  > section {
+    flex: 0 0 70%;
+    max-width: 70%;
+    padding-right: 100px;
+
+    @media (max-width: $tablet-breakpoint) {
+      padding-right: 0;
+      max-width: 100%;
+    }
+  }
+
+  > aside {
+    flex: 0 0 30%;
+    max-width: 30%;
+
+    @media (max-width: $tablet-breakpoint) {
+      display: none;
+    }
+  }
 }
