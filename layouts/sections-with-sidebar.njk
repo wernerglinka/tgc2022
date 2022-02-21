@@ -3,7 +3,7 @@
 {% from "./sections/component.njk" import component %}
 
 {% block body %}
-  <div class="container main-columns">
+  <div class="container main-columns {{ pageType }}">
     <section>
     {% for section in sections %}
 

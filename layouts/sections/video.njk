@@ -1,0 +1,8 @@
+{% from "../partials/video.njk" import video %}
+
+<section class="section-video {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  <div class="container">
+    {% set videoData = params.video %}
+    {{ video(videoData, site) }}
+  </div>
+</section>

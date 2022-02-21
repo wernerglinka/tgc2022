@@ -35,13 +35,13 @@ const navigation = (function() {
     // use a body attribute "pageName" to style nav items, etc.
 
     // get the path from the window.location object and delete leading and trailing "/"
-    let loc = window.location.pathname.replace(/(^\/)|(\/$)/g, "");
+    let loc = window.location.pathname.replace(/(^\/)|(\/$)/g, "").replace("/", "-");
     loc = loc ? loc : "home";
     document.body.setAttribute("pageName", loc);
 
     document.addEventListener("swup:contentReplaced", e => {
       // get the path from the swup object and delete leading and trailing "/"
-      let loc = e.path[0].location.pathname.replace(/(^\/)|(\/$)/g, "");
+      let loc = e.path[0].location.pathname.replace(/(^\/)|(\/$)/g, "").replace("/", "-");
       loc = loc ? loc : "home";
       document.body.setAttribute("pageName", loc);
     });

@@ -1,0 +1,299 @@
+---
+title: Building Job pages with Metalsmith and the Lever Postings API
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+blogTitle: "Building Job pages with Metalsmith and the Lever Postings API"
+date: 2018-11-10T12:00:00Z
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 2
+excerpt: |-
+  An overview of how to build dynamic Metalsmith pages by using a third-party service API.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2018-11-10:00:00Z
+    title: "Building Job pages with Metalsmith and the Lever Postings API"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645473940/tgc2022/blogImages/metalsmith-lever-api/header_iojiti.jpg"
+      alt: "new hire"
+      aspectRatio: "25"
+      caption: "Photo by [RODNAE Productions](https://www.pexels.com/@rodnae-prod) from [Pexels](https://www.pexels.com/photo/people-standing-beside-a-whiteboard-7581125)"
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Some of my clients are using Lever to manage their recruiting process. Lever provides a [Postings REST API](https://github.com/lever/postings-api) that allows their customers to add job listings to their websites.
+
+      One client site is a static website that is build with [Metalsmith](https://www.metalsmith.io/).
+
+      Metalsmith is a NodeJS based Static Site Generator, a very simple “piece of machinery” that moves files from a source to a destination directory and in between it allows plugins to manipulate the files. Specifically:
+
+      - Metalsmith reads source files from a source directory and converts the files into Javascript Objects
+      - These Javascript Objects can now be manipulated with Plugins. These manipulations are applied to the JavaScript objects either by changing the properties or the property values. See my post Introducing Project Orca - Part 2 for a more detailed explanation of how Metalsmith works
+      - Metalsmith then converts all JS objects back into files and writes them to a destination directory
+
+  - component: image
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    header: ""
+    subTitle: ""
+    prose: ""
+    image:
+      src: "v1645474174/tgc2022/blogImages/metalsmith-lever-api/metalsmith-with-plugins_cmycip.svg"
+      aspectRatio: "65.7"
+      caption: ""
+  
+  
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Metalsmith is perfectly suited to add pages dynamically during its build cycle. During the build process, a custom Metalsmith plugin requests a JSON object with all jobs data from the Lever API and turns them into a Metalsmith file object. This object is then added to the Metalsmith files object and processed like any other page.
+
+      Essentially, we get the Lever API Jobs object, convert it into a Metalsmith file object and then Metalsmith does the rest.
+
+      Here is an example of a Lever Job object from their API docs:
+
+      ```javascript
+      {
+        "additionalPlain": "The Lever Story\n\nWe participated in Y Combinator in summer 2012, … and hiring a diverse workforce.",
+        "additional": "<div><b style="\"font-size:" 18px\"="">The Lever Story</b></div><div><br></div><div>We participated in Y Combinator in summer 2012, … hiring a diverse workforce.</div>",
+        "categories": {
+          "commitment": "Full Time",
+          "department": "Sales",
+          "location": "Toronto",
+          "team": "Account Executive"
+        },
+        "createdAt": 1502907172814,
+        "descriptionPlain": "Work at Lever\n\nLever builds software for teams…well-designed, real-time apps.",
+        "description": "<div><b style="\"font-size:" 18px\"="">Work at Lever</b></div><div><br></div><div>Lever builds software for teams…well-designed, real-time apps.</div>",
+        "id": "ff7ef527-b0d3-4c44-836a-8d6b58ac321e",
+        "lists": [
+          {
+            "text": "About the Gig:",
+            "content": "<li>You will be responsible …across North America</li><li>You will be a Top Hat … your territory</li><li>You will grow … relationships through the schools</li><li>You will educate professors…our platform in their classrooms</li><li>You will run demonstrations… North America)</li>"
+          },
+          {
+            "text": "About You:",
+            "content": "<li>You are highly motivated…communication skills</li><li>You have previous…are incredibly eager to learn!</li><li>You are detail-oriented and a self-starter</li><li>You have completed … experience</li><li>You will also … team as required</li>"
+          }
+        ],
+        "text": "Account Director (Inside/Outside Hybrid Sales)",
+        "hostedUrl": "https://jobs.lever.co/leverdemo/ff7ef527-b0d3-4c44-836a-8d6b58ac321e",
+        "applyUrl": "https://jobs.lever.co/leverdemo/ff7ef527-b0d3-4c44-836a-8d6b58ac321e/apply"
+      }
+      ```
+
+      Some of the fields are not really that descriptive but here is my interpretation of what we are looking at:
+
+      - **text** : the job title
+      - **id** : the job ID
+      - **categories/commitment** : job status - Full/half time
+      - **categories/department** : the job department:
+      - **categories/location** : the job location
+      - **categories/team** : job group - a team in a department
+      - **lists** : this is a list of objects, each having a text and content property. This can be used to describe the various aspects of a job
+      - **description and descriptionPlain** : describing jobs at this company. description is a html string while descriptionPlain is a plain text string
+      - **additional and additionalPlain** : Used to describe the hiring company
+      - **hostedURL** : URL of the Lever Job listing page
+      - **applyURL** : URL of the form to apply for this job
+
+      To transform the above Lever job JSON into the corresponding Metalsmith file object I wrote a simple plugin. In this plugin I am using a couple of node modules to fetch the JSON from the Lever server and to format the template string for the target page html in a readable way .
+
+      - [request](https://www.npmjs.com/package/request) - a simple HTTP client to make calls to the Lever Postings API.
+      - [common-tags](https://www.npmjs.com/package/common-tags) - a set of well-tested, commonly used template literal tag functions for use in ES2015+.
+
+      ```javascript
+      var request = require('request');
+      var commonTags = require('common-tags');
+
+      /**
+      * Metalsmith plugin to create static pages from lever api data
+      */
+      function plugin() {
+        'use strict';
+
+        return function (files, metalsmith, done) {
+
+          var companyUID = "LEVER_CUSTOMER_ID";
+          var url = "https://api.lever.co/v0/postings/";
+          var leverAPI = url + companyUID + "?mode=json";
+          var jobObj = {};
+          var j;
+          var fileContent, fileName, page;
+          var jobProse = "";
+
+          // get data from the Lever API
+          request.get(leverAPI, function (error, response, data) {
+            if (error) {
+                return console.dir(error);
+            }
+            // parse lever json into js object
+            jobObj = JSON.parse(data);
+
+            // build the job pages
+            jobObj.forEach(function (job) {
+
+              jobProse = "";
+              for (j = 0; job.lists.length > j; j++) {
+                jobProse += "<h2>" + job.lists[j].text + "</h2>";
+                jobProse += "<ul>" + job.lists[j].content + "</ul>";
+              }
+
+              fileContent = commonTags.html`
+                <div class="content-wrapper">
+                  <div class="careers-title-wrapper">
+                    <div class="title-wrapper">
+                      <h1>${job.text}</h1>
+                      <ul class="list-unstyled list-inline">
+                        <li>${job.categories.location}</li>
+                        <li>${job.categories.team}</li>
+                        <li>${job.categories.commitment}</li>
+                      </ul>
+                    </div>
+                    <div class="job-application">
+                      <a href="${job.applyUrl}" class="btn btn-default btn-b3">Apply for this Job</a>
+                    </div>
+                  </div>
+                  <div class="scroll-wrapper">
+                    <div class="job-verbiage">
+                      <div class="job-description">
+                        ${job.descriptionPlain}
+                      </div>
+                      <div class="job-requirements">
+                        ${jobProse}
+                      </div>
+                      <div class="additional-info">
+                        ${job.additionalPlain}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+              // key for the files array
+              fileName = "jobs/" + job.id + ".html";
+              page = {
+                layout: "jobs-page.html",
+                title: job.text,
+                description: “You really want this job",
+                body_classes: "careers",
+                contents: new Buffer(fileContent)
+              };
+              // add page to metalsmith object
+              files[fileName] = page;
+            });
+            done();
+          });
+        };
+      }
+
+      module.exports = plugin;
+      ```
+
+      The plugin code should be pretty self explainatory. In short:
+
+      - We are requesting the job listings from this endpoint: `https://api.lever.co/v0/postings/<LEVER_CUSTOMER_ID>?mode=json`
+      - Upon receiving the response JSON we convert the Lever JSON into a Javascript object
+      - Then we build the job pages content one by one by inserting the appropriate object properties into the HTML template string
+      -  Then we define the job page key for the Metalsmith files object. This key is the path to the page, in our case, using the id from the example job above, it is: _jobs/ff7ef527-b0d3-4c44-836a-8d6b58ac321e.html_
+      - Then the page object is defined by the previously populated template string and by various metadata, including the page template that Metalsmith should use.
+      - And lastly, we are adding this page to the Metalsmith files object.
+
+      Metalsmith does the rest. At the end of this build process there will be a folder `jobs` in the Metalsmith destination directory with our example file - among others - `ff7ef527-b0d3-4c44-836a-8d6b58ac321e.html` in it.
+      
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

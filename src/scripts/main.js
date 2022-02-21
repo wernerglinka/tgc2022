@@ -31,13 +31,14 @@ function initPage() {
   if (document.querySelector('.js-progressive-image-wrapper')) {
     loadResponsiveImage.init();
   }
-  //externalLinks.init();
   if (document.querySelector('.js-splide-customers')) {
     customerSlider.init();
   }
   if (document.querySelector('.js-splide-testimonials')) {
     testimonialsSlider.init();
   }
+
+  modalVideo.init();
 };
 
 (function() {

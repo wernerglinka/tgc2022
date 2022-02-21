@@ -1,0 +1,23 @@
+{% from "../partials/text.njk" import text %}
+
+<section class="section-blog-list {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  {% set info = params %}
+  {{ text(info)}}
+
+  <ul class="blog-list">
+    {% for post in allSortedBlogPosts %}
+    
+    <li>
+      <H4><a href="/{{ post.path }}">{{ post.title }}</a></H4>
+      <time datetime="{{ post.date }}">{{ post.date | niceDate }}</time>
+      {% if post.author %}
+      <p>{{post.author}}</p>
+      {% endif %}
+      <div class="excerpt">{{ post.excerpt | mdToHTML | safe }}</div>
+    </li>
+    
+    {% endfor %}
+  </ul>
+
+
+</section>

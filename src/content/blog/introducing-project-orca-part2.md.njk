@@ -1,0 +1,335 @@
+---
+title: Introducing Project Orca - Part 2
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+blogTitle: "Introducing Project Orca - Part 2"
+date: "2018-07-28T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  A look at how Metalsmith transforms a file using plugins.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2018-07-28T12:00:00Z"
+    title: "Introducing Project Orca"
+    header: "h1"
+    headerClass: ""
+    subTitle: "Part 2"
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645224098/tgc2022/blogImages/orca1/orca_ahjaat.jpg"
+      alt: "a tree"
+      aspectRatio: "25"
+      caption: "Photo by [Andre Estevez](https://www.pexels.com/@andre-estevez-1743712) from [Pexels](https://www.pexels.com/photo/grayscale-photo-of-body-of-water-3309865)"
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      In [Introducing Project Orca - Part 1](/blog/introducing-project-orca-part1/) I wrote about why we should be using a static website and provided a short overview of what a Metalsmith static site generator is. In this post we'll look at how Metalsmith transforms a file using plugins.
+
+      ## A simple build script
+      We will be using a very simple Metalsmith build script `build.js` to:
+
+      -Transform a file into a javascript object
+      - Convert markdown content into html
+      - Determine the permalink
+      - Apply a page template
+      - Transform the final javascript object back into a file
+      - Place the file into a destination directory
+     
+      **build.js**
+
+      ```javascript
+      Metalsmith(__dirname)            
+          .source('sourcepath')      
+          .destination('destpath')   
+          .use(markdown())
+          .use(permalinks())          
+          .use(layouts())
+          .build(function(err) {         
+              if (err) throw err;          
+          });
+      ```
+
+      The above Metalsmith build script defines the source path and the destination path for all files that are processed.
+
+      ## Transforming `example-file.md`
+
+      We are starting with a simple markdown file example-file.md. First Metalsmith transformes this file into a javascript object and then plugins will change the appropriate javascript properties. At the end the object will be transformed back into a file by Metalsmith and placed into the destination directory.
+
+      The initial markdown file includes a section at the top that is called [frontmatter](https://jekyllrb.com/docs/front-matter/). Frontmatter is formatted in [YAML](https://yaml.org/) and is set between triple-dashed lines.
+
+      Below the frontmatter is the content, in our case it is just a simple paragraph with a h2 header
+
+      **example-file.md**
+
+      ```markdown
+      ---
+      layout: blog-post.html
+
+      # meta data
+      title: Etiam Mollis Risus
+      draft: true
+      description: "Vestibulum id ligula porta felis euismod semper."
+
+      # page properties
+      blog_title: Etiam Mollis Risus
+      categories: category1
+      tags: [tag1, tagA, tag3]
+      author: [author2, author1]
+      featured_blog_post: true
+      featured_blog_post_order: 2
+
+      image:
+        feature: default.jpg
+        thumbnail: default_tn.jpg
+      date: 2017-03-12
+      body_classes: blog-post has-sidebar
+      ---
+
+      ## Nibh Fringilla Cursus
+      Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+      Note the variable layout that specifies the template file to be used. In our example the template looks like this:
+      ```
+
+      **blog-post.html**
+
+      ```html
+      <!doctype html>
+      <html>
+          <head>
+              <title>{{ title }}</title>
+          </head>
+          <body>
+              {{ contents | safe }}
+          </body>
+      </html>
+      ```
+
+      ## File to javascript object transformation
+      
+      Metalsmith starts the build process by transforming all files in the source directory into objects. In our example we only have one file, example-file.md.
+
+      ```javascript
+      {
+        relative_to_source_path/example-file.md: {
+          layout: blog-post.html,
+          title: Etiam Mollis Risus,
+          description: ‘Vestibulum id ligula porta…’,
+          blog_title: Etiam Mollis Risus,
+          categories: category1,
+          tags: [tag1, tagA, tag3],
+          author: [author2, author1],
+          featured_blog_post: true,
+          featured_blog_post_order: 2,
+          image: {
+            feature: default.jpg,
+            thumbnail: default_tn.jpg
+          },
+          date: 2017-03-12,
+          body_classes: blog-post has-sidebar,
+          contents:‘## Nibh Fringilla Cursus…’,
+          mode: ‘0777’,
+          stats: {}
+      }
+      ```
+
+      The result of the transformation shows an object of objects. Each file object is identified by its source path as the _key_ and the _value_ with all file properties.
+
+      ## Markdown to HTML transformation
+
+      The first plugin that is invoked by Metalsmith is the [markdown plugin](https://github.com/metalsmith/markdown) to convert the file contents into html
+
+      ```javascript
+      {
+        relative_to_source_path/example-file.html: {
+          layout: blog-post.html,
+          title: Etiam Mollis Risus,
+          description: ‘Vestibulum id ligula porta…’,
+          blog_title: Etiam Mollis Risus,
+          categories: category1,
+          tags: [tag1, tagA, tag3],
+          author: [author2, author1],
+          featured_blog_post: true,
+          featured_blog_post_order: 2,
+          image: {
+            feature: default.jpg,
+            thumbnail: default_tn.jpg
+          },
+          date: 2017-03-12,
+          body_classes: blog-post has-sidebar,
+          contents:‘<h2>Nibh Fringilla Cursus…</h2>’,
+          mode: ‘0777’,
+          stats: {}
+      }
+      ```
+      
+      The results of this conversion show in two places. The object key now shows a .html file extension and the contents variable now shows an html string.
+
+      ## Determine the permalink
+
+      ```javascript
+      {
+        relative_to_source_path/example-file.html: {
+          layout: blog-post.html,
+          title: Etiam Mollis Risus,
+          description: ‘Vestibulum id ligula porta…’,
+          blog_title: Etiam Mollis Risus,
+          categories: category1,
+          tags: [tag1, tagA, tag3],
+          author: [author2, author1],
+          featured_blog_post: true,
+          featured_blog_post_order: 2,
+          image: {
+            feature: default.jpg,
+            thumbnail: default_tn.jpg
+          },
+          date: 2017-03-12,
+          body_classes: blog-post has-sidebar,
+          contents:‘<h2>Nibh Fringilla Cursus…</h2>’,
+          path: 'example-file',
+          mode: ‘0777’,
+          stats: {}
+      }
+      ```
+
+      The [permalinks plugin](https://github.com/metalsmith/permalinks) creates a new directory for each file and names it with the file name sans the extension. Then it places the file into the new directory and renames the file to index.html. For example after the plugin is done, the file `example-file.html` has become `example-file/index.html`. It also added a new variable `path` to the file object.
+
+      ## Applying the page template
+
+      ```javascript
+      {
+        relative_to_source_path/example-file.html: {
+          layout: blog-post.html,
+          title: Etiam Mollis Risus,
+          description: ‘Vestibulum id ligula porta…’,
+          blog_title: Etiam Mollis Risus,
+          categories: category1,
+          tags: [tag1, tagA, tag3],
+          author: [author2, author1],
+          featured_blog_post: true,
+          featured_blog_post_order: 2,
+          image: {
+            feature: default.jpg,
+            thumbnail: default_tn.jpg
+          },
+          date: 2017-03-12,
+          body_classes: blog-post has-sidebar,
+          contents:’<!doctype html>
+            <html>
+                <head>
+                  <title>Etiam Mollis Risus</title>
+                </head>
+                <body>
+                  <h2>Nibh Fringilla Cursus</h2>…
+                </body>
+            </html>,
+          path: 'example-file',
+          mode: ‘0777’,
+          stats: {}
+      }
+      ```
+
+      The layout plugin applies the template file `blog-post.html`. This transforms the variable `contents` into a full fledged html page. The object is now ready to be converted back into a file by Metalsmith and put into the destination directory. Because we used the permalinks plugin our file name is now `example-file/index.html`.
+
+      **example-file/index.html**
+
+      ```html
+      <!doctype html>
+      <html>
+        <head>
+          <title>Etiam Mollis Risus</title>
+        </head>
+        <body>
+          <h2>Nibh Fringilla Cursus</h2>
+          <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+        </body>
+      </html>
+      ```
+
+      As you can see, we have complete control over the files object. In fact, we do not even need a source file, we could just build a new js object and add that to the Metalsmith pages object in a plugin and at the end that object will be converted into a real file. The data for such a dynamically generated file may come from a data file or from an API call that will fetch data from an external source.
+
+      The result is always the same, a good old static html file.
+
+      If you want to learn more about adding dynamically generated files read my post [Building Job pages with Metalsmith with the Lever Postings API](/blog/metalsmith-lever-api/).
+
+      A very crucial part of generating html pages with a static site generator is the templating engine. In a future post, Introducing Project ORCA Part3 we will have a look at [Nunjucks](https://mozilla.github.io/nunjucks/), "a rich and powerful templating language for JavaScript" that is maintained by Mozilla.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

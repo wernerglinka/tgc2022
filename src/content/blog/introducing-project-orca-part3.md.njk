@@ -1,0 +1,251 @@
+---
+title: Introducing Project Orca - Part 3
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+blogTitle: "Introducing Project Orca - Part 3"
+date: "2019-01-18T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  A brief introduction of Nunjucks,  the templating engine that was used in Project ORCA.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2019-01-18T12:00:00Z"
+    title: "Introducing Project Orca"
+    header: "h1"
+    headerClass: ""
+    subTitle: "Part 3"
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645224098/tgc2022/blogImages/orca1/orca_ahjaat.jpg"
+      alt: "a tree"
+      aspectRatio: "25"
+      caption: "Photo by [Andre Estevez](https://www.pexels.com/@andre-estevez-1743712) from [Pexels](https://www.pexels.com/photo/grayscale-photo-of-body-of-water-3309865)"
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      In [Introducing Project Orca - Part 1](/blog/introducing-project-orca-part1/) I wrote about when to use a static website and provided a short overview of what a Metalsmith static site generator is. In [Introducing Project Orca - Part 2](/blog/introducing-project-orca-part2/) I described how Metalsmith works.
+
+      In this blogpost I will briefly introduce the [templating engine](https://en.wikipedia.org/wiki/Web_template_system) that was used in Project ORCA.
+
+      I wanted to use a templating engine that is Javascript based and supports a [Twig](https://twig.symfony.com/doc/2.x/tags/if.html) like syntax and found [Nunjucks](https://mozilla.github.io/nunjucks/). Both engines have a common ancestor, [Jinja](https://jinja.palletsprojects.com/en/3.0.x/), which was modeled after [Django’s](https://www.djangoproject.com/) templates. (_Django is a high-level Python Web framework_). Nunjucks is maintained by Mozilla.
+
+      Nunjucks is a token based templating system with support for variables, loops and conditionals. In addition it also supports advanced page composition with block inheritance, includes, layout inheritance, custom tags and macros. The Nunjucks docs can be found [here](https://mozilla.github.io/nunjucks/api.html).
+
+      Here is an example of a Nunjucks template:
+
+      ```html
+      <!doctype html>
+      <html lang="en" itemscope="" itemtype="”http://schema.org/Article”">
+        <head>
+          {% include "head.html" %}
+        </head>
+
+        <body id="onTop" class="{{ body_classes }} isLoading">
+          {% include "browser-upgrade.html" %}
+
+          <div class="container">
+            <div class="has-columns cf">
+              <section class="main">
+                {% if title %}
+                <h1 class="page-title">{{ title }}</h1>
+                {% endif %}
+                <ul class="blog-list-vertical list-unstyled">
+                  {% for blogpost in pagination.files %}            
+                  <li class="cf">
+                    <a href="/{{ blogpost.path | makePermalink }}">
+                      <div class="blog-list-vertical__img" style="background-image: url({{ blogpost.tn }})"></div>
+                    </a>
+                    <div class="blog-info">
+                      <a href="/{{ blogpost.path | makePermalink }}"><h2>{{ blogpost.title }}</h2></a>
+                      <p>
+                        by {% for index, author in blogpost.blogAuthors %}{{ author.title }}{% if not loop.last %}, {% endif %}{% endfor %}
+                        <br>on {{ blogpost.date | dateFilter("MMMM D, YYYY") }}
+                      </p>
+                    </div>
+                  </li>       
+                  {% endfor %}
+                </ul>
+
+                {% include "pager.html" %}
+
+                </section>
+                <aside class="sidebar">
+                  <h3>Blog Categories:</h3>
+                  {% include "categories-list.html" %}
+
+                  <h3>Tags</h3>
+                  {% include "tags-list.html" %}
+
+                  <h3>Featured Posts</h3>
+                  <ul class="blog-list-overview">
+                    {% for featuredBlogPost in featuredBlogPosts %}
+                    <li>
+                      <ul class="list-unstyled">
+                        <li class="blog-post-title"><a href="/{{ featuredBlogPost.path }}/">{{ featuredBlogPost.title }}</a></li>
+                        <li><a class="read-more-link" href="/{{ featuredBlogPost.path }}/">Read it <span>»</span></a></li>
+                      </ul>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </aside>
+              </div>
+            </div>
+
+            {% block footer %}
+            {% include "footer.html" %}
+            {% endblock %}
+
+            <a id="toTopButton" href="#onTop"><i class="icon icon-arrow-up"></i></a>
+        
+            {% block body_scripts %}
+            {% include "scripts.html" %}
+            {% endblock %}
+          </div>
+        </body>
+      </html>
+      ```
+
+      This example uses various features of Nunjucks and many act very similar to their Javascript cousins.
+
+      ### Variables
+      This example shows a variable `body_classes` being added to a static class `isLoading`.
+
+      ```html
+      <body id="onTop" class="{{ body_classes }} isLoading"> ... </body>
+      ```
+
+      ### include
+
+      `include` imports other templates in place. This allows the use of common page elements. For example:
+
+      ```html
+      <head>
+          {% include "head.html" %}
+      </head>
+      ```
+
+      ### if
+      `if` allows conditional rendering like the example below:
+
+      ```html
+      {% if title %}
+          <h1 class="page-title">{{ title }}</h1>
+      {% endif %}
+      ```
+
+      ### for
+      `for` allows to iterate over arrays and objects. In the example below I create all list items by iterating over an object called `featuredBlogPosts`.
+
+      ```html
+      <ul class="blog-list-overview">
+          {% for featuredBlogPost in featuredBlogPosts %}
+          <li>
+              <ul class="list-unstyled">
+              <li class="blog-post-title"><a href="/{{ featuredBlogPost.path }}/">{{ featuredBlogPost.title }}</a></li>
+              <li><a class="read-more-link" href="/{{ featuredBlogPost.path }}/">Read it <span>»</span></a></li>
+              </ul>
+          </li>
+          {% endfor %}
+      </ul>
+      ```
+
+      ### Filters
+      From the Nunjucks Docs: "_Filters are essentially functions that can be applied to variables. They are called with a pipe operator (|) and can take arguments._". In the example below the path to a blogpost is transformed into a permalink with the filter function `makePermalink`.
+
+      ```html
+      <a href="/{{ blogpost.path | makePermalink }}"><h2>{{ blogpost.title }}</h2></a>
+      ```
+
+      ### Template Inheritance
+      Again from the Nunjucks docs: "_Template inheritance is a way to make it easy to reuse templates. When writing a template, you can define "blocks" that child templates can override._". 
+      
+      In this example I define a block `footer` and then include `footer.html`. Any template that extends this template can now add to or replace the content of this block.
+
+      ```html
+      {% block footer %}
+          {% include "footer.html" %}
+      {% endblock %}
+      ```
+
+      The full Nunjucks docs can be found [here](https://mozilla.github.io/nunjucks/templating.html). I'd also recommend reading [Building A Static Site With Components Using Nunjucks](https://www.smashingmagazine.com/2018/03/static-site-with-nunjucks/) by [Chris Coyier](https://chriscoyier.net/) on the Smashing Magazine website for his take on how to use Nunjucks.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

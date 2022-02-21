@@ -1,0 +1,164 @@
+---
+title: Nunjucks and jsTransformer
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+blogTitle: "Nunjucks and jsTransformer"
+date: "2018-08-01T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  How to extend the Nunjucks environment when using jstransformers.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2018-08-01T12:00:00Z
+    title: "Nunjucks and jsTransformer"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645220774/tgc2022/blogImages/metalsmith-layouts-nunjucks/layout-options_apwj06.jpg"
+      alt: "a tree"
+      aspectRatio: "25"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      When using Nunjucks with Metalsmith-in-place or Metalsmith-layouts we are doing so via the [jstransformer-nunjucks](https://github.com/jstransformers/jstransformer-nunjucks) plugin. In this case, to extend the Nunjucks environment we have to pass a configuration object to the Metalsmith plugins.
+
+      Currently `jstransformer-nunjucks` supports a path variable, filters and extensions.
+
+      This is how we would pass these configuration options to Nunjucks:
+
+      ## In our Metalsmith build file
+
+      ```javascript
+      const CaptureTag = require(“nunjucks-capture”);
+
+      const toUpper = text => text.toUpperCase();
+      const spaceToDash = text => text.replace(/\s+/g, “-“);
+      .
+      .
+      .
+      const templateConfig = {
+          engineOptions: {
+              path: __dirname + '/layouts',
+              filters: {
+                  toUpper: toUpper,
+                  spaceToDash: spaceToDash
+              },
+              extensions: {
+                  CaptureTag: new CaptureTag()
+              }
+          }
+      };
+      .
+      .
+      .
+      .use(metalsmith-in-place(templateConfig))
+      ```
+
+      This example defines the path to the layout directory. Now all paths in our templates must be relative to this layout directory path.
+
+      We are also adding two filters: One that converts a string to upper case and a second one that replaces all spaces in a string with dashes.
+
+      Finally, we are extending Nunjucks with [nunjucks-capture](https://github.com/fffunction/nunjucks-capture) - a nunjucks port of the [Liquid Capture tag](https://shopify.dev/api/liquid/tags/variable-tags#capture), which will allow us to use a new capture tag like so:
+
+      ```javascript
+      {% set favorite_food = 'pizza' %}
+      {% set age = 35 %}
+
+      {% capture about_me -%}
+      I am {{ age }} and my favorite food is {{ favorite_food }}.
+      {%- endcapture %}
+
+      {{ about_me }}
+      ```
+
+      This will result in
+
+      ```javascript
+      I am 35 and my favorite food is pizza.
+      ```
+
+      Everything between the two tags is stored in a new variable as a string. Dynamic content, such as includes or loops, are evaluated before the variable is stored. This means you've captured the resulting content, not the templating.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

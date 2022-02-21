@@ -3,7 +3,7 @@ body {
 }
 p,
 li {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 300;
   line-height: 1.5;
   color: $paragraph-color;
@@ -78,7 +78,24 @@ a {
   text-decoration: none;
 
   &:hover {
-    color: $link-hover-color;
+    border-bottom: 1px solid $link-color;
+  }
+}
+a[href*='http://'], a[href*='https://'] {
+  white-space: nowrap;
+
+  &:after {
+    background-image: url('/assets/images/external-link.png');
+    background-size: .7em;
+    display: inline-block;
+    width: .7em; 
+    height: .7em;
+    content:"";
+    margin-left: 5px;
+  }
+
+  &.icon-link:after {
+    display: none;
   }
 }
 

@@ -1,0 +1,169 @@
+---
+title: Introducing Project Orca - Part 1
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+blogTitle: "Introducing Project Orca - Part 1"
+date: "2018-07-18T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  Wordpress, Joomla or any of the readily available open source CMSs is overkill for many small to medium sized business websites. In many cases a static website will be a better choice.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2018-07-18T12:00:00Z"
+    title: "Introducing Project Orca"
+    header: "h1"
+    headerClass: ""
+    subTitle: "Part 1"
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645224098/tgc2022/blogImages/orca1/orca_ahjaat.jpg"
+      alt: "a tree"
+      aspectRatio: "25"
+      caption: "Photo by [Andre Estevez](https://www.pexels.com/@andre-estevez-1743712) from [Pexels](https://www.pexels.com/photo/grayscale-photo-of-body-of-water-3309865)"
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      In my blogpost [Who needs a WordPress website?](/blog/wordpress-static-website/) I wrote about CMS overuse. My conclusion was that using Wordpress, Joomla or any of the readily available open source CMSs is overkill for many small to medium sized businesses. In many cases a static website will be a better choice.
+
+      ## Why a static site?
+      
+      > They are secure, fast, and inexpensive to host. They do NOT need any security patches, updates - no drama, no armageddons.
+
+      I have build static sites for corporate clients that explicitly wanted one because they load super fast and are very secure. But some of them also wanted to update page content by themselves.
+
+      This was the inspiration for project ORCA. Using Drupal for its superior content management capability in conjunction with a static website.
+
+      > ORCA is a decoupled Drupal 8 site feeding content to a static website build process.
+
+      ORCA implements a small/medium size company website. The home page provides an extensive company overview much like a Single Page website but also provides links to specific landing pages, for example the blog landing page.
+
+      When building a Drupal site, information are organized into Blocks. Blocks are build manually in the block admin page, as Nodeblocks or automatically with Views. The blocks are then used by Drupal to assemble a page dynamically.
+
+      With static pages we don’t have that luxury and that is where a [Static Site Generator](https://www.sitepoint.com/7-reasons-use-static-site-generator/) enters the picture.
+
+      Static site generators build HTML-only page files from templates and raw data. Data may be contained in JSON, YML or Markdown files. They offer some of the benefits of a CMS without the hosting, performance and security issues.
+
+      A site generator in combination with a [Templating Engine](https://en.wikipedia.org/wiki/Template_engine) allows us to use components to assemble site pages, except that this “build step” is done prior to uploading a site to the server.
+
+      There are hundreds of site generators available. The most prominent one is [Jekyll](https://jekyllrb.com/), which can be used to [create GitHub pages](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll). Jekyll is written with Ruby but I wanted to use a Javascript based site generator as that is a language I already know. I also wanted something simple so after some searching I found [Metalsmith](https://www.metalsmith.io/), and what a find it was.
+
+      ## Metalsmith
+      Metalsmith is a Static Site Generator, it is a simple piece of software that moves files from a source to a destination directory and in between it allows plugins to manipulate the files.
+
+  - component: image
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    header: ""
+    subTitle: ""
+    prose: ""
+    image:
+      src: "v1645119351/tgc2022/what-is-metalsmith_x9t5nr.jpg"
+      aspectRatio: "48.3"
+      caption: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      - First Metalsmith reads files from a source directory and converts the files into Javascript Objects.
+      - These Javascript Objects can now be transformed with Plugins and these plugins can simply be chained together. Plugin transformations are applied to the JavaScript objects either by changing the properties or the property values.
+      - Finally, Metalsmith converts all transformed JS objects back into files and writes them to a destination directory.
+      
+      Metalsmith is [Nodejs](https://nodejs.org/en/) based so there are thousands of plugins already available that may be used in Metalsmith plugins. Also, Metalsmith may be used with [Gulp](https://gulpjs.com/) so we can take advantage of all Gulp plugins during the build process. And if there is a problem that has not been solved yet, it is fairly simple to write a plugin.
+
+      In Introducing Project Orca - Part 2 we will take a look at how Metalsmith works in detail.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

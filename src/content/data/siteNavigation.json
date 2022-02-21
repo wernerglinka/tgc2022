@@ -24,7 +24,7 @@
       "icon": "layers",
       "label": "Blog",
       "description": "A sometimes unfilterred stream of thoughts.",
-      "url": "/blog",
+      "url": "/blogs",
       "submenuID": "",
       "submenuClass": "",
       "isButton": false,

@@ -7,9 +7,9 @@ const inplace = require('@metalsmith/in-place');
 const permalinks = require('@metalsmith/permalinks');
 const processLinks = require('metalsmith-safe-links');
 const prism = require('metalsmith-prism');
-const blogLists = require('metalsmith-blog-lists');
+//const blogLists = require('metalsmith-blog-lists');
 
-//const blogLists = require('../local_modules/metalsmith-blog-lists');
+const blogLists = require('../local_modules/blog-lists');
 
 
 const CaptureTag = require('nunjucks-capture');
