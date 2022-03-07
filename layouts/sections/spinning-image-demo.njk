@@ -1,0 +1,311 @@
+<style>
+  .section-spinning-image-demo .imageSpinContainer {
+    border: 1px solid #ccc;
+    width: 50%;
+    height: 0;
+    padding-bottom: 56.05%;
+    background: transparent url(https://res.cloudinary.com/glinkaco/image/upload/v1645641417/tgc2022/blogImages/case-spinning-image/cork-screw_bksz3t.jpg) no-repeat 0;
+    background-size: cover;
+    margin: 40px auto; 
+  }
+  .section-spinning-image-demo .imageSpinContainer.afterLoad {
+    background: transparent url(https://res.cloudinary.com/glinkaco/image/upload/v1645641414/tgc2022/blogImages/case-spinning-image/cork-screw-spinning_gldoeg.jpg) no-repeat 0;
+    background-size: cover; 
+  }
+</style>
+
+<section class="section-spinning-image-demo {% if params.paddingTop %}paddingTop{% endif %} {% if params.paddingBottom %}paddingBottom{% endif %}">
+  <div class="imageWrapper">
+    <div class="imageSpinContainer imgOne afterLoad" data-spin-continuously="true" style="background-position: 80% 0px;"></div>
+  </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://unpkg.com/benmajor-jquery-touch-events@1.0.5/src/jquery.mobile-events.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+    'use strict';
+
+    /**
+     * touchClick to deal with touch and clicks we build a jquery event extension >> touchclick
+     */
+    var hasTouch = false;
+    // modernizr is required for this to work
+    if ($('html').hasClass('touch')) {
+      hasTouch = true;
+    }
+
+    // map the click
+    var eventType = hasTouch
+      ? "tap"
+      : "click";
+
+    $.event.special.touchclick = {
+      bindType: eventType,
+      delegateType: eventType
+    };
+
+    /**
+     *  the document ready function
+     */
+    $(function () {
+
+      var i = 0;
+      var spinSandBox = {
+
+        /**
+         *  to deal with screen resizing we create an event "resizeEnd"
+         *  this is used to do things at the end of resizing
+         */
+        screenResize: {
+          init: function () {
+
+            $(window).resize(function () {
+              if (this.resizeTO) {
+                clearTimeout(this.resizeTO);
+              }
+
+              this.resizeTO = setTimeout(function () {
+                $(this).trigger('resizeEnd');
+              }, 500);
+            });
+          }
+        }, // end screenResize
+
+        backgroundImages: {
+
+          config: {
+            imageSpinContainers: $('.imageSpinContainer'),
+            defaultSpinContinously: false,
+            defaultNumberOfFrames: 36,
+            defaultStartingFrame: 0,
+            defaultSpinDirection: "forward",
+            defaultTimeout: 120,
+            dragThreshold: 8
+          },
+
+          /**
+           * init background images object
+           * initializes all spinning image objects
+           * All objects must have data attributes to indicate continuous spin and spin direction
+           *
+           */
+          init: function () {
+
+            var self = this;
+            var imageSpinContainers = this.config.imageSpinContainers;
+
+            // init every image spin container
+            imageSpinContainers.each(function () {
+              // the image instance
+              var instance = $(this);
+
+              // build the instance data object
+              // If the data variable is missing we add the default setting
+              instance.data('starting-frame', (instance.data('starting-frame') || self.config.defaultStartingFrame));
+              instance.data('current-frame', (instance.data('starting-frame')));
+              instance.data('spin-continuously', (instance.data('spin-continuously') || self.config.defaultSpinContinously));
+              instance.data('spin-direction', (instance.data('spin-direction') || self.config.defaultSpinDirection));
+              instance.data('number-frames', (instance.data('number-frames') || self.config.defaultNumberOfFrames));
+              instance.data('time-out', (instance.data('time-out') || self.config.defaultTimeout));
+              instance.data('swipe-distance', 0); // used for temp distance storage during swipes
+
+              // local variables for easy reading
+              var spinContinuously = instance.data('spin-continuously');
+              var startingFrame = instance.data('starting-frame');
+
+              // show the first frame defined by data-starting-frame
+              // allow for starting frame option
+              self._goToNewFrame(startingFrame, instance);
+              instance.fadeIn('slow');
+
+              // init the controls for this spin instance
+              self._initControls(instance);
+
+              // let 'em spin
+              if (spinContinuously) {
+                self._spin(instance);
+              }
+            });
+
+          },
+
+          /**
+           * _spin
+           * Advances the image frames via a recursive timing loop until a click in
+           * the image container occurs
+           *
+           * @param  {obj} instance   The image instance
+           * @return                  none
+           */
+          _spin: function (instance) {
+
+            var self = this;
+            i = instance.data('starting-frame');
+
+            // start continuous spin
+            (function loop() {
+
+              var timeoutPeriod = instance.data('time-out');
+
+              setTimeout(function () {
+                // get the next frame number
+                i = self._updateFrameNumber(instance);
+                // advance to the next frame
+                self._goToNewFrame(i, instance);
+                // continue spinning if 'spin-continuously' is true
+                if (instance.data('spin-continuously')) {
+                  loop();
+                } else {
+                  // keep track of the last frame
+                  // so we can restart the spin where we left off.
+                  instance.data('starting-frame', i);
+                }
+              }, timeoutPeriod);
+            }());
+
+          },
+
+          /**
+           * _goToNewFrame
+           * Updates the image frame by updating the background position of the image instance
+           *
+           * @param  {integer} i        The frame number the image sprite is advanced to
+           * @param  {obj} instance     The image sprite instance
+           * @return                    none
+           */
+          _goToNewFrame: function (i, instance) {
+
+            var numberOfFrames = instance.data('number-frames');
+            var frameWidth = 100 / (numberOfFrames - 1);
+
+            instance.css('backgroundPosition', i * frameWidth + '% 0px');
+
+            // store the current frame number
+            instance.data('current-frame', i);
+          },
+
+          /**
+           * _updateFrameNumber
+           * Increaments or decrements the frame number depending on the spin direction of this instance
+           *
+           * @param  {integer} i              Current frame number
+           * @param  {obj} instance           The image object that neeeds its frame updated
+           * @param  {integer} numberOfFrames The number of frames of this image
+           * @return {[integer]}              Updated frame number
+           */
+          _updateFrameNumber: function (instance) {
+
+            // get the instance spin direction
+            var spinDirection = instance.data('spin-direction');
+            i = instance.data('current-frame');
+            var numberOfFrames = instance.data('number-frames');
+
+            if (spinDirection === "forward") {
+              // increment for forward direction
+              i++;
+              // reset to beginning when we reach the last frame
+              if (i === numberOfFrames) {
+                i = 0;
+              }
+            } else {
+              // decrease for backward direction
+              i--;
+              // reset to the end when we reach the first frame
+              if (i === -1) {
+                i = numberOfFrames - 1;
+              }
+            }
+            return i;
+          }, // end _updateFrameNumber
+
+          /**
+           * _initControls
+           * function to initialize simple image spin controls
+           * double clicking on the image will stop/start the continues spin
+           */
+          _initControls: function (instance) {
+
+            var self = this;
+            var mouseDown = false;
+            var StartMousePosX;
+
+            // init click on each container
+            instance.on('dblclick', function () {
+
+              if (instance.data('spin-continuously')) {
+                instance.data('spin-continuously', false);
+              } else {
+                instance.data('spin-continuously', true);
+                self._spin(instance);
+              }
+            });
+
+            // handlers to implement dragging
+            instance
+              .on('tapstart', function (e, touch) {
+                e.preventDefault();
+                mouseDown = true;
+                // get the mouse starting position
+                StartMousePosX = touch.position.x;
+              })
+              .on('tapmove', function (e, touch) {
+                if (mouseDown) {
+                  // get current mouse position
+                  var currentMousePosX = touch.position.x;
+
+                  var moveTo = parseInt((currentMousePosX - StartMousePosX), 10);
+                  var dragThreshold = self.config.dragThreshold;
+
+                  // make sure we have moved at least the threashold distance
+                  if (Math.abs(moveTo) > dragThreshold) {
+                    // update the start position with current position
+                    StartMousePosX = currentMousePosX;
+
+                    if (moveTo >= 1) {
+                      // set spin direction to backward
+                      instance.data('spin-direction', 'backward');
+                    }
+                    if (moveTo <= -1) {
+                      // set spin direction to backward
+                      instance.data('spin-direction', 'forward');
+                    }
+                    // go to next frame
+                    i = self._updateFrameNumber(instance);
+                    self._goToNewFrame(i, instance);
+
+                  }
+                }
+              });
+
+            $(window).on('tapend', function () {
+              if (mouseDown) {
+                mouseDown = false;
+              }
+            });
+          } // end _initControls
+
+        } // end background images
+      }; // end spinSandBox object
+
+      // iterate over all init functions
+      $.each(spinSandBox, function () {
+        // this is the current object
+        this.init();
+      });
+
+    }); // end ready function
+
+    /**
+     * onload
+     * we add the class 'afterLoad', which will switch the background image to the sprite version
+     */
+    window.onload = function () {
+      $('.imageSpinContainer').each(function () {
+        $(this).addClass('afterLoad');
+      });
+    };
+  });
+</script>

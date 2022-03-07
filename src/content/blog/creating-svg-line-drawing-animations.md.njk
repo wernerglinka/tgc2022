@@ -1,0 +1,171 @@
+---
+title: Creating SVG line drawing animations
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+blogTitle: "Creating SVG line drawing animations"
+date: "2015-05-07T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: false
+featuredBlogpostOrder: 1
+excerpt: |-
+  RequestAnimationFrame can make for some smooth svg animations. All browsers now support it so it's time to explore this new way.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2015-05-07T12:00:00Z"
+    title: "Creating SVG line drawing animations"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645471283/tgc2022/blogImages/conscious-uncoupling-drupal-metalsmith/header_yrq0xy.png"
+      alt: "a tree"
+      aspectRatio: "16.31"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: true
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Recently, I came across a very nice page on the Square Space site while surfing the web. The page features some nice animations. which improve the user experience. The animations are implemented with the [Scrollr jQuery plugin](https://github.com/Prinzhorn/skrollr), an elegant way of performing scroll based page animations. However, what caught my eye was the SVG line animation. Having stayed away from SVG usage, mainly because of inconsistent browser support, I got curios and decided to build a small test case. Here is what I learned along the way:
+
+      ## How to animate a SVG line drawing?
+      
+      There are several very good sources about SVG line animation on the web already so here is my summary of it.
+
+      Looking at animated SVG line drawings, it seems that the length of the individual lines is animated from zero to full length. I was surprised to learn that you cannot animate the length of a line, or a path, at all. Turns out that we can create the illusion of animating the line length by using the stroke-dash property of a SVH path. These two blog posts explain this expertly:
+
+      - Jake Archibald’s: [Animated line drawing in SVG](https://jakearchibald.com/2013/animated-line-drawing-svg/)
+      - Vox Product’s: [Polygon feature design: SVG animations for fun and profit](https://product.voxmedia.com/2013/11/25/5426880/polygon-feature-design-svg-animations-for-fun-and-profit)
+
+      ## Using requestAnimationFrame instead of using an interval timer
+
+      While the animation that got me started was scroller based, these two blog posts take different approaches to implement the animation. Jake Archibald uses CSS3 transitions and he reveals a little trick ( Using getBoundingClientRect to trigger layout ) along the way, while the Vox blog post uses a Javascript based approach. Furthermore, the Vox implementation uses [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame), a more efficient way of building Javascript based animations. [Paul Irish](https://www.paulirish.com/) provided an early introduction “[requestAnimationFrame for Smart Animating](https://www.paulirish.com/2011/requestanimationframe-for-smart-animating/)” in 2011. At the time the spec wasn’t finished and [browser support](https://caniuse.com/?search=requestAnimationFrame) was just not there. Today, browser support has much improved , even IE supports it for version 10 and above. For older browsers there are polyfills that emulate requestAnimationFrame functionality with an interval timer. If you still build stuff for older browsers you might want to consider Oleg Slobodskoi’s polyfill [AnimationFrame.js](https://github.com/kof/animation-frame).
+
+      Knowing the mechanics of animating SVG lines I started out to build my test case. I fired up Adobe Illustrator and created three rectangular shapes and saved them as .svg files.
+
+  - component: image
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    header: ""
+    subTitle: ""
+    prose: ""
+    image:
+      src: "v1645500871/tgc2022/blogImages/creating-svg-line-drawing-animations/svg-options_zt2cyc.png"
+      aspectRatio: "67.9"
+      caption: ""
+      
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: true
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      To get the svg code, click Show SVG Code… in the SVG Options modal window and you’ll see the code in another modal text window.
+
+      Note: If you create simple shapes like a [rectangle](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect) or [circle](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/circle) , the svg code will describe them as basic shapes and not as paths and that will not work. So to convert a basic shape into a compound path just select the shape and go to Object > Compound Path > Make or hit Command + 8 (on a Mac).
+
+      There is one more thing to do before we are finished. We need to make the svg line drawing responsive. Again, there are plenty of resources on the web about this subject.
+
+      Below you can see what this test case looks like
+
+  - component: svg-animation-demo
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

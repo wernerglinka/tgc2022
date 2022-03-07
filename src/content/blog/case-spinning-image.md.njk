@@ -1,0 +1,224 @@
+---
+title: The case of the spinning image
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+blogTitle: "The case of the spinning image"
+date: "2015-05-31T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: false
+featuredBlogpostOrder: 1
+excerpt: |-
+  Do small businesses really need a website build with a CMS?
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2015-05-31T12:00:00Z"
+    title: "The case of the spinning image"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1645641434/tgc2022/blogImages/case-spinning-image/spinning-image-header_ipdkjl.jpg"
+      alt: "a corkscrew"
+      aspectRatio: "24"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      For a recent website redesign project, the design called for some spinning images. I had never done a spinning image and so I hit Google. And as expected I found many jQuery plugins that did just that. But, there is always a but, the ones I found were over-engineered for my purpose and did not all do what I needed them to do. The image needed to spin, be responsive, minimize http requests to support fast page load and I was curious, so I build it myself.
+
+      To make a spinning image we take advantage of the [Phi phenomenon](https://en.wikipedia.org/wiki/Phi_phenomenon), the optical illusion of perceiving continuous motion between separate objects viewed rapidly in succession. To achieve the illusion of smooth motion we need a minimum of 36 images or frames.
+
+      We can create this illusion by using many images, positioned on top of each other, and then moving each image to the top in sequential succession at a fast rate.
+
+  - component: image
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    header: ""
+    subTitle: ""
+    prose: ""
+    image:
+      src: "v1645641427/tgc2022/blogImages/case-spinning-image/image-stack_il7h7o.png"
+      aspectRatio: "100"
+      caption: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      This approach works well, but it has one drawback, each individual image requires a separate http request for loading. 36 additional http requests killed this approach right away.
+
+      An alternative approach was using one large image that contained all frames - all 36 images merged into one. I used this large image as the background of a container. The background image position was changed by one frame width every 36th of a second, and that did the trick.
+
+  - component: image
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    header: ""
+    subTitle: ""
+    prose: ""
+    image:
+      src: "v1645641423/tgc2022/blogImages/case-spinning-image/image-sprite_b9gh0s.png"
+      aspectRatio: "44"
+      caption: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      The disadvantage of using one large image is that we have to load a …well… very large image but it turns out that even a large image download beats the latency of 35 additional http requests. That rationale is why we use image sprites rather than individual images. There is a good write-up about that at the [Yahoo developer pages](https://developer.yahoo.com/performance/rules.html).
+
+      If you prepare the image in Photoshop, be aware that Photoshop will limit the image to a width of 8192 pixels if you save the image with Save for Web & Devices.... Save the image as a regular jpg file and optimize it with tools like [Image Optimizer](http://www.imageoptimizer.net/Pages/Home.aspx). There are many more on the web.
+
+      So a large background image sprite it was. To make this spinning image responsive, I created an empty container div with its width set to be a percentage of its container. To get the right height, we set the container height to zero and apply a bottom padding that corresponds to a single frame aspect ratio in percent. The background image is applied with `background-size: cover` , which makes it fit the height of the container.
+
+      The css looks like this:
+
+
+      ```css
+      .imageSpinContainer {
+        width: 30%;
+        height: 0;
+        padding-bottom: 33.63%;  /*reflects the single image/frame aspect ratio*/
+        background: transparent url('../images/cork-screw.jpg') no-repeat 0;
+        background-size: cover;
+      }
+      ```
+
+      Now we can modify the background position periodically and the image starts moving. For this approach to be responsive we’ll need to change the background position a percentage of the whole background image.
+
+      And here is the final implementation. On page load I use a single image so we don’t see a flash of empty space before the large image sprite is completely downloaded. I swap the background image when the onload event occurs.
+
+  - component: spinning-image-demo
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      _Double clicking will stop/start the spin and click and drag will move the image manually._
+
+      To describe the code in detail for this project proved to long, instead I have attached my dev sandbox as an archive. You can download and see for yourself how this all fits together.
+
+      [Download the Archive](/assets/downloads/spinning-image.zip)
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

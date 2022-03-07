@@ -64,6 +64,10 @@
   text-decoration: none;
   cursor: pointer;
 
+  &:hover {
+    border: none;
+  }
+
   svg g {
     transition: stroke 0.3s ease-in-out;
   }

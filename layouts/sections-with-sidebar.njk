@@ -23,13 +23,15 @@
       <h3>Featured Posts</h3>
       <ul class="blog-sidebar-list">
         {% for post in featuredBlogPosts %}
-        <li>
-          <H4><a href="/{{ post.path }}">{{ post.title }}</a></H4>
-          <time datetime="{{ post.date }}">{{ post.date | niceDate }}</time>
-          {% if post.author %}
-          <p>{{post.author}}</p>
+          {% if post.title !== blogTitle %}
+          <li>
+            <H4><a href="/{{ post.path }}">{{ post.title }}</a></H4>
+            <time datetime="{{ post.date }}">{{ post.date | niceDate }}</time>
+            {% if post.author %}
+            <p>{{post.author}}</p>
+            {% endif %}
+          </li>
           {% endif %}
-        </li>
         {% endfor%}
       </ul>
     </aside>

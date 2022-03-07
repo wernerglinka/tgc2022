@@ -10,7 +10,7 @@ const path = require('path');
 const defaults = {
   latestQuantity: 3,
   featuredQuantity: 3,
-  featuredPostSortOrder: "desc",
+  featuredPostOrder: "desc",
   fileExtension: ".md",
   blogDirectoryName: "./blog"
 }
@@ -24,11 +24,6 @@ function normalizeOptions(options) {
   return Object.assign({}, defaults, options || {})
 }
 
-function doSomething(file, path) {
-  file.path = path
-  return file
-}
-
 /**
  * A Metalsmith plugin to add various blog lists to metadata
  *
@@ -36,7 +31,7 @@ function doSomething(file, path) {
  * @returns {import('metalsmith').Plugin}
  */
 function initMetalsmithBlogLists(options) {
-  options = normalizeOptions(options)
+  options = normalizeOptions(options);
 
   return function metalsmithBlogLists(files, metalsmith, done) {
     
@@ -73,7 +68,7 @@ function initMetalsmithBlogLists(options) {
         // requires:
         //    featuredBlogpost: true
         //    featuredBlogpostOrder: <integer>
-        //    featuredPostSortOrder: "asc" | "desc"
+        //    featuredPostOrder:: "asc" | "desc"
         // to be set in the files frontmatter
         if ( thisFile.featuredBlogpost ) {
           featuredBlogPosts.push(temp);
@@ -89,7 +84,7 @@ function initMetalsmithBlogLists(options) {
     featuredBlogPosts.sort(function(a,b) {
       return a.order - b.order;
     });
-    if (options.featuredPostSortOrder === 'desc') {
+    if (options.featuredPostOrder === 'desc') {
         featuredBlogPosts.reverse();
     }
     featuredBlogPosts.splice(options.featuredQuantity);
