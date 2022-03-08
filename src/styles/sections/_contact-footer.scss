@@ -28,7 +28,7 @@
       z-index: -1;
     }
 
-    p {
+    h2, p {
       color: #fff;
     }
     
@@ -48,30 +48,20 @@
           padding: 0;
         }
       }
+
+      &:last-of-type {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        padding-left: 50px;
+
+        .copyright {
+          margin-top: auto;
+        }
+      }
     }
   }
-  .footer-decoration {
-    position: absolute;
-    right: 0;
-    bottom: 300px;
-    width: 900px;
-
-    @media (max-width: 1000px) {
-      width: 600px;
-      bottom: 500px;
-    }
-    @media (max-width: $tablet-breakpoint) {
-      position: relative;
-      bottom: 100px;
-      width: 50%;
-      float: right;
-    }
-    @media (max-width: $small-screen-size) {
-      display: none;
-    }
-
-  }
-
+  
   // form styles
   .hidden {
     display: none;

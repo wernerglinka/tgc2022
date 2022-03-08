@@ -6,6 +6,7 @@ import navigation from './modules/navigation';
 import modalVideo from "./modules/modal-video";
 import customerSlider from "./modules/customer-slider";
 import testimonialsSlider from "./modules/testimonials-slider";
+//import svgAnimation from "./modules/svg-animation";
 
 
 
@@ -26,8 +27,6 @@ function initPage() {
     window.onYouTubeIframeAPIReady = () => resolve();
   });
 
-  navigation.init();
-
   if (document.querySelector('.js-progressive-image-wrapper')) {
     loadResponsiveImage.init();
   }
@@ -42,12 +41,17 @@ function initPage() {
 };
 
 (function() {
+
+  navigation.init();
+/*
   const options = {
     // disable SWUP from intercepting anchor links and external links
     linkSelector:
       'a[href^="/"]:not([data-no-swup]), a[href^="' + window.location.origin + '"]:not([data-no-swup])'
   };
   const swup = new Swup(options);
-
+*/
   initPage();
+
+  swup.on('contentReplaced', initPage);
 })();
