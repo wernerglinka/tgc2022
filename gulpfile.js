@@ -18,6 +18,8 @@ const processScripts = require('./gulp-tasks/process-scripts');
 const cleanAssets = require('./gulp-tasks/clean');
 // process animations
 const processAnimations = require('./gulp-tasks/process-animations');
+// process downloads
+const processDownloads = require('./gulp-tasks/process-downloads');
 // process images 
 const processImages = require('./gulp-tasks/process-images');
 // Metalsmith build site process
@@ -81,6 +83,7 @@ function watchSite(done) {
 exports.default = gulp.series(
   cleanAssets,
   processAnimations,
+  processDownloads,
   processImages,
   processScripts,
   processFonts,
@@ -94,6 +97,7 @@ exports.default = gulp.series(
 exports.buildProd = gulp.series(
   cleanAssets,
   processAnimations,
+  processDownloads,
   processImages,
   processScripts,
   processStyles,
