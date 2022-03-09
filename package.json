@@ -24,6 +24,7 @@
     "@metalsmith/permalinks": "^2.3.0",
     "@splidejs/splide": "^3.6.12",
     "@splidejs/splide-extension-auto-scroll": "^0.3.7",
+    "@swup/head-plugin": "^1.2.0",
     "autoprefixer": "^10.4.0",
     "browser-sync": "^2.27.7",
     "cssnano": "^5.0.11",

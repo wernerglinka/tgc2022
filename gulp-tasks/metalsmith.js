@@ -8,6 +8,7 @@ const permalinks = require('@metalsmith/permalinks');
 const processLinks = require('metalsmith-safe-links');
 const prism = require('metalsmith-prism');
 const blogLists = require('metalsmith-blog-lists');
+const writeMetadata = require('metalsmith-writemetadata');
 
 //const blogLists = require('../local_modules/blog-lists');
 
@@ -105,6 +106,16 @@ module.exports = function metalsmith(callback) {
       assets({
         source: './src/assets/',
         destination: './assets/',
+      })
+    )
+
+    // Generate a metadata json file for each page
+    // Used for Debug only
+    .use(
+      writeMetadata({
+        pattern: ['**/*.html'],
+        ignorekeys: ['next', 'contents', 'previous'],
+        bufferencoding: 'utf8',
       })
     )
 

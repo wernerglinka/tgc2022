@@ -1,5 +1,5 @@
 .section-testimonials {
-  max-width: 700px;
+  max-width: 760px;
   margin: 0 auto;
   padding-top: 0;
   padding-bottom: 0;
@@ -54,6 +54,7 @@
   // slider styles
   .splide-testimonials {
     position: relative;
+    padding: 0 35px;
   }
   .splide__list {
     height: auto;
@@ -65,26 +66,14 @@
       cursor: pointer;
       position: absolute;
       top: 30%;
-      left: -60px;
+      left: -10px;
     }
     .splide__arrow--prev {
       transform: rotate(180deg);
     }
     .splide__arrow--next {
       left: auto;
-      right: -50px;
-    }
-
-    @media (max-width: 600px) {
-      .splide__arrow {
-        top: auto;
-        bottom: -40px;
-        left: 0;
-      }
-      .splide__arrow--next { 
-        right: 0;
-        left: auto;
-      }
+      right: -10px;
     }
   }
 

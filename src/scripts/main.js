@@ -1,6 +1,7 @@
 // NOTE: main.js is called at the end of the document body - no DOMContentLoaded event needed
 
 import Swup from 'swup';
+import SwupHeadPlugin from '@swup/head-plugin';
 
 import loadResponsiveImage from './modules/load-responsive-image';
 import navigation from './modules/navigation';
@@ -55,7 +56,8 @@ function initPage() {
   const options = {
     // disable SWUP from intercepting anchor links and external links
     linkSelector:
-      'a[href^="/"]:not([data-no-swup]), a[href^="' + window.location.origin + '"]:not([data-no-swup])'
+      'a[href^="/"]:not([data-no-swup]), a[href^="' + window.location.origin + '"]:not([data-no-swup])',
+    plugins: [new SwupHeadPlugin()]
   };
   const swup = new Swup(options);
 

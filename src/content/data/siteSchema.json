@@ -1,0 +1,18 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Werner Glinka",
+  "legalName" : "Werner Glinka",
+  "url": "https://www.glinka.co",
+  "logo": "http://www.glinka.co/images/logos/wg.svg",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "main",
+    "telephone": "[+650-867-0778]",
+    "email": "werner@glinka.co"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/werner-glinka-2a427/",
+    "https://github.com/wernerglinka"
+  ]
+}

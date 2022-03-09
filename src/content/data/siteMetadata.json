@@ -4,19 +4,13 @@
   "author": "werner@glinka.co",
   "siteURL": "https://ms-page-sections.netlify.app/",
   "siteOwner": "Werner Glinka",
-  "mainAddress": {
-    "street": "",
-    "misc": "",
-    "city": "",
-    "state": "",
-    "ZIP": "",
-    "tel": ""
+  "validate": {
+    "google": "",
+    "ms": ""
   },
   "social": {
-    "twitter": "",
-    "facebook": "",
-    "linkedIn": "",
-    "github": ""
+    "linkedIn": "in/werner-glinka-2a427/",
+    "github": "wernerglinka"
   },
   "imagePrefix": "https://res.cloudinary.com/glinkaco/image/upload/",
   "imageDefault": "",

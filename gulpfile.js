@@ -22,6 +22,8 @@ const processAnimations = require('./gulp-tasks/process-animations');
 const processDownloads = require('./gulp-tasks/process-downloads');
 // process images 
 const processImages = require('./gulp-tasks/process-images');
+// process icons 
+const processIcons = require('./gulp-tasks/process-icons');
 // Metalsmith build site process
 const metalsmith = require('./gulp-tasks/metalsmith');
 
@@ -85,6 +87,7 @@ exports.default = gulp.series(
   processAnimations,
   processDownloads,
   processImages,
+  processIcons,
   processScripts,
   processFonts,
   processStyles,
@@ -99,6 +102,7 @@ exports.buildProd = gulp.series(
   processAnimations,
   processDownloads,
   processImages,
+  processIcons,
   processScripts,
   processStyles,
   getPrismStyles,
