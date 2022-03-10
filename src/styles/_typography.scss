@@ -82,7 +82,7 @@ a {
   }
 }
 a[href*='http://'], a[href*='https://'] {
-  white-space: nowrap;
+  //white-space: nowrap;
 
   &:after {
     background-image: url('/assets/images/external-link.png');
