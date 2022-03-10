@@ -102,10 +102,10 @@ sections:
         aspectRatio: "50"
         caption: "Based on image by [rawpixel.com/Freepik](http://www.freepik.com)"
       ```
-      `src` - the Cloudinary image id. The Cloudinary baseURL is available from the site object in Metalsmith metadata. By combining the BaseURL and the image id we get the high-res image src.
-      `alt` - the alt text
-      `aspectRatio` - the aspect ratio of the image. As we'll see a bit later, to prevent any content movement when we insert the high res image, we will measure the available width for the image with javascript and then calculate the required height for the image. For that step we need the aspect ratio of the original image.
-      `caption` - 
+      - `src` - the Cloudinary image id. The Cloudinary baseURL is available from the site object in Metalsmith metadata. By combining the BaseURL and the image id we get the high-res image src.
+      - `alt` - the alt text
+      - `aspectRatio` - the aspect ratio of the image. As we'll see a bit later, to prevent any content movement when we insert the high res image, we will measure the available width for the image with javascript and then calculate the required height for the image. For that step we need the aspect ratio of the original image.
+      - `caption` - use it to give credit or whatever makes sense.
 
       In our template we use a Nunjucks macro instead of an `img` or `picture` tag.
 

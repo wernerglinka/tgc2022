@@ -22,6 +22,10 @@ ol {
   padding: 0;
 }
 
+strong {
+  font-weight: 500;
+}
+
 // class attached to body when overlay is open. prevents scrolling under overlay
 .modal-active, .menu-active {
   overflow: hidden;
