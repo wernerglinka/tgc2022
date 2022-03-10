@@ -15,7 +15,6 @@ const loadResponsiveImage = (function loadResponsiveImage() {
   
         // get the dimensions of the image wrapper and the display pixel density
         const imageWidth = thisWrapper.clientWidth;
-        const imageHeight = thisWrapper.clientHeight;
         const pixelRatio = window.devicePixelRatio || 1.0;
         
         // assemble url parameters for the cloudinary image url

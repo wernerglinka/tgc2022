@@ -1,0 +1,224 @@
+---
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Using responsive images | Werner Glinka
+  description: "Responsive images are important as they allow delivery of optimal file size, the right image for the right screen size, improved user experience and improved loading time"
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Using responsive images"
+date: "2022-03-02T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 2
+excerpt: |-
+  Responsive images are important as they allow delivery of optimal file size, the right image for the right screen size, improved user experience and improved loading time.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2022-03-02T12:00:00Z"
+    title: "Using responsive images"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1646867890/tgc2022/blogImages/building-responsive-progressive-image-component/responsive-image_o6hza7.png"
+      alt: "a corkscrew"
+      aspectRatio: "24"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      It is important to have [responsive images](https://cloudinary.com/blog/introducing_intelligent_responsive_image_breakpoints_solutions) because they improve file sizes, user experience and loading times. Responsive images are great for users on small mobile devices. They don't waste bandwidth and shorted page load times, however, they require site builders to create multiple copies of an image that are optimized for different display sizes and resolutions.
+
+      **But given the myriad of screen sizes, just how many different images will we need?**
+
+      Using an online tool, the [Responsive Image Breakpoints Generator](https://www.responsivebreakpoints.com/), we can calculate responsive image breakpoints interactively and generate the required images. I used this tool to create all images needed for all screen sizes.
+
+      With this tool, I was able to create all the images for 320px wide and 1440px wide screens of the beautiful castle Neuschwanstein in Germany.
+
+  - component: image
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false 
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    header: ""
+    subTitle: ""
+    prose: ""
+    image:
+      src: "v1646869359/tgc2022/blogImages/building-responsive-progressive-image-component/castle_nz1stw.jpg"
+      aspectRatio: "67"
+      caption: "Schloß Neuschwanstein in Germany"
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      I set the parameters so the difference in image size between two sizes is 20kB. This means that a user will never load an image with more than 20kB excessive size. The tool will then provide all images and the HTML markup to use. These 10 images will cover the range of screen sizes I specified and minimize the download for each device.
+      
+      The HTML `<img>` tag tells the browser when to use what image. 
+
+      ```html
+      <img src="castle_c_scale,w_1440.jpg"
+        sizes="(max-width: 1440px) 100vw, 1440px"
+        srcset="
+          castle_c_scale,w_320.jpg 320w,
+          castle_c_scale,w_645.jpg 645w,
+          castle_c_scale,w_803.jpg 803w,
+          castle_c_scale,w_943.jpg 943w,
+          castle_c_scale,w_1079.jpg 1079w,
+          castle_c_scale,w_1196.jpg 1196w,
+          castle_c_scale,w_1283.jpg 1283w,
+          castle_c_scale,w_1281.jpg 1281w,
+          castle_c_scale,w_1401.jpg 1401w,
+          castle_c_scale,w_1440.jpg 1440w
+        " 
+        alt=""
+      >
+      ```
+      All in all, this is a great tool. It calculates the images we need, creates the images, and provides the code so the browser can display them. 
+
+      But wait! This is just for loading a jpg image. What if we want to use an optimized image format like webp for browsers that support it? File sizes of webp images can be dramatically less then jpg images. 
+
+      In that case we have to use a `<picture>` tag like so:
+
+      ```html
+      <picture>
+        <source type="image/webp"
+        sizes="(max-width: 1440px) 100vw, 1440px"
+        srcset=" 
+          castle_c_scale,w_320.webp 320w,
+          castle_c_scale,w_645.webp 645w,
+          castle_c_scale,w_803.webp 803w,
+          castle_c_scale,w_943.webp 943w,
+          castle_c_scale,w_1079.webp 1079w,
+          castle_c_scale,w_1196.webp 1196w,
+          castle_c_scale,w_1283.webp 1283w,
+          castle_c_scale,w_1281.webp 1281w,
+          castle_c_scale,w_1401.webp 1401w,
+          castle_c_scale,w_1440.webp 1440w"
+        >
+        <img 
+          src="castle_c_scale,w_1440.jpg"
+          sizes="(max-width: 1440px) 100vw, 1440px"
+          srcset="
+            castle_c_scale,w_320.jpg 320w,
+            castle_c_scale,w_645.jpg 645w,
+            castle_c_scale,w_803.jpg 803w,
+            castle_c_scale,w_943.jpg 943w,
+            castle_c_scale,w_1079.jpg 1079w,
+            castle_c_scale,w_1196.jpg 1196w,
+            castle_c_scale,w_1283.jpg 1283w,
+            castle_c_scale,w_1281.jpg 1281w,
+            castle_c_scale,w_1401.jpg 1401w,
+            castle_c_scale,w_1440.jpg 1440w"
+          alt=""
+        >
+      </picture>
+      ```
+      This is the markup for one image, it has to be used for every image that is used on the website. In the above example you now have to create 20 different copies for each image on your website. That is insane.
+      
+      You can see where this is going when you need to include yet another image format, for example `jpeg-xr`.
+      
+      **Just imagine having 50 images on your website.**
+
+      There must be a better way to do this. In my next post [Building a responsive/progressive image component](/blog/building-responsive-progressive-image-component/), we'll see what that better way may look like.
+
+      In the meantime you may want to review these articles about responsive images:
+
+      - [Responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)
+      - [A Guide to the Responsive Images Syntax in HTML](https://css-tricks.com/a-guide-to-the-responsive-images-syntax-in-html/)
+      - [Responsive Images Done Right: A Guide To `<picture>` And `srcset`](https://www.smashingmagazine.com/2014/05/responsive-images-done-right-guide-picture-srcset/)
+      - [Introducing Intelligent Responsive Breakpoints Solutions](https://cloudinary.com/blog/introducing_intelligent_responsive_image_breakpoints_solutions)
+  
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false 
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---

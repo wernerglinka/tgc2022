@@ -1,0 +1,318 @@
+---
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Building a responsive/progressive image component | Werner Glinka
+  description: "Using javascript and a digital asset management service we'll be building a responsive/progressive image component that delivers properly sized images to any device"
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Building a responsive/progressive image component"
+date: "2022-03-10T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  Using javascript and a digital asset management service we'll be building a responsive/progressive image component for Metalsmith that delivers properly sized images to any device.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2022-03-10T12:00:00Z"
+    title: "Building a responsive/progressive image component"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1646931839/tgc2022/blogImages/building-responsive-progressive-image-component/different-devices_hbtqd1.png"
+      alt: "multiple devices with same image"
+      aspectRatio: "50"
+      caption: "Based on image by [rawpixel.com/Freepik](http://www.freepik.com)"
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      My [last article](/blog/using-responsive-images/) discussed the challenges responsive images pose when building and maintaining a website. In this article I will discuss a responsive/progressive lazy-loading image component for Metalsmith/Nunjucks. This component will ensure that we always have a properly sized image, regardless of screen size or device pixel ratio and the best image format the browsers supports. The idea for this project came from a [YouTube video from Glen Maddern](https://www.youtube.com/watch?v=_lQvw2vSDbs&t=2s). I highly recommend watching this video.
+
+      This approach uses [cloudinary.io](https://cloudinary.com/) to store all images. They have a generous free plan with no credit card needed to sign up.
+
+      The component will do the following:
+
+      - Every image will be loaded in very low resolution and blurred with CSS. This low-res image will be rendered at the same size as the original image to avoid content shift when the high-res image is rendered.
+      - Once the low-res images are loaded, images in the viewport will be immediately updated by fading-in their high-res version.
+      - All images outside the viewport remain low-res and will be lazy-loaded/faded-in once scrolling into the viewport.
+
+      If this sounds familiar, you may have seen it on Medium or another popular website.
+
+      ## Implementation
+
+      First we define the image in our frontmatter. This example shows the data for this pages banner image.
+      
+      **In the content page**
+      ```yaml
+      image:
+        src: "v1646931839/tgc2022/blogImages/building-responsive-progressive-image-component/different-devices_hbtqd1.png"
+        alt: "multiple devices with same image"
+        aspectRatio: "50"
+        caption: "Based on image by [rawpixel.com/Freepik](http://www.freepik.com)"
+      ```
+      `src` - the Cloudinary image id. The Cloudinary baseURL is available from the site object in Metalsmith metadata. By combining the BaseURL and the image id we get the high-res image src.
+      `alt` - the alt text
+      `aspectRatio` - the aspect ratio of the image. As we'll see a bit later, to prevent any content movement when we insert the high res image, we will measure the available width for the image with javascript and then calculate the required height for the image. For that step we need the aspect ratio of the original image.
+      `caption` - 
+
+      In our template we use a Nunjucks macro instead of an `img` or `picture` tag.
+
+      **In the template**
+      ```javascript
+      {% from "../partials/responsive-image.njk" import responsiveImage %}
+      ...
+      {% set image = params.image %}
+      {# site is in scope, was passed via the component macro #}
+      {{ responsiveImage(image, site) }}
+
+      ```
+      Here we first import the macro and then call it with two props. We are passing the frontmatter image data and site metadata, which includes the cloudinary base url for our account.
+
+      **responsive-image.njk**
+      ```javascript
+      {% macro responsiveImage(image, site) %}
+        <div class="responsive-wrapper js-progressive-image-wrapper" style="padding-bottom:{{ image.aspectRatio}}%;" >
+
+          {# assemble the image url #}
+          {% set source = site.imagePrefix ~ image.src %}
+
+          {# get image source for LRIP #}
+          {% set lowResImagesrc = site.imagePrefix ~ "w_100,c_fill,g_auto,f_auto/" ~ image.src %}
+
+          <img class="low-res" src="{{ lowResImagesrc }}" alt="{{ image.alt }}"/>
+          <img class="high-res" src="" alt="{{ image.alt }}" data-prefix="{{ site.imagePrefix }}" data-source="{{ image.src }}"/>
+        </div>
+      {% endmacro %}
+      ```
+      To construct the image wrapper we use an ancient technique by Thierry Koblentz's [Intrinsic Ratios](https://alistapart.com/article/creating-intrinsic-ratios-for-video/) and apply the aspect ratio via the style attribute. This technique can probably be replaced with the css [aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio) property, I'll leave that for the reader to explore.
+
+      ```html
+      <div class="responsive-wrapper js-progressive-image-wrapper" style="padding-bottom:{{ image.aspectRatio}}%;" >
+      ```
+
+      Then we assemble the low resolution image source:
+
+      ```javascript
+      {% set lowResImagesrc = siteMeta.imagePrefix ~ "w_100,c_fill,g_auto,f_auto/" ~ image.src %}
+      ```
+
+      Here `lowResImagesrc` says: get a 100 pixels wide image, crop it to this width and put the interesting part of the image in its center. [Cloudinary's dynamic URL transformations](https://cloudinary.com/documentation/image_transformations) enable us to get exactly the image we need without having to create one. Cloudinary uses the original image in our account and transforms it on-the-fly.
+
+      Lets have a closer look at the portion of the source that will specify what image we get. This is a set of Cloudinary image transformation parameters
+
+      - `w_100` - delivers an image of exactly 100px width
+      - `c_fill` - crops the image so it fills the available space
+      - `g_auto` - applies automatic content-aware gravity by setting the gravity transformation parameter to auto (g_auto in URL syntax). If no gravity is specified in a crop, the image is cropped around its center.
+      - `f_auto` - delivers the image in the best format the browser understands. For example in Chrome it would send a webp image which is smaller then a jpg or png image.
+
+      Next we have the two image tags. The first with class `low-res` has a valid src url, so the browser will fetch it immediately upon loading the page. The second image with class `high-res` has an empty `src` attribute, so the browser ignores it. An image ID is attached to the `data-source` attribute. We will use this to build a valid source url when this image is entering the viewport.
+
+      Now that we have our markup defined we need to style it:
+
+      ```css
+      .responsive-wrapper {
+        position: relative;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+
+        img {
+          display: block;
+          max-width: 100%;
+        }
+
+        .low-res {
+          filter: blur(10px);
+          transition: opacity 0.4s ease-in-out;
+          width: 100%;
+          height: auto;
+        }
+
+        .high-res {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          opacity: 0;
+          transition: opacity 0.4s ease-in-out;
+        }
+
+        &.done {
+          .high-res {
+            opacity: 1;
+          }
+          .low-res {
+            opacity: 0;
+          }
+        }
+      }
+      ```
+
+      Here we see that the initial `low-res` image is blurred. Once the `hi-res` image has been loaded, we will set the class `done` on the wrapper which concludes the process by fading-in the `high-res` image and fading-out the `low-res` version.
+
+      And here is the Javascript that makes it all work:
+
+      ```javascript
+      import debounce from "../utilities/debounce";
+
+      const loadResponsiveImage = (function loadResponsiveImage() {
+        "use strict"
+
+        // images are loaded when they are visible in the viewport and updated when
+        // the viewport width changes.
+        
+        const loadImage = ((entries, observer) => {
+          // During initial page load the entries array contains all watched objects. The 
+          // isIntersecting property for the individual object indicates visibility.
+          for (let entry of entries) {
+            if ( entry.isIntersecting) {
+              const thisWrapper = entry.target;
+        
+              // get the dimensions of the image wrapper and the display pixel density
+              const imageWidth = thisWrapper.clientWidth;
+              const pixelRatio = window.devicePixelRatio || 1.0;
+              
+              // assemble url parameters for the cloudinary image url
+              const imageParams = `w_${100 * Math.round((imageWidth * pixelRatio) / 100)},f_auto`;
+        
+              // find the high res image in the wrapper and get the data attributes...
+              const thisImage = thisWrapper.querySelector(".high-res");
+              const thisImagePrefix = thisImage.dataset.prefix;
+              const thisImageSource = thisImage.dataset.source;
+              // ...so we can assemble and replace the image src url
+              thisImage.src = `${thisImagePrefix}${imageParams}/${thisImageSource}`;
+              
+              // take this image of the observe list 
+              observer.unobserve(thisWrapper);
+        
+              // once the hi-res image has been loaded, add done class to wrapper
+              // which will fade-in the hi-res image and fade-out the low-res image
+              thisImage.onload = () => {
+                thisWrapper.classList.add("done");
+              };
+            }
+          }
+        });
+
+        const updateImage = debounce(function() {
+          // images are only loaded when they are visible
+          const observer = new IntersectionObserver(loadImage);
+        
+          // loop over all image wrappers and add to intersection observer
+          const allHiResImageWrappers = document.querySelectorAll(".js-progressive-image-wrapper");
+          for ( let imageWrapper of allHiResImageWrappers ) {
+            observer.observe(imageWrapper);
+          }
+        }, 500);
+
+        // resize and intersectionObserver are persistent window methods, ergo they fire after SWUP loads
+        const init = () => {
+          // images will update on page load and after a resize
+          const resizeObserver = new ResizeObserver(updateImage);
+          const resizeElement = document.body;
+          resizeObserver.observe(resizeElement);
+        };
+        
+        
+        return { init }
+        
+      }());
+
+      export default loadResponsiveImage;
+      ```
+      To detect that an image is in the viewport we use an intersection observer and a resize observer. Since the code is well documented, I won't repeat what's already there.
+
+      To elaborate on the calculated image parameters:
+
+      ```javascript
+      const imageParams = `w_${100 * Math.round((imageWidth * pixelRatio) / 100)},f_auto`;
+      ```
+
+      In order to calculate the requested image width, the device pixel ratio is taken into account. For a retina display with double the pixels of a normal display the image will be double the width and image size would be adjusted in steps of 100px. By doing this, cloudinary will limit the number of image transformations.
+
+      And that is our image component. To see this in action just browse this website and see the images fading in as you change pages and as you scroll. You can find me on the [Metalsmith community Gitter page](https://gitter.im/metalsmith/community).
+
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
