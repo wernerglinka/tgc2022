@@ -100,7 +100,7 @@ sections:
     headerClass: ""
     subTitle: ""
     prose: |-
-      Over time I have build several plugins that are available to the community on my GitHub repo or via npm.
+      I have build several plugins that are available to the community on my GitHub repo or via npm. I also try to contribute to existing plugins.
 
       #### [Metalsmith Markdown Partials](https://github.com/wernerglinka/metalsmith-markdown-partials)
       Enables the reuse of markdown partials. These partials are inserted into the contents of a markdown file by replacing an include marker. This allows for modular markdown and promotes reuse of content.
@@ -116,8 +116,47 @@ sections:
       #### [Metalsmith Safe Links](https://github.com/wernerglinka/metalsmith-safe-links)
       Reformats links, strips the protocal and host name from local links and adds a target and rel attribute to external links. As markdown syntax only allows for alt and title attributes in links, content editors normally must use HTML to add other attributes. This plugin negates the use of HTML for links in a markdown document.
 
-
+      #### [Metalsmith Prism](https://github.com/wernerglinka/metalsmith-prism)
+      Syntax highlighting for Metalsmith HTML templates using [Prism.js](https://prismjs.com/).
+      This plugin was authored by Robert McGuinness and sponsored by Availity. I assumed maintenance in March 2022.
       
+    hasCtas: false
+    ctas:
+      - url: ""
+        label: ""
+        isButton: false
+        buttonStyle: ""
+
+  - component: intro
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: true
+    marginBottom: false
+    paddingTop: true
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    title: "Starters"
+    header: "h2"
+    headerClass: ""
+    subTitle: ""
+    prose: |-
+      Here are some starters that may be helpful to get started with building a Metalsmith site.
+
+      #### [Metalsmith Bare-bones Starter](https://github.com/wernerglinka/metalsmith-bare-bones-starter)
+      As the name says, this starter is providing a bare-bones setup to get you started. It uses Markdown content and Nunjucks templating and has a couple of pages. The rest is up to you.
+
+      **Plugins:**
+      - metalsmith-drafts
+      - metalsmith-metadata
+      - metalsmith-in-place
+      - metalsmith-permalinks
+      - metalsmith-layouts
+      - metalsmith-assets
+      - metalsmith-html-minifier
+
+
     hasCtas: false
     ctas:
       - url: ""

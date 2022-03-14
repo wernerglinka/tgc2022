@@ -20,6 +20,22 @@ ul,
 ol {
   margin: 0 0 1em 1em;
   padding: 0;
+  list-style: none;
+
+  li:before {
+    display: inline-block;
+    height: 0;
+    width: 0;
+    content: "";
+    border: 5px solid transparent;
+    border-left-color: #666;
+  }
+}
+
+.plainList {
+  li:before {
+    border: none;
+  }
 }
 
 strong {

@@ -9,7 +9,7 @@
   <div class="content columns {% if params.reverse %}reverse{% endif %}">
     {% set info = params %}
 
-    <div class="column1">
+    <div class="column1 {{ info.column1.columnClasses }}">
       {{ text(info.column1)}}
 
       {% if info.column1.hasCtas %}
