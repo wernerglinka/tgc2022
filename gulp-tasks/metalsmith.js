@@ -99,7 +99,7 @@ module.exports = function metalsmith(callback) {
     }))
 
     .use(processLinks({
-      hostNames: ["localhost", "ms-page-sections.netlify.app"]
+      hostNames: ["localhost", "glinka.co"]
     }))
 
     .use(
