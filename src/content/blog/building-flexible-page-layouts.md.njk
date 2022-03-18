@@ -1,0 +1,396 @@
+---
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Building flexible page layouts for Metalsmith | Werner Glinka
+  description: "Sectioned pages consist of 100% structured data in their frontmatter which is written in YAML format, they do not have a body. The YAML data represents the content model of the page."
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Building flexible page layouts for Metalsmith"
+date: "2022-03-18T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  Sectioned pages consist of 100% structured data in their frontmatter which is written in YAML format, they do not have a body. The YAML data represents the content model of the page.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2022-03-18T12:00:00Z"
+    title: "Building flexible page layouts for Metalsmith"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1647632687/tgc2022/blogImages/build-flexible-page-layouts/flexible-layouts-starter_o23zzr.jpg"
+      alt: "flexible layout"
+      aspectRatio: "50"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      In this post we will be looking at how to build flexible page layouts for Metalsmith. We'll be using Markdown and Nunjucks templating. For lack of a better word we'll call these pages Sectioned Pages.
+
+      Typically, markdown pages consist of frontmatter and a page body. The frontmatter contains some metadata, like the template name, draft status, SEO title and description etc. The page body contains the content, an unstructured,  long blob of Markdown. 
+
+      This format is ok for simple blogposts and page layouts  but fails when building web pages that have a more complex structure. Enter sectioned pages.
+
+      Sectioned pages consist of 100% structured data in their frontmatter which is written in YAML format, they do not have a body. The YAML data represents the content model of the page.  
+
+      Content is broken into separate components, each component is defined by a set of fields. A field being a YAML `key:value` pair. Fields may contain short text strings, numbers, booleans and since YAML supports multi-line text areas, even Markdown. Each component uses a template that consumes these fields. 
+
+      This approach allows us to build templates that can be reused anywhere, individually or in groups, with predefined layouts and styles yielding consistent content representation.
+
+      ## Page source
+
+      What does that look like in practice? Here is the code of the home page of the Metalsmith Company Starter.
+
+      `index.md`
+
+      ```yaml
+      ---
+      layout: sections.njk
+      bodyClasses: "home"
+
+      seo:
+        title: Metalsmith Company Starter
+        description: "A starter to build a company website with Metalsmith"
+        socialImage: "/assets/images/metalsmith-starter-social.png"
+        canonicalOverwrite: ""
+
+      sections:
+        - component: banner
+          ...
+        - component: intro
+          ...
+        - component: media
+          ...
+        - component: media
+          ...
+        - component: intro
+          ...
+      ---
+      ```
+
+      The part that is of interest is the `sections` part. This is a YAML list that represents all section entries for this page. It starts out with a `banner` component  and then uses `intro` and `media` components for the remainder of the page. The rendered page looks like this:
+
+  - component: image
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    header: ""
+    subTitle: ""
+    prose: ""
+    image:
+      src: "v1647631819/tgc2022/blogImages/build-flexible-page-layouts/home-page_mnithk.jpg"
+      aspectRatio: "151"
+      caption: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Let's have a look as the banner component in detail.
+
+      `banner.njk`
+
+      ```yaml
+      - component: banner
+        disabled: false
+        inContainer: true
+        marginTop: false
+        marginBottom: true
+        paddingTop: false
+        paddingBottom: true
+        backgroundColor: ""
+        targetId: ""
+        title: Metalsmith Company Starter
+        header: "h1"
+        subTitle: Using "sectioned" pages to build flexible page layouts
+        prose: This starter is build in the style of a company marketing site. The components on this site are bare-bone interpretations of common information presentation patterns that can be found on many corporate websites. [The source code for this site can be found on GitHub](https://github.com/wernerglinka/metalsmith-company-starter).
+        hasCtas: true
+        ctas:
+          - url: "https://github.com/wernerglinka/ms-components"
+            label: Get the Starter
+            isExternal: true
+            isButton: true
+            buttonStyle: "primary"
+            isVideoTrigger: false
+            videoId: ""
+        mediaType: Image
+        video:
+          src: youtube
+          id: ""
+          tn: ""
+          aspectRatio: ""
+          caption:
+        image:
+          src: "v1647546742/tgc2022/corporate_ip4qbt.jpg"
+          alt: "Metalsmith Javascript"
+          aspectRatio: "56.25"
+          caption: "Photo by Josh Hild from Pexels"
+        lottieData:
+          src: ""
+          control:
+            autoplay: true
+            loop: true
+        icon: ""
+        audio:
+          bgImage: ""
+          aspectRatio: ""
+          ogg: ""
+          mpeg: ""
+          caption:
+      ```
+
+      We can easily see how the banner component content model correlates to the rendered page section. 
+
+      ```javascript
+      disabled: false
+      ```
+      A component may be disabled so it is not rendered but can stay in the code. This is intended a temporary measure. If the component is not needed anymore the code can simply be remoted.
+  
+      ```javascript
+      inContainer: true
+      marginTop: false
+      marginBottom: true
+      paddingTop: false
+      paddingBottom: true
+      backgroundColor: ""
+      ```
+      A component may be inside a container or span the full width of a page. We can also set margins and padding to manage spacing between adjacent page sections. Also, a background color may be applied.
+
+
+      ```javascript
+      targetId: ""
+      ```   
+      A component may be the target for in-page anchor links.
+
+      ```javascript
+      title: Metalsmith Company Starter
+      header: "h1"
+      subTitle: Using "sectioned" pages to build flexible page layouts
+      prose: This starter is build in the style of a company marketing site. The components on this site are bare-bone interpretations of common information presentation patterns that can be found on many corporate websites. [The source code for this site can be found on GitHub](https://github.com/wernerglinka/metalsmith-company-starter).
+      ```
+      In this case the section title is an h1 as it is also the page title.
+
+      ```javascript
+      hasCtas: true
+      ctas:
+        - url: "https://github.com/wernerglinka/ms-components"
+          label: Get the Starter
+          isExternal: true
+          isButton: true
+          buttonStyle: "primary"
+          isVideoTrigger: false
+          videoId: ""
+      ```
+      This component may have multiple call-to-actions. In this case it uses one. The CTA may be a link to an internal or external page or may trigger a video modal and it may be rendered as a button or a text link.
+
+      ```javascript
+      mediaType: Image
+        video:
+          src: youtube
+          id: ""
+          tn: ""
+          aspectRatio: ""
+          caption:
+        image:
+          src: "v1647546742/tgc2022/corporate_ip4qbt.jpg"
+          alt: "Metalsmith Javascript"
+          aspectRatio: "56.25"
+          caption: "Photo by Josh Hild from Pexels"
+        lottieData:
+          src: ""
+          control:
+            autoplay: true
+            loop: true
+        icon: ""
+        audio:
+          bgImage: ""
+          aspectRatio: ""
+          ogg: ""
+          mpeg: ""
+          caption:
+      ```
+      The banner component features a media part that  may be an image, a video, icon or a Lottie animation. Note, that we specify the aspect ratio of images. This is needed for the [responsive image component](/blog/building-responsive-progressive-image-component/) that is used on this site.
+
+      Partials like the ctas and media types are shared with other components. However, specific styles are applied to the banner Nunjucks template.
+
+  
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      ## Templates
+      The page is rendered with several templates. A default template `layout.njk`  provides the page container and the header and footer while the `sections.njk` template renders all the components.
+
+      `layout.njk`
+
+      ```html
+      <!DOCTYPE html>
+      <html>
+        <head>
+          {% include "sections/head.njk" %}
+        </head>
+      </h1>
+
+      <body class="{{ bodyClasses }}">
+        <div id="at-top"></div>
+        {% include "sections/header.njk" %}
+
+        <main>
+          {% block body %}
+            This is the default contents
+          {% endblock %}
+        </main>
+
+        {% include "sections/footer.njk" %}
+        {% include "partials/scripts.njk" %}
+
+      </body>
+      </html>
+      ```
+
+      `sections.njk`
+
+      ```html
+      {% extends "layout.njk" %}
+
+      {% from "./sections/component.njk" import component %}
+
+      {% block body %}
+        <section class="main-content">
+
+          {% for section in sections %}
+
+            {% set name = section.component %}
+            {% set params = section %}
+            {% set site = site %}
+
+            <div class="section-wrapper {% if section.inContainer %}inContainer{% endif %}">
+              {{ component(name, params, site) }}
+            </div>
+
+          {% else %}
+            <p class="error-message">There are no sections available</p>
+          {% endfor %}
+        </section>
+      {% endblock %}
+      ```
+
+      The `sections.njk` template	is at the heart of this approach. Note that all components are inserted into the template by name reference. The template loops through all sections and renders them in the order of its list position, ergo, the section position is not hard coded but depends on its list position. Moving a section to another position is simply a matter of moving the component code in page source. When using a CMS like forestry.io, this is done with drag and drop.
+
+      To insert a section we use a Nunjucks macro component. Using a macro isolates the components fields from the global scope so components which use the same fields cannot overwrite the properties of other components.
+
+      `component.njk`
+
+      ```javascript
+      {% macro component(name, params, site) %}
+        {% include "../sections/" + name + ".njk" ignore missing %}
+      {% endmacro %}
+      ```
+      
+      The metalsmith-company-starter code is available at https://github.com/wernerglinka/metalsmith-company-starter and the demo site can be viewed at https://metalsmith-company-starter.netlify.app/
+
+      Another extensive example of this site building technique can be seen here: https://ms-page-sections.netlify.app/
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
