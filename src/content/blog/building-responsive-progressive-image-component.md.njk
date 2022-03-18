@@ -281,7 +281,7 @@ sections:
       const imageParams = `w_${100 * Math.round((imageWidth * pixelRatio) / 100)},f_auto`;
       ```
 
-      In order to calculate the requested image width, the device pixel ratio is taken into account. For a retina display with double the pixels of a normal display the image will be double the width and image size would be adjusted in steps of 100px. By doing this, cloudinary will limit the number of image transformations.
+      In order to calculate the requested image width, the device pixel ratio is taken into account. For a retina display with double the pixels of a normal display's width the image will be double the width and image size would be adjusted in steps of 100px. By doing this, cloudinary will limit the number of image transformations.
 
       And that is our image component. To see this in action just browse this website and see the images fading in as you change pages and as you scroll. You can find me on the [Metalsmith community Gitter page](https://gitter.im/metalsmith/community).
 
