@@ -145,7 +145,7 @@ sections:
 
       As we can [see in the tutorial](https://www.netlifycms.org/docs/customization/#registerpreviewtemplate), building the React component is done without the benefit of JSX. I am used to JSX but the browser doesn't understand it. Rather to make this work with JSX we'd have to install Babel and convert JSX to Javascript.  I'd love to use JSX but don't want to add a compile step into my front-end code. 
 
-      Fortunately there is a solution, [**htm**](https://github.com/developit/htm), with a jsx-like syntax in plain javascript. HTM looks pretty much the same as JSX, except it uses template literals. Htm will parse the template literals and convert them to javascript that the browser can digest. 
+      Fortunately there is a solution, [**htm**](https://github.com/developit/htm), with a jsx-like syntax in plain javascript. HTM looks pretty much the same as JSX, except it uses template literals. It will parse the template literals and convert them to javascript that the browser can digest. 
 
       With htm a preview page template may look like this:
 
@@ -179,7 +179,7 @@ sections:
 
       Yes, we'll have all images located in a single directory, for small sites this will work. For larger sites I'd recommend to use a Digital asset management tool like cloudinary.com.
 
-      
+
 
 
 
