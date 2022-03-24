@@ -1,0 +1,220 @@
+---
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Adding Netlify CMS to Metalsmith | Werner Glinka
+  description: "Netlify CMS is an open source content management system for a Git workflow that provides editors with a friendly UI and intuitive workflows. This blogpost describes how to add Netlify CMS to the Metalsmith Static Site Generator"
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Adding Netlify CMS to Metalsmith"
+date: "2022-03-28T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  Netlify CMS is an open source content management system for a Git workflow that provides editors with a friendly UI and intuitive workflows. This blogpost describes how to add Netlify CMS to the Metalsmith Static Site Generator.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2022-03-28T12:00:00Z"
+    title: "Adding Netlify CMS to Metalsmith"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1648136437/tgc2022/blogImages/add-netlify-cms/adding-netlify-cms_klvybu.jpg"
+      alt: "flexible layout"
+      aspectRatio: "32.25"
+      caption: "Photo by [Andrea Piacquadio](https://www.pexels.com/@olly) from Pexels"
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Let's be frank, the editing experience with any Static Site Generator (SSG), for anybody who is not a developer, is teribble. As developer friendly as SSGs are, most "normal" people do not like editing content in Markdown. Many editors are used to a Wordpress-like editing experience and that's what they expect. In this post we will look at how to add the Netlify CMS to a Metalsmith website so our users will be able to enjoy non-code editing.
+
+      ## Netlify CMS in their own words
+
+      **Static + content management = ♥**
+      
+      Get the speed, security, and scalability of a static site, while still providing a convenient editing interface for content.
+
+      **An integrated part of your Git workflow**
+      
+      Content is stored in your Git repository alongside your code for easier versioning, multi-channel publishing, and the option to handle content updates directly in Git.
+
+      **An extensible CMS built on React**
+      
+      Netlify CMS is built as a single-page React app. Create custom-styled previews, UI widgets, and editor plugins or add backends to support different Git platform APIs.
+
+      ## Adding Netlify CMS to your Metalsmith site
+      There is a good, [offical tutorial](https://www.netlifycms.org/docs/add-to-your-site/) on their website so I'll limit this post to some observations and comments that I find noteworthy based on implementing this CMS on a [Metalsmith Netlify Starter website](https://metalsmith-netlify-starter.netlify.app/). The Github repository for this site can be found [here](https://github.com/wernerglinka/metalsmith-netlify-starter).
+
+      ### Adding local editing
+
+      According to their website, local editing is in beta. I have been using it on the Metasmith Netlify Starter website with no issues.
+
+      #### 1 Configure the Netlify CMS proxy server port number
+      
+      Create a `.env` file in the `metalsmith` root folder and define the PORT you'd like the proxy server to use. The dev server runs on http://localhost:3000.
+      
+      ```bash
+      PORT=3002
+      ```
+      
+      #### 2 Add the `local_backend` object in `config.yml`
+      ```yaml
+      backend:
+        name: git-gateway
+
+      local_backend:
+        # when using a custom proxy server port
+        url: http://localhost:3002/api/v1
+      ```
+
+      #### 3 Add this script to the package.json file
+
+      ```json
+      "edit": "cross-env NODE_ENV=development NODE_PATH=./node_modules npx netlify-cms-proxy-server & npm run watch & npm run serve"
+      ```
+
+      Run `npm run edit` will start the local site. Navigate to http://localhost:3000/admin/ and click the login button... et voilà... the Netlify CMS.
+
+
+      ### Styling the preview pane
+
+      For the CMS to use our CSS, we'll need to register the style sheet first in the admin/index.html file.
+
+      ```html
+      <body>
+        <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+        <script>CMS.registerPreviewStyle('https://metalsmith-netlify-cms-starter.netlify.app/assets/styles.css');</script>
+      </body>
+      ```
+
+      ### Creating Custom Previews
+
+      By default the CMS shows all frontmatter fields and the content body of the page in the preview pane. For the preview to show the page as in production we have to duplicate the whole page structure in React components. This process is explained [here](https://www.netlifycms.org/docs/customization/).
+
+      As we can [see in the tutorial](https://www.netlifycms.org/docs/customization/#registerpreviewtemplate), building the React component is done without the benefit of JSX. I am used to JSX but the browser doesn't understand it. Rather to make this work with JSX we'd have to install Babel and convert JSX to Javascript.  I'd love to use JSX but don't want to add a compile step into my front-end code. 
+
+      Fortunately there is a solution, [**htm**](https://github.com/developit/htm), with a jsx-like syntax in plain javascript. HTM looks pretty much the same as JSX, except it uses template literals. Htm will parse the template literals and convert them to javascript that the browser can digest. 
+
+      With htm a preview page template may look like this:
+
+      ```javascript
+      // use htm so we don't have to build templates with h()
+      import htm from "https://unpkg.com/htm?module";
+      const html = htm.bind(h);
+
+      // Preview component for a Page
+      const Page = createClass({
+        render() {
+          const entry = this.props.entry;
+
+          return html`
+            <main>
+              <h1>${entry.getIn(["data", "title"], null)}</h1>
+              ${this.props.widgetFor("body")}
+            </main>
+          `;
+        },
+      });
+
+      export default Page;
+      ```
+
+      Have a look at the [CMS setup for the starter](https://github.com/wernerglinka/metalsmith-netlify-starter/tree/main/src/content/admin) to get a better idea of what this may look like.
+
+
+      ### Images
+      Unfortunately, Netlify CMS does not support image sub-folders. All site images will be stored in one folder. Of course Wordpress users have been doing this forever so a whole cottage industry of file manager plugins has emerged but I digress...
+
+      Yes, we'll have all images located in a single directory, for small sites this will work. For larger sites I'd recommend to use a Digital asset management tool like cloudinary.com.
+
+      
+
+
+
+
+
+
+
+      
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
