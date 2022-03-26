@@ -1,0 +1,486 @@
+---
+layout: sections-with-sidebar.njk
+draft: true
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Building a Netlify CMS content model | Werner Glinka
+  description: "In the Netlify CMS a content model is defined in config.yaml. I prefer to write my content model in a modular fashion. In this post we'll look at how to do that in Netlify CMS."
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Building a Netlify CMS content model"
+date: 2022-04-02T12:00:00Z
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  Netlify CMS uses config.yaml to define the site's content model. I prefer to write my content model in a modular fashion. In this post we'll look at how to do that for Netlify CMS.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2022-04-02T12:00:00Z
+    title: "Building a Netlify CMS content model"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1648318622/tgc2022/blogImages/netlify-cms-content-model/content-model_zgup7u.jpg"
+      alt: "flexible layout"
+      aspectRatio: "37.55"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      I just finished building a Metalsmith Netlify starter with baked-in Netlify CMS support. Adding the basic CMS is pretty straight forward, I just followed the tutorial in the [Netlify docs](https://www.netlifycms.org/docs/add-to-your-site/). Since a Metalsmith template wasn't available I had to go the [Add to you site](https://www.netlifycms.org/docs/add-to-your-site/) route. I wrote about this experience in my blogpost [Adding Netlify CMS to Metalsmith](/blog/adding-netlify-cms/).
+
+      After I finished the integration I submitted the starter to Netlify CMS for inclusion in the [Start with a Template](https://www.netlifycms.org/docs/start-with-a-template/) section.
+
+      I have build several larger sites with Metalsmith and Gatsby and have experienced firsthand what a pain it can be to update configurations for a site's content model as the site grows and expands. In the Netlify CMS the content model is defined in YAML in `config.yaml` which is located in the `/admin` folder. In my view that has two disadvantages
+      
+      1. It is written in YAML
+      2. It becomes one large mess of config data very quickly 
+
+      I prefer to define content models in a modular fashion, in json or js, that makes them much easier to manage. YAML does not allow imports so modularity is not an option. So one big config.yaml it is... or is it? 
+      
+      Digging a bit more into the section [Beta Features](https://www.netlifycms.org/docs/beta-features/) I found exactly what I was looking for:  [Manual Initialization](https://www.netlifycms.org/docs/beta-features/#manual-initialization). This new feature makes all the difference, it allows us to forgo `config.yml` and to configure the CMS dynamically with javascript. Using this approach we can define each content type in its own file.
+
+      Here is the admin folder for this implementation and all content model files:
+
+      ```
+      admin
+
+        ├─ index.html
+        │
+        ├─ templates
+        │   ...
+        └─ content-models
+            │
+            ├─ index.js
+            ├─ data.js
+            ├─ pages.js
+            └─ posts.js
+      ```
+      
+      **admin/index.html**
+
+
+      ```html
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Netlify CMS</title>
+        </head>
+        <body>
+          <script>
+            // This global flag enables manual initialization.
+            window.CMS_MANUAL_INIT = true;
+          </script>
+          <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+          <script type="module" src="./content-models/index.js"></script>
+          <!-- Include Netlify Identity for authentication -->
+          <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+          <script type="module" src="./templates/index.js"></script>
+        </body>
+      </html>
+      ```
+
+      **admin/content-models/index.js**
+
+      ```javascript
+      import pages from "./pages.js";
+      import posts from "./posts.js";
+      import data from "./data.js";
+
+      const { CMS, initCMS: init } = window;
+
+      init({
+        config: {
+          backend: {
+            name: "git-gateway",
+            branch: "main",
+          },
+          local_backend: {
+            url: "http://localhost:3002/api/v1",
+          },
+          publish_mode: "editorial_workflow",
+          media_folder: "src/assets/images",
+          public_folder: "assets/images",
+          collections: [pages, posts, data],
+        },
+      });
+      ```
+
+      **admin/content-models/pages.js**
+
+      ```javascript
+      const pages = {
+        name: "pages",
+        label: "Pages",
+        folder: "src/content/",
+        create: true,
+        slug: "{{slug}}",
+        fields: [
+          {
+            label: "Layout",
+            name: "layout",
+            widget: "hidden",
+            default: "simple.njk",
+          },
+          {
+            label: "Body Class",
+            name: "bodyClass",
+            widget: "string",
+            required: false,
+          },
+          {
+            label: "SEO",
+            name: "seo",
+            widget: "object",
+            summary: "SEO Properties",
+            fields: [
+              {
+                label: "Title",
+                name: "title",
+                widget: "string",
+              },
+              {
+                label: "Description",
+                name: "description",
+                widget: "string",
+              },
+              {
+                label: "Social Image",
+                name: "socialImage",
+                widget: "image",
+                required: false,
+              },
+              {
+                label: "Canonical Overwrite",
+                name: "canonicalOverwrite",
+                widget: "string",
+                required: false,
+              },
+            ],
+          },
+          {
+            label: "Body",
+            name: "body",
+            widget: "markdown",
+            required: false,
+          },
+        ],
+      };
+
+      export default pages;
+      ```
+
+      **admin/content-models/pages.js**
+
+      ```javascript
+      const posts = {
+        name: "posts",
+        label: "Posts",
+        folder: "src/content/blog",
+        create: true,
+        slug: "{{slug}}",
+        fields: [
+          {
+            label: "Layout",
+            name: "layout",
+            widget: "hidden",
+            default: "blog-post.njk",
+          },
+          {
+            label: "Body Class",
+            name: "bodyClass",
+            widget: "string",
+            required: false,
+          },
+          {
+            label: "SEO",
+            name: "seo",
+            widget: "object",
+            summary: "SEO Properties",
+            fields: [
+              {
+                label: "Title",
+                name: "title",
+                widget: "string",
+              },
+              {
+                label: "Description",
+                name: "description",
+                widget: "string",
+              },
+              {
+                label: "Social Image",
+                name: "socialImage",
+                widget: "image",
+                required: false,
+              },
+              {
+                label: "Canonical Overwrite",
+                name: "canonicalOverwrite",
+                widget: "string",
+                required: false,
+              },
+            ],
+          },
+          {
+            label: "Blog Title",
+            name: "blogTitle",
+            widget: "string",
+          },
+          {
+            label: "Publish Date",
+            name: "publishDate",
+            widget: "dateTime",
+          },
+          {
+            label: "Author",
+            name: "author",
+            widget: "string",
+            required: false,
+          },
+          {
+            label: "Image",
+            name: "image",
+            widget: "image",
+            required: false,
+          },
+          {
+            label: "Featured Blogpost",
+            name: "featuredBlogpost",
+            widget: "boolean",
+            required: false,
+          },
+          {
+            label: "Featured Blogpost Order",
+            name: "featuredBlogpostOrder",
+            widget: "number",
+            required: false,
+          },
+          {
+            label: "Excerpt",
+            name: "excerpt",
+            widget: "string",
+            required: false,
+          },
+          {
+            label: "Body",
+            name: "body",
+            widget: "markdown",
+            required: false,
+          },
+        ],
+      };
+
+      export default posts;
+      ```
+
+      **admin/content-models/pages.js**
+
+      ```javascript
+      const data = {
+        name: "data",
+        label: "Data",
+        files: [
+          {
+            label: "Navigation",
+            name: "navigation",
+            file: "src/content/data/navigation.json",
+            fields: [
+              {
+                label: "Menu",
+                name: "menu",
+                widget: "list",
+                fields: [
+                  {
+                    label: "Label",
+                    name: "label",
+                    widget: "string",
+                  },
+                  {
+                    label: "URL",
+                    name: "url",
+                    widget: "string",
+                  },
+                  {
+                    label: "Body Class",
+                    name: "bodyClass",
+                    widget: "string",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            label: "Site",
+            name: "site",
+            file: "src/content/data/site.json",
+            fields: [
+              {
+                label: "Title",
+                name: "title",
+                widget: "string",
+              },
+              {
+                label: "Description",
+                name: "description",
+                widget: "string",
+              },
+              {
+                label: "Author",
+                name: "author",
+                widget: "string",
+              },
+              {
+                label: "Site URL",
+                name: "siteUrl",
+                widget: "string",
+              },
+              {
+                label: "Site Owner",
+                name: "siteOwner",
+                widget: "string",
+              },
+              {
+                label: "Validate",
+                name: "validate",
+                widget: "object",
+                summary: "Validation",
+                fields: [
+                  {
+                    label: "Google",
+                    name: "google",
+                    widget: "string",
+                    required: false,
+                  },
+                  {
+                    label: "Bing",
+                    name: "bing",
+                    widget: "string",
+                    required: false,
+                  },
+                ],
+              },
+              {
+                label: "Social",
+                name: "social",
+                widget: "object",
+                summary: "Social",
+                fields: [
+                  {
+                    label: "LinkedIn",
+                    name: "linkedIn",
+                    widget: "string",
+                    required: false,
+                  },
+                  {
+                    label: "GitHub",
+                    name: "gitHub",
+                    widget: "string",
+                    required: false,
+                  },
+                ],
+              },
+              {
+                label: "Social Image",
+                name: "socialImage",
+                widget: "image",
+                required: false,
+              },
+            ],
+          },
+        ],
+      };
+
+      export default data;
+
+      ```
+      You can review the whole site code for the [Metalsmith Netlify Starter](https://github.com/wernerglinka/metalsmith-netlify-starter) at Github.
+
+      ### Rdcommended Reading
+
+      - [Understanding Content Modeling In A Headless World](https://www.stackbit.com/blog/content-modeling-headless/) by Brian Rinaldi
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
