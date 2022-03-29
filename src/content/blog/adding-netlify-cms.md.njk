@@ -143,7 +143,7 @@ sections:
 
       By default the CMS shows all frontmatter fields and the content body of the page in the preview pane. For the preview to show the page as in production we have to duplicate the whole page structure in React components. This process is explained [here](https://www.netlifycms.org/docs/customization/).
 
-      As we can [see in the tutorial](https://www.netlifycms.org/docs/customization/#registerpreviewtemplate), building the React component is done without the benefit of JSX. I am used to JSX but the browser doesn't understand it. Rather to make this work with JSX we'd have to install Babel and convert JSX to Javascript.  I'd love to use JSX but don't want to add a compile step into my front-end code. 
+      As we can [see in the tutorial](https://www.netlifycms.org/docs/customization/#registerpreviewtemplate), building the React component is done without the benefit of JSX. I am used to JSX but the browser doesn't understand it. Rather, to make this work with JSX we'd have to install Babel and convert JSX to Javascript.  I'd love to use JSX but don't want to add a compile step into my front-end code. 
 
       Fortunately there is a solution, [**htm**](https://github.com/developit/htm), with a jsx-like syntax in plain javascript. HTM looks pretty much the same as JSX, except it uses template literals. It will parse the template literals and convert them to javascript that the browser can digest. 
 
@@ -177,7 +177,7 @@ sections:
       ### Images
       Unfortunately, Netlify CMS does not support image sub-folders. All site images will be stored in one folder. Of course Wordpress users have been doing this forever so a whole cottage industry of file manager plugins has emerged but I digress...
 
-      Yes, we'll have all images located in a single directory, for small sites this will work. For larger sites I'd recommend to use a Digital asset management tool like cloudinary.com.
+      Yes, we'll have all images located in a single directory, for small sites this will work. For larger sites I'd recommend to use a digital asset management tool like [cloudinary.com](http://cloudinary.com).
 
   - component: contact-footer
     disabled: false
