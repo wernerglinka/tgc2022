@@ -5,6 +5,20 @@
   // padding-bottom will be set during render based on image
   overflow: hidden;
 
+  &.has-shadow {
+    // https://www.joshwcomeau.com/css/designing-shadows/
+    filter:
+      drop-shadow(
+        1px 1px 4px rgba(8, 8, 8, 0.1)
+      )
+      drop-shadow(
+        1px 2px 8px rgba(8, 8, 8, 0.1)
+      )
+      drop-shadow(
+        1px 4px 16px rgba(8, 8, 8, 0.1)
+      );
+  }
+  
   img {
     display: block;
     max-width: 100%;
