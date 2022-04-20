@@ -94,8 +94,7 @@ module.exports = function metalsmith(callback) {
     .use(layouts(templateConfig))
 
     .use(prism({
-      lineNumbers: true,
-      preLoad: ["scala", "java"]
+      lineNumbers: true
     }))
 
     .use(processLinks({
