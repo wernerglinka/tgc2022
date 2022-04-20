@@ -1,0 +1,317 @@
+---
+layout: sections-with-sidebar.njk
+draft: true
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Building a badges section | Werner Glinka
+  description: "A badge section has many uses. It can be used to list features, customers, awards, etc. "
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Building a badges section with Metalsmith and Nunjucks"
+date: 2022-04-22T12:00:00Z
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  A badge section be used to list features, customers, awards, etc. List items may be an image or an icon, optionally it may include a title and some prose and it may include a link to other resources. 
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2022-04-20T12:00:00Z
+    title: "Building a badges section with Metalsmith and Nunjucks"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1650491861/tgc2022/blogImages/build-badges-section/badges-header_nrd7sx.png"
+      alt: "badges"
+      aspectRatio: "41"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      A badge section has many uses. It can be used to list features, customers, awards, etc. List items may be just an image or an icon, it may include a title and some prose and it may include a link to other resources. Today's corporate websites are full of examples. 
+
+      In this post we'll build such a section for awards with Metalsmith with Nunjucks templating.
+
+      The context for this implementation is as follows: We have a several awards, all listed in a JSON file that is located in `src/data/awards.json`. These awards are available for display but we like to be in control of which one to list and in what order. We achieve that by using a select list in our `sections` object.
+
+      ### Badges section
+
+      ```yaml
+      - section: badges
+          sectionClass: "example"
+          animateSection: true
+          inContainer: true
+          hasBackground: false
+          backgroundColor: ""
+          backgroundIsDark: false
+          marginTop: true
+          marginBottom: true
+          paddingTop: false
+          paddingBottom: false
+          text:
+            title: Awards.
+            header: "h2"
+            subTitle: Look at how many awards we have won.
+            prose: "We keep trying and they are piling up."
+          list:
+            source: awards
+            selections:
+              - title: "Award1"
+              - title: "Award2" 
+              - title: "Award3"
+              - title: "Award4"
+              - title: "Award5"
+          hasCtas: true
+          ctas:
+            - url: "/base-components/"
+              label: Check out our award winning products
+              isExternal: false
+              isButton: false
+              buttonStyle: "primary"
+      ```
+
+      Besides a common set of section properties, the `section` object is composed of the base components `text`, `list` and `ctas`. `list` provides the source and a list of awards we like to show. We only need to  list the titles of the awards as all other awards info is available in `awards.json`.
+
+      The source property is the name of the metadata key under which we can access all awards information. We use the `@metalsmith/metadata` plugin to inject the `awards.json` file into the metalsmith metadata.
+
+      ### awards.json
+
+      ```json
+      [
+        {
+          "title": "Award1",
+          "url": "https://www.youtube.com/watch?v=Cgl4jdI9zRg",
+          "image": "",
+          "icon": "feather",
+          "description": "Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
+        },
+        {
+          "title": "Award2",
+          "url": "",
+          "image": "v1650325427/metalsmith-components/awards/award6_sono17.jpg",
+          "description": "Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
+        },
+        {
+          "title": "Award3",
+          "url": "",
+          "image": "v1650325427/metalsmith-components/awards/award3_ct4nrh.jpg",
+          "description": "Fusce dapibus, tellus ac cursus commodo, tortor mauris."
+        },
+        {
+          "title": "Award4",
+          "url": "https://www.youtube.com/watch?v=EcHiDVv-2xw",
+          "image": "v1650325427/metalsmith-components/awards/award1_s925ma.jpg",
+          "description": "Maecenas faucibus mollis interdum."
+        },
+        {
+          "title": "Award5",
+          "url": "",
+          "image": "v1650325427/metalsmith-components/awards/award4_oehdu3.jpg",
+          "description": "Curabitur blandit tempus porttitor."
+        },
+        {
+          "title": "Award6",
+          "url": "",
+          "image": "v1650325427/metalsmith-components/awards/award5_whkzuo.jpg",
+          "description": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et."
+        }
+      ]
+      ```
+
+      ### badges.njk
+
+      ```html
+      {% from "../partials/ctas.njk" import ctas %}
+      {% from "../partials/text.njk" import text %}
+      {% from "../partials/list.njk" import list %}
+
+
+      {# this section receives props params and site #}
+
+      <section 
+        class="section-badges {{ params.sectionClass }}{{ " paddingTop" if params.paddingTop }}{{ " paddingBottom" if params.paddingBottom }}">
+        <div class="content">
+          
+          {{ text(params.text)}}
+
+          {# list source is specified in the params. Source is metadata object that was built from data files #}
+          {% if params.list.source === "awards" %}
+            {% set source = awards | filterList(params.list.selections) %}
+          {% endif %}
+          {{ list(params.list, source, site)}}
+              
+          {% if params.hasCtas %}
+            {{ ctas(params.ctas) }}
+          {% endif %}
+          
+        </div>
+      </section>
+      ```
+
+      Note that we use a Nunjucks filter to arrive at the awards to be displayed. In the above code section we filter the metadata objet `awards` with the `selections` object and set `source` with the resulting objects.
+
+      The Nunjucks filter is implemented like this:
+
+      ```javascript
+      const filterList = (list, selections) => {
+        const filterredList = [];
+        for (let i = 0; i < list.length; i++) {
+          for (let j = 0; j < selections.length; j++) {
+            if (list[i].title === selections[j].title) {
+              filterredList.push(list[i]);
+            }
+          }
+        }
+        return filterredList;
+      };
+      ```
+
+      ### list.njk
+
+      ```html
+      {% from "../partials/icon.njk" import icon %}
+
+      {% macro list(info, source, siteMeta) %}
+        <ul class="badges-list {info.source}-list">
+          {# filter the list with selection from frontmatter #}
+          {% for item in source %}
+
+            {% if item.show %}
+            <li>
+              {% if item.url %}
+              <a href="{{ item.url }}">
+                
+                {% if item.image %}
+                {% set imagesrc = siteMeta.imagePrefix ~ "w_100,c_fill,g_auto,f_auto/" ~ item.image %}
+                <img src="{{ imagesrc }}" alt="{{ item.title }}">
+                {% endif %}
+
+                {% if item.icon %}
+                {% set iconSource = item.icon %}
+                {{ icon(iconSource) }}
+                {% endif %}
+                
+                {% if item.title %}
+                <h4>{{ item.title }}</h4>
+                {% endif %}
+                
+                {% if item.description %}
+                <div>{{ item.description | mdToHTML | safe }}</div>
+                {% endif %}
+
+              </a>
+
+              {% else %}
+
+              <span>
+                
+                {% if item.image %}
+                {% set imagesrc = siteMeta.imagePrefix ~ "w_100,c_fill,g_auto,f_auto/" ~ item.image %}
+                <img src="{{ imagesrc }}" alt="{{ item.title }}">
+                {% endif %}
+
+                {% if item.icon %}
+                {% set iconSource = item.icon %}
+                {{ icon(iconSource) }}
+                {% endif %}
+                
+                {% if item.title %}
+                <h4>{{ item.title }}</h4>
+                {% endif %}
+                
+                {% if item.description %}
+                <div>{{ item.description | mdToHTML | safe }}</div>
+                {% endif %}
+
+              </span>
+              {% endif %}
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% endmacro %}
+      ```
+
+      The result is a badges section as shown in the header image of this post.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
