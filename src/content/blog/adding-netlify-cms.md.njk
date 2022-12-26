@@ -79,7 +79,7 @@ sections:
     backgroundColor: ""
     targetId: ""
     prose: |-
-      Let's be frank, the editing experience with any Static Site Generator (SSG), for anybody who is not a developer, is teribble. As developer friendly as SSGs are, most "normal" people do not like editing content in Markdown. Many editors are used to a Wordpress-like editing experience and that's what they expect. In this post we will look at how to add the Netlify CMS to a Metalsmith website so our users will be able to enjoy non-code editing.
+      Let's be frank, the editing experience with any Static Site Generator (SSG), for anybody who is not a developer, is terrible. As developer-friendly as SSGs are, most "normal" people dislike editing Markdown content. Many editors are used to a Wordpress-like editing experience, and that's what they expect. This post will look at how to add the Netlify CMS to a Metalsmith website so users can enjoy non-code editing.
 
       ## Netlify CMS in their own words
 
@@ -96,7 +96,7 @@ sections:
       Netlify CMS is built as a single-page React app. Create custom-styled previews, UI widgets, and editor plugins or add backends to support different Git platform APIs.
 
       ## Adding Netlify CMS to your Metalsmith site
-      There is a good, [offical tutorial](https://www.netlifycms.org/docs/add-to-your-site/) on their website so I'll limit this post to some observations and comments that I find noteworthy based on implementing this CMS on a [Metalsmith Netlify Starter website](https://metalsmith-netlify-starter.netlify.app/). The Github repository for this site can be found [here](https://github.com/wernerglinka/metalsmith-netlify-starter).
+      There is a good, [official tutorial](https://www.netlifycms.org/docs/add-to-your-site/) on their website, so I'll limit this post to some observations and comments that I find noteworthy based on implementing this CMS on a [Metalsmith Netlify Starter website](https://metalsmith-netlify-starter.netlify.app/). The GitHub repository for this site can be found [here](https://github.com/wernerglinka/metalsmith-netlify-starter).
 
       ### Adding local editing
 
@@ -142,13 +142,13 @@ sections:
 
       ### Creating Custom Previews
 
-      By default the CMS shows all frontmatter fields and the content body of the page in the preview pane. For the preview to show the page as in production we have to duplicate the whole page structure in React components. This process is explained [here](https://www.netlifycms.org/docs/customization/).
+      By default, the CMS shows all frontmatter fields and the page's content body in the preview pane. For the preview to display the page as in production, we must duplicate the whole page structure in React components. This process is explained [here](https://www.netlifycms.org/docs/customization/).
 
-      As we can [see in the tutorial](https://www.netlifycms.org/docs/customization/#registerpreviewtemplate), building the React component is done without the benefit of JSX. I am used to JSX but the browser doesn't understand it. Rather, to make this work with JSX we'd have to install Babel and convert JSX to Javascript.  I'd love to use JSX but don't want to add a compile step into my front-end code. 
+      As we can [see in the tutorial](https://www.netlifycms.org/docs/customization/#registerpreviewtemplate), building the React component is done without the benefit of JSX. I am used to JSX, but the browser doesn't understand it. Instead, to make this work with JSX, we'd have to install Babel and convert JSX to Javascript.  I'd love to use JSX, but I want to avoid adding a compile step to my front-end code. 
 
-      Fortunately there is a solution, [**htm**](https://github.com/developit/htm), with a jsx-like syntax in plain javascript. HTM looks pretty much the same as JSX, except it uses template literals. It will parse the template literals and convert them to javascript that the browser can digest. 
+      Fortunately, there is a solution, [**htm**](https://github.com/developit/htm), with a jsx-like syntax in plain javascript. HTM looks the same as JSX, except it uses template literals. It will parse the template literals and convert them to javascript that the browser can digest. 
 
-      With htm a preview page template may look like this:
+      With htm, a preview page template may look like this:
 
       ```javascript
       // use htm so we don't have to build templates with h()
@@ -176,9 +176,9 @@ sections:
 
 
       ### Images
-      Unfortunately, Netlify CMS does not support image sub-folders. All site images will be stored in one folder. Of course Wordpress users have been doing this forever so a whole cottage industry of file manager plugins has emerged but I digress...
+      Unfortunately, Netlify CMS does not support image sub-folders. All site images will be stored in one folder. Of course, WordPress users have been doing this forever, so a whole cottage industry of file manager plugins has emerged, but I digress...
 
-      Yes, we'll have all images located in a single directory, for small sites this will work. For larger sites I'd recommend to use a digital asset management tool like [cloudinary.com](http://cloudinary.com).
+      Yes, we'll have all images in a single directory; this will work for small sites. For larger sites, I'd recommend using a digital asset management tool like [cloudinary.com](http://cloudinary.com).
 
   - component: contact-footer
     disabled: false
