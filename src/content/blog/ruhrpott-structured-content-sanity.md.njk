@@ -1,0 +1,199 @@
+---
+layout: sections-with-sidebar.njk
+draft: false
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: "Ruhrpott - Structured Content from Sanity | Werner Glinka"
+  description: "Metalsmith is a flexible static site generator, agnostic to how a website is built. It can be used to create websites with either structured content, using the contents property or the metadata object to provide data for page components. It is designed to be highly extensible, allowing you to use a wide range of plugins to customize the build process to suit your needs."
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1681165865/sanity-blog-header_wqvbpm.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Ruhrpott - Structured Content from Sanity"
+date: 2022-12-02T12:00:00Z
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 1
+excerpt: |-
+  Sanity.io is the platform for structured content. It comes with an open-source editing environment called Sanity Studio that you can customize with JavaScript and a real-time hosted data store. Sanity has generously included quotas – so getting started is free.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2022-12-02T12:00:00Z
+    title: "Ruhrpott - Structured Content from Sanity"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1681165865/sanity-blog-header_wqvbpm.png"
+      alt: "ruhrpott blog post"
+      aspectRatio: "25"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      In the first post of the Ruhrpot project, we discussed how to use structured content to build a simple media page section. The content was defined in the Frontmatter YAML Object of the source page. In this post, we will source all content from the [Sanity CMS](https://www.sanity.io/docs/a-short-introduction-to-sanity-io). There will be no source file; structured content will be fetched from the Sanity API and directly injected into the Metalsmith metadata layer.
+
+      ## About Sanity.io
+
+      Sanity.io is a content platform that allows you to create, edit, and manage structured content such as text, images, and other media. It provides a real-time data store for storing and managing this content and APIs for interacting with it. Sanity.io also offers a content editing environment called [Sanity Studio](https://www.sanity.io/studio), a single-page application that allows us to quickly set up and customize an editing environment for our content. In addition to the data store and Studio, Sanity.io also provides a range of SDKs, libraries, and tools that enable us to query content and integrate it with other websites, services, and applications.
+
+      Learn how to get started with Sanity here: https://www.sanity.io/docs/getting-started-with-sanity
+
+      To use the Sanity Studio, we first define the structure of our content using schemas. A schema is a JSON object that represents the types of content that can be created, the fields that can be used to store data, and the relationships between different types of content.
+
+      ## A practical example the Sanity way
+
+      In this example, we will model the media section from our previous blogpost. While our last implementation was done with a YAML object in the file frontmatter, this time, we will create the media section content with Sanity Studio, which our Metalsmith SSG can then fetch during build time. We will discuss how that works in the next blogpost.
+
+      ## The media section schema
+
+      ```javascript
+      import {defineType} from 'sanity'
+
+      export default defineType({
+        name: 'mediaBlock',
+        title: 'Media Block',
+        type: 'object',
+        fields: [
+          {
+            name: 'blockOrder',
+            title: 'Block Order',
+            type: 'string',
+            options: {
+              list: [
+                { title: "Image Right", value: "imageRight" },
+                { title: "Image Left", value: "imageLeft" },
+              ]
+            },
+            initialValue: "imageRight",
+          },
+          { name: 'titlePrefix', 
+            type: 'string', 
+            title: 'Title Prefix' 
+          },
+          {
+            title: 'Title',
+            name: 'title',
+            type: 'string'
+          },
+          {
+            name: "headerType",
+            title: "Header Type",
+            type: "string",
+            description: 'Choose from h1 through h6',
+            options: {
+              list: [
+                { title: "h1", value: "h1" },
+                { title: "h2", value: "h2" },
+                { title: "h3", value: "h3" },
+                { title: "h4", value: "h4" },
+                { title: "h5", value: "h5" },
+                { title: "h6", value: "h6" },
+              ]
+            },
+            initialValue: "h2",
+          },
+          {
+            name: 'subTitle',
+            type: 'string',
+            title: 'Subtitle',
+          },
+          {
+            name: 'mediaImage',
+            title: 'Media Image',
+            type: 'imageBlock',
+          },
+          {
+            name: 'portableTextBody',
+            type: 'simpleBlockContent',
+            title: 'Portable Text Body',
+          },
+          {
+            name: 'cta',
+            type: 'cta',
+            title: 'CTA',
+          },
+        ],
+      })
+      ```
+
+      Here is the JSON Object schema that defines an object called `mediaBlock` with several fields, including `headerType` and `portableTextBody`. The `headerType` field is a list that allows us to select from a list of options. `portableTextBody` is a rich text field using a format called [Portable Text](https://www.sanity.io/docs/presenting-block-text), which is different from the markdown format used in the previous example. Once the values for the mediaBlock object have been entered into Sanity Studio, they can be published and made available through the Sanity API.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
