@@ -1,0 +1,137 @@
+---
+layout: sections-with-sidebar.njk
+draft: false
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Better Responsive Websites with Clamp | Werner Glinka
+  description: "clamp() is a powerful tool for creating responsive designs that work across a wide range of devices and screen sizes. It allows us to create linear transitions between two viewport widths, and it has been supported by major browsers since 2020. By using clamp() in our CSS, we can create more flexible and maintainable designs that adapt to the needs of our users."
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1681846719/a-clamp_bzno8s.jpg"
+  canonicalOverwrite: ""
+
+blogTitle: "Better Responsive Websites with Clamp"
+date: 2023-04-18T12:00:00Z
+author: ""
+image: ""
+featuredBlogpost: false
+featuredBlogpostOrder: 1
+excerpt: |-
+  clamp() is a powerful tool for creating responsive designs that work across a wide range of devices and screen sizes. It allows us to create linear transitions between two viewport widths, and it has been supported by major browsers since 2020. By using clamp() in our CSS, we can create more flexible and maintainable designs that adapt to the needs of our users.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2023-04-18T12:00:00Z
+    title: "Better Responsive Websites with Clamp"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1681846719/a-clamp_bzno8s.jpg"
+      alt: "badges"
+      aspectRatio: "56.25"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      The [clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp) function is powerful in creating responsive web designs. It allows you to specify a value that is bounded between a minimum and maximum value and can be used to develop linear transitions between two viewport widths. The function has been supported by major browsers since 2020, making it a reliable and widely compatible solution for responsive design.
+        
+      The basic syntax of clamp() is as follows:
+
+
+      ```css
+      clamp(minimum, value, maximum);
+      ```
+
+      The minimum and maximum arguments define the lower and upper bounds for the value being set, while the value argument represents the actual value. The value argument can be a fixed value, or it can be calculated using CSS functions like [calc()](https://developer.mozilla.org/en-US/docs/Web/CSS/calc). For example, when using clamp() to create a responsive design, we can use calc() to calculate the value argument based on the current viewport width.
+
+      For example, the viewport width increases from 320px to 768px. Then, we can use the following formula:
+
+
+      ```css
+      font-size: clamp(16px, calc(16px + (24 - 16) * (100vw - 320px) / (768 - 320)), 24px);
+      ```
+
+      In this formula, 16px is the minimum font size, 24px is the maximum font size, 320px is the minimum viewport width, and 768px is the full viewport width. The calc() function subtracts 320px from the current viewport width (100vw) and divides the result by the difference between 768px and 320px. 
+
+      This gives a value between 0 and 1, representing the distance's proportion between the two viewport widths. Multiplying this proportion by the difference between 24px and 16px and adding 16px gives a value that is linearly proportional to the viewport width. So, the font size will start at 16px when the viewport width is 320px, increase linearly as the viewport width increases, and reach 24px when the viewport width is 768px or greater.
+
+      This approach is not limited to fluid font-size calculation. Any number can be made fluid, including padding and margins.
+      One of the benefits of using clamp() is that it allows us to create responsive designs without relying on media queries or JavaScript. This can simplify the CSS and makes the code more maintainable.
+
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
