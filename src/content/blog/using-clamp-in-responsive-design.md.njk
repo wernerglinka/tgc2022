@@ -79,19 +79,24 @@ sections:
     backgroundColor: ""
     targetId: ""
     prose: |-
-      The [clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp) function is powerful in creating responsive web designs. It allows you to specify a value that is bounded between a minimum and maximum value and can be used to develop linear transitions between two viewport widths. The function has been supported by major browsers since 2020, making it a reliable and widely compatible solution for responsive design.
+      The [clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp) function is powerful in creating responsive web designs. It outputs a preferred value within a range of values between a defined minimum and maximum bound and can be used to develop linear transitions between two viewport widths. The function has been supported by major browsers since 2020, making it a reliable and widely compatible solution for responsive design.
         
       The basic syntax of clamp() is as follows:
 
 
       ```css
-      clamp(minimum, value, maximum);
+      clamp(minimum, preferred value, maximum);
       ```
 
-      The minimum and maximum arguments define the lower and upper bounds for the value being set, while the value argument represents the actual value. The value argument can be a fixed value, or it can be calculated using CSS functions like [calc()](https://developer.mozilla.org/en-US/docs/Web/CSS/calc). For example, when using clamp() to create a responsive design, we can use calc() to calculate the value argument based on the current viewport width.
+      The minimum value is the smallest. This is the lower bound in the range of allowed values. The minimum value will be used if the preferred value is less than this value.
 
-      For example, the viewport width increases from 320px to 768px. Then, we can use the following formula:
+      The preferred value is the expression whose value will be used as long as a result is between the minimum and maximum values. The minimum value will be used if the preferred value is less than the minimum value. The maximum value will be used if the preferred value is greater than the maximum value.
 
+      The maximum value is the largest expression value to which the property's value will be assigned if the preferred value exceeds this upper bound. If the preferred value is larger than this value, the maximum value will be used
+
+      The preferred value argument is typically expressed in percent or viewport width, and it can be calculated using CSS functions like [calc()](https://developer.mozilla.org/en-US/docs/Web/CSS/calc). So, for example, when using clamp() to create a responsive design, we can use calc() to calculate the preferred value argument based on the current viewport width
+
+      To implement fluid font sizes as a function of the viewport width, we can use the following formula to vary the font size between 16px and 24px as the viewport width increases from 320px to 768px:
 
       ```css
       font-size: clamp(16px, calc(16px + (24 - 16) * (100vw - 320px) / (768 - 320)), 24px);
