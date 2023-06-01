@@ -1,0 +1,288 @@
+---
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Minneapolis - building a WordPress page section | Werner Glinka
+  description: "Minneapolis embraces a modular page-building paradigm to construct web pages. This approach entails the composition of pages using a series of page sections."
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Minneapolis - building a WordPress page section"
+date: "2023-06-01T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 2
+excerpt: |-
+  Minneapolis is the project that aims to use WordPress as a headless CMS to feed structured content to Metalsmith, a static site generator
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: true
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2023-06-01T12:00:00Z"
+    title: "Minneapolis - building a WordPress page section"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1685658100/lake-harriet_lzj6xs.jpg"
+      alt: "minneapolis lake Harriet"
+      aspectRatio: "33"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Minneapolis embraces a modular page-building paradigm to construct web pages. This approach entails the composition of pages using a series of page sections.
+
+      To better understand this concept, let's examine an example on the [project website](https://dev-mpls.pantheonsite.io/). One of the sections renders what is usually called a "media object." This particular design pattern has gained widespread popularity across the web.
+
+      The media object is a visually appealing two-column box that combines an image on one side with relevant text content on the other.
+
+      <img src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/media-section_xzpaoa.png" alt="media section" />
+
+      To construct the schemas for our page sections, including the media section, we will use an Advanced Custom Fields (ACF) group.
+
+      For a comprehensive guide on implementing this approach, I recommend referring to the following resource: [DIY Page Builder with ACF](https://wptips.dev/diy-page-builder-with-acf/).
+
+      Now, let's delve into the composition of the media section, which consists of the following key components:
+      
+      **Common Section Fields**: These fields are the foundation for all sections and provide essential information such as section type, background color, or other common attributes shared across different sections.
+
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/common-section-fields_lqfyjb.png" alt="common section fields ui" />
+      
+      **Text**: This component allows for the inclusion of textual content within the media section. It provides flexibility to add optional title, subtitle and prose.
+
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/text_w6hmbm.png" alt="text section ui" />
+      
+      **CTA** (Call-to-Action): The CTA element enables adding actionable content within the media section, such as buttons or links.
+
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/cta_jfcj50.png" alt="cta section ui" />
+      
+      **Image**: The image component plays a pivotal role in the media section, allowing for the integration of visually appealing graphics or photographs. 
+
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/image_pydfwn.png" alt="media section ui" />
+      
+      **Media Position**: This setting provides the ability to control the positioning of the media object within the media section. It enables layout customization by specifying whether the image should be on the left or right side of the accompanying text.
+
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/media-position_z6o4tc.png" alt="media position section ui" />
+
+      Having defined the section, let's now consider the section template. Please note that the WordPress section template provides an editor's preview and does not affect the actual front-end display of the website. It allows editors to have a preview of the content and layout while they are working on constructing the page.
+
+      For pages with sections, we use a particular page template, in this case: `page-with-sections.php`. 
+
+      ```javascript
+        <?php
+          /**
+          * Sectioned Page Blank Template
+          * Template for a sectioned page
+          * 
+          * Template Name: Sectioned Page
+          * Template Post Type: page, post
+          *
+          * @package mpls
+          */
+
+          
+          include_once(get_template_directory() . '/page_sections/inc/shared_functions.php');
+          include_once(get_template_directory() . '/page_sections/inc/section_components.php');
+
+          get_header();
+        ?>
+
+        <div id="primary" class="content-area">
+          <main id="main" class="site-main">
+          
+          <?php 
+            // ID of the current item in the WordPress Loop
+            $id = get_the_ID();
+
+            // check if the flexible content field has rows of data
+            if ( have_rows( 'sections', $id ) ) :
+              
+              // loop through the selected ACF layouts and display the matching section
+              while ( have_rows( 'sections', $id ) ) : the_row();
+                
+                include(get_template_directory() . '/page_sections/inc/render_layout.php');
+
+              endwhile;
+            elseif ( get_the_content() ) :
+              echo "No sections found.";
+            endif;
+          ?>
+          
+          </main><!-- #main -->
+        </div><!-- #primary -->
+
+
+        </div><!-- #content -->
+      </div><!-- #page .site-wrapper -->
+
+      <?php wp_footer(); ?>
+
+      </body> 
+      </html>
+      ```
+
+      Note that all section templates are in the folder `page_sections` and that the template name matches the ACF field name. For each layout found, we invoke `render_layout.php` to render the section. 
+
+      ```javascript
+      <?php
+
+        // get the layout name
+        $thisLayout = get_row_layout();
+        $props= get_sub_field($thisLayout);
+
+        //check if this section is disabled. If disabled, bypass rendering the section
+        $is_disabled = isset($props['common_section_fields']['settings']) && in_array("is_disabled", $props['common_section_fields']['settings']);
+        if (!$is_disabled) {
+          $background_image = $props['common_section_fields']['background_image'];
+
+          // determine section usage, e.g. is this section used as a banner or a section
+          // if usage is as a section, then the wrapper type may be a <section> or an <aside>
+          // if usage is as a banner, then the wrapper type is a <section>, overwriting the value of $wrapper_element
+          $wrapper_element = $props['common_section_fields']['wrapper_element'];
+          $usage = $props['common_section_fields'] ? $props['common_section_fields']['usage'] : "banner";
+          $wrapper_type = $usage == "banner" ? "section" : $wrapper_element;
+
+          // build the body classes string
+          $body_classes= build_section_class_string($props);
+          // build the styles string
+          $body_styles= build_section_styles_string($props);
+
+          echo "<" . $wrapper_type . " class='page-section " .  str_replace('_', '-', $thisLayout) . " " . $body_classes . "' ";
+          if($body_styles) {
+            echo "style='" . $body_styles . "'";
+          }
+          echo ">";
+
+
+          if ($background_image['url'] != "") {
+            echo "<div class='background-image'>";
+            render_image_component($background_image);
+            echo "</div>";
+          }
+                
+          get_template_part( 'page_sections/' . $thisLayout, null, array('props' => $props));
+
+          echo "</" . $wrapper_type . ">";
+          
+        }
+      ?>
+      ```
+
+      In `render_layout.php`, we check if the section is disabled. If it is not disabled, the rendering process continues.
+
+      Next, the code proceeds to render the common items to all sections. These common items provide consistency across all sections of the website. This includes the wrapper element for the section. This wrapper element includes relevant classes and inline styles to define the section's appearance and behavior. Additionally, if a background image is specified for the section, it is added to the wrapper element.
+
+      Finally, the code renders the section-specific template. In the case of the media section, the specific template being utilized is `media.php`. This template renders the unique components and layout specific to the media section, such as the image, text, CTA, and media position.
+
+      By following this rendering process, the section-specific templates ensure each section has its distinct layout and functionality while still adhering to the common elements and styles defined in the wrapper and the common section items.
+
+      ```javascript
+      <?php
+      /**
+      * Page section for displaying a page banner
+      * 
+      * @package hlwp
+      */
+
+        $props = $args['props'];
+        $text = $props['text'];
+        $cta = $props['cta'];
+        $image = $props['image'];
+
+      ?>
+
+      <div class="container">
+        <div class="columns">
+          <div class="column text">
+            <?php render_text_component($text); ?>
+            <?php render_cta_component($cta); ?>
+          </div>
+          <?php if($image['url']) : ?>
+            <div class="column media image">
+              <?php render_image_component($image); ?>
+            </div>
+          <?php endif; ?>
+        </div> <!-- .columns -->
+      </div><!-- .container -->
+      ```
+
+
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
