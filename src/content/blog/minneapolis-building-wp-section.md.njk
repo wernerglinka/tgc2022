@@ -86,40 +86,53 @@ sections:
 
       <img id="media-section" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/media-section_xzpaoa.png" alt="media section" />
 
-      To construct the schemas for our page sections, including the media section, we will use an Advanced Custom Fields (ACF) group.
+      To construct the schemas for our page sections, including the media section, we will use an Advanced Custom Fields (ACF) group called `Page Sections` with one Flexible Content field called `Sections`. In `Sections` we will define the various page sections, including the media section.
 
       For a comprehensive guide on implementing this approach, I recommend referring to the following resource: [DIY Page Builder with ACF](https://wptips.dev/diy-page-builder-with-acf/).
 
-      Now, let's delve into the composition of the media section, which consists of the following key components:
+      ## Sections
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685663080/page-sections-ui_mjazmi.png" alt="common section fields ui" />
+
+      ## Media Section
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685663080/media-section-ui_oq4zqu.png" alt="common section fields ui" />
+
+      ### Media Section Fields
+      The media section consists of the following key components:
       
-      **Common Section Fields**: These fields are the foundation for all sections and provide essential information such as section type, background color, or other common attributes shared across different sections.
+      #### Common Section Fields
+      These fields are the foundation for all sections and provide essential information such as section type, background color, or other common attributes shared across different sections.
 
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/common-section-fields_lqfyjb.png" alt="common section fields ui" />
       
-      **Text**: This component allows for the inclusion of textual content within the media section. It provides flexibility to add optional title, subtitle and prose.
+      #### Text
+      This component allows for the inclusion of textual content within the media section. It provides flexibility to add optional title, subtitle and prose.
 
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/text_w6hmbm.png" alt="text section ui" />
       
-      **CTA** (Call-to-Action): The CTA element enables adding actionable content within the media section, such as buttons or links.
+      #### CTA (Call-to-Action)
+      The CTA element enables adding actionable content within the media section, such as buttons or links.
 
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/cta_jfcj50.png" alt="cta section ui" />
       
-      **Image**: The image component plays a pivotal role in the media section, allowing for the integration of visually appealing graphics or photographs. 
+      #### Image
+      The image component plays a pivotal role in the media section, allowing for the integration of visually appealing graphics or photographs. 
 
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/image_pydfwn.png" alt="media section ui" />
       
-      **Media Position**: This setting provides the ability to control the positioning of the media object within the media section. It enables layout customization by specifying whether the image should be on the left or right side of the accompanying text.
+      #### Media Position
+      This setting provides the ability to control the positioning of the media object within the media section. It enables layout customization by specifying whether the image should be on the left or right side of the accompanying text.
 
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/media-position_z6o4tc.png" alt="media position section ui" />
 
+      ### Media Section Template
       Having defined the section, let's now consider the section template. Please note that the WordPress section template provides an editor's preview and does not affect the actual front-end display of the website. It allows editors to have a preview of the content and layout while they are working on constructing the page.
 
       For pages with sections, we use a particular page template, in this case: `page-with-sections.php`. 
 
+      #### Sectioned Page Template
       ```javascript
         <?php
           /**
-          * Sectioned Page Blank Template
           * Template for a sectioned page
           * 
           * Template Name: Sectioned Page
@@ -169,7 +182,9 @@ sections:
       </html>
       ```
 
+      #### Render Layouts
       Note that all section templates are in the folder `page_sections` and that the template name matches the ACF field name. For each layout found, we invoke `render_layout.php` to render the section. 
+      
 
       ```javascript
       <?php
@@ -224,6 +239,8 @@ sections:
 
       By following this rendering process, the section-specific templates ensure each section has its distinct layout and functionality while still adhering to the common elements and styles defined in the wrapper and the common section items.
 
+
+      #### Media Section Template
       ```javascript
       <?php
       /**
