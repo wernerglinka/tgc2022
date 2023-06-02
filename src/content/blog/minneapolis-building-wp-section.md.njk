@@ -78,26 +78,31 @@ sections:
     backgroundColor: ""
     targetId: ""
     prose: |-
-      Minneapolis embraces a modular page-building paradigm to construct web pages. This approach entails the composition of pages using a series of page sections.
+      The Minneapolis project adopts a modular page-building paradigm for constructing web pages. This means that pages are composed of different page sections. Each section serves a specific purpose or contains specific content, and by combining these sections, we create complete web pages.
 
-      To better understand this concept, let's examine an example on the [project website](https://dev-mpls.pantheonsite.io/). One of the sections renders what is usually called a "media object." This particular design pattern has gained widespread popularity across the web.
-
-      The media object is a visually appealing two-column box that combines an image on one side with relevant text content on the other.
+      To better understand this concept, we'll analyze the **Lake of the Isles** section.  This sections is rendered with what is usually called a "media object." The media object is a visually appealing two-column box that combines an image on one side with relevant text content on the other. This particular design pattern has gained widespread popularity across the web.
 
       <img id="media-section" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/media-section_xzpaoa.png" alt="media section" />
 
-      To construct the schemas for our page sections, including the media section, we will use an Advanced Custom Fields (ACF) group called `Page Sections` with one Flexible Content field called `Sections`. In `Sections` we will define the various page sections, including the media section.
+      To construct the schemas for our page sections, including the media section above, we will use an Advanced Custom Fields (ACF) group called `Page Sections` with one Flexible Content field called `Sections`. In `Sections` we will define the various page sections layouts, including the media section.
 
-      For a comprehensive guide on implementing this approach, I recommend referring to the following resource: [DIY Page Builder with ACF](https://wptips.dev/diy-page-builder-with-acf/).
+      For a beginners guide on implementing this approach, I recommend reading this blog post: [DIY Page Builder with ACF](https://wptips.dev/diy-page-builder-with-acf/).
 
       ## Sections
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685663080/page-sections-ui_mjazmi.png" alt="common section fields ui" />
 
-      ## Media Section
-      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685663080/media-section-ui_oq4zqu.png" alt="common section fields ui" />
+      ## Media Section Definition
+      This is what our media section layout looks like in the ACF UI. It has a single [group field](https://www.advancedcustomfields.com/resources/group/) called Media. This group field contains all the fields that are required to render the media section. These fields themselves are group fields that contain a cloned field. This way cloned fields are reusable accross various section layouts, the UI is more manageable and this provides a logical structure to the content. 
+      
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685721769/complete-media-section_dcahva.png" alt="common section fields ui" />
 
-      ### Media Section Fields
-      The media section consists of the following key components:
+      ## Building the page
+      To build a page, we will use the `Sections` field to add the various page sections. We will add the `Media` section to the page and populate it with content. All sections are rendered in the order they are added to the page but can be reordered by dragging them in the UI.
+
+      <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685721985/home-page_rwaqvf.png" alt="page builder ui" />
+
+      ### Media Section Content
+      And here are the media section fields with the content added.
       
       #### Common Section Fields
       These fields are the foundation for all sections and provide essential information such as section type, background color, or other common attributes shared across different sections.
@@ -125,11 +130,11 @@ sections:
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685658331/media-position_z6o4tc.png" alt="media position section ui" />
 
       ### Media Section Template
-      Having defined the section, let's now consider the section template. Please note that the WordPress section template provides an editor's preview and does not affect the actual front-end display of the website. It allows editors to have a preview of the content and layout while they are working on constructing the page.
+      Having defined the section, let's now consider the section template. This template provides an editor's preview and does not affect the actual front-end display of the website. It allows editors to have a preview of the content and layout while they are working on constructing the page. We will review the front-end templates in a later blog post.
 
-      For pages with sections, we use a particular page template, in this case: `page-with-sections.php`. 
+      First let's look at the page template. This page template renders all sections in the order they are defined in the editing page. 
 
-      #### Sectioned Page Template
+      #### page-with-sections.php
       ```javascript
         <?php
           /**
@@ -182,11 +187,11 @@ sections:
       </html>
       ```
 
-      Note that all section templates are in the folder `page_sections` and that the template name matches the ACF field name. For each layout found, we invoke `render_layout.php` to render the section. 
+      All section templates are in the folder `page_sections` and the template name matches the ACF field name. For each layout found, we invoke `render_layout.php` to render the section. 
 
       <img class="acf-ui" src="https://res.cloudinary.com/glinkaco/image/upload/v1685665886/page-section-templates_fmmxs4.png" alt="page section templates" />
 
-      #### Render Layouts
+      #### render_layout.php
       
       ```javascript
       <?php
@@ -235,14 +240,14 @@ sections:
 
       In `render_layout.php`, we check if the section is disabled. If it is not disabled, the rendering process continues.
 
-      Next, the code proceeds to render the common items to all sections. These common items provide consistency across all sections of the website. This includes the wrapper element for the section. This wrapper element includes relevant classes and inline styles to define the section's appearance and behavior. Additionally, if a background image is specified for the section, it is added to the wrapper element.
+      Next, the code proceeds to render common section items. These common items provide consistency across all sections of the website. This includes the wrapper element for the section. This wrapper element includes relevant classes and inline styles to define the section's appearance and behavior. Additionally, if a background image is specified for the section, it is added to the wrapper element.
 
       Finally, the code renders the section-specific template. In the case of the media section, the specific template being utilized is `media.php`. This template renders the unique components and layout specific to the media section, such as the image, text, CTA, and media position.
 
       By following this rendering process, the section-specific templates ensure each section has its distinct layout and functionality while still adhering to the common elements and styles defined in the wrapper and the common section items.
 
 
-      #### Media Section Template
+      #### media.php
       ```javascript
       <?php
       /**
