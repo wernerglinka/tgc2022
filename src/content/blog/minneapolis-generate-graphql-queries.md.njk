@@ -78,22 +78,20 @@ sections:
     backgroundColor: ""
     targetId: ""
     prose: |-
-      At his point in our project review, we installed and configured our WordPress site. We have defined our page sections and have shown how sections are used to compose a home page. In this blog post, we will review how to fetch the content data for Metalsmith, our static site generator.
+      At this stage of our project review, we have successfully installed and configured our WordPress site. We have defined the different sections of our pages and demonstrated how these sections can be utilized to compose an engaging home page. In this blog post, our focus will be on explaining the process of creating queries to retrieve content data for Metalsmith, our chosen static site generator.
 
-      When we set up the WordPress site, we installed the WP GraphQL plugin. This plugin provides an extendable GraphQL schema and API for our WordPress site.  We also need to access ACF fields and any SEO info that is available via the Yoast plugin.  For them, we use the WPGraphQL for Advanced Custom Fields and the Add WPGraphQL SEO plugin. 
+      During the setup of our WordPress site, we made use of the WP GraphQL plugin. This powerful plugin offers an extendable GraphQL schema and API that seamlessly integrates with our WordPress site. Additionally, we needed to access the Advanced Custom Fields (ACF) and utilize any available SEO information provided by the Yoast plugin. To achieve this, we employed the WPGraphQL for Advanced Custom Fields plugin and the Add WPGraphQL SEO plugin.
 
-      For all ACF fields, we must ensure that GraphQL API access has been enabled with the Show in GraphQL toggle.
+      To ensure that all ACF fields are accessible through the GraphQL API, it is crucial to enable the "Show in GraphQL" toggle for each respective field.
 
       ![](https://res.cloudinary.com/glinkaco/image/upload/f_auto,q_auto/v1685987787/graphql-toggle_h1i60z.png)
 
       ## Building GraphQL queries
-      The WP GraphQL plugin features the GraphiQL IDE, a tool that lets us explore available schema. The GraphQL schema defines the types of data and operations we can perform through the API. It provides a complete view of the available queries, mutations, and data structures.
+      The WP GraphQL plugin includes the GraphiQL IDE, an invaluable tool that allows us to explore the available schema. The GraphQL schema essentially defines the various types of data and operations that can be performed through the API. It provides a comprehensive overview of the queries, mutations, and data structures that are at our disposal.
 
-      Using the information obtained from the schema exploration, we can start constructing GraphQL queries to fetch the desired content.
+      Once we have gained insights from exploring the schema, we can begin constructing GraphQL queries to retrieve the specific content we need. These queries are structured and precisely define the data we want to fetch.
 
-      GraphQL queries are structured and specify the exact data we want to fetch.
-
-      Typically, we'll write a query that begins with the entry point, such as `query {}`, and specify the fields you want to fetch within the curly braces.
+      Typically, a query is written starting with an entry point, such as `query {}`, and within the curly braces, we specify the fields we wish to retrieve.
 
       Read more for a [thorough introduction to GraphQL](https://www.wpgraphql.com/docs/intro-to-graphql).
       Jason Bahl also has several helpful videos on YouTube about WP GraphQL. I'd recommend to start with this one.
