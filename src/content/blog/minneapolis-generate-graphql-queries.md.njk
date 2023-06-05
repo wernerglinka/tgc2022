@@ -1,0 +1,184 @@
+---
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Minneapolis - getting the content from WordPress | Werner Glinka
+  description: "When we set up the WordPress site, we installed the WP GraphQL plugin. This plugin provides an extendable GraphQL schema and API for our WordPress site."
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Minneapolis - getting the content from WordPress"
+date: "2023-06-05T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 2
+excerpt: |-
+  When we set up the WordPress site, we installed the WP GraphQL plugin. This plugin provides an extendable GraphQL schema and API for our WordPress site.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2023-06-05T12:00:00Z"
+    title: "Minneapolis - getting the content from WordPress"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1685987355/mpls-stone-bridge_iyjlw2.jpg"
+      alt: "minneapolis stone bridge"
+      aspectRatio: "25"
+      caption: Photo by [weston m](https://unsplash.com/pt-br/@betteratf8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/photos/g-isDA6zUYU?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      At his point in our project review, we installed and configured our WordPress site. We have defined our page sections and have shown how sections are used to compose a home page. In this blog post, we will review how to fetch the content data for Metalsmith, our static site generator.
+
+      When we set up the WordPress site, we installed the WP GraphQL plugin. This plugin provides an extendable GraphQL schema and API for our WordPress site.  We also need to access ACF fields and any SEO info that is available via the Yoast plugin.  For them, we use the WPGraphQL for Advanced Custom Fields and the Add WPGraphQL SEO plugin. 
+
+      For all ACF fields, we must ensure that GraphQL API access has been enabled with the Show in GraphQL toggle.
+
+      ![](https://res.cloudinary.com/glinkaco/image/upload/f_auto,q_auto/v1685987787/graphql-toggle_h1i60z.png)
+
+      ## Building GraphQL queries
+      The WP GraphQL plugin features the GraphiQL IDE, a tool that lets us explore available schema. The GraphQL schema defines the types of data and operations we can perform through the API. It provides a complete view of the available queries, mutations, and data structures.
+
+      Using the information obtained from the schema exploration, we can start constructing GraphQL queries to fetch the desired content.
+
+      GraphQL queries are structured and specify the exact data we want to fetch.
+
+      Typically, we'll write a query that begins with the entry point, such as `query {}`, and specify the fields you want to fetch within the curly braces.
+
+      Read more for a [thorough introduction to GraphQL](https://www.wpgraphql.com/docs/intro-to-graphql).
+      Jason Bahl also has several helpful videos on YouTube about WP GraphQL. I'd recommend to start with this one.
+  
+  - component: video
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    video:
+      src: youtube
+      id: "ze2un3ni1CY"
+      tn: "v1685988589/jason-bahl-video-tn_izl9vs.png"
+      aspectRatio: "56.25"
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      Let's have a look at how we can use the GraphiQL IDE to build a query string for our home page.
+
+      Open the IDE by clicking the GraphQL link on the left side of the WP dashboard. Click on the Query Composer button.
+
+      <img class="acf-image" src="https://res.cloudinary.com/glinkaco/image/upload/f_auto,q_auto/v1685986730/graphiql-ide_dfagji.png" alt="GraphQL Query Composer">
+
+      In the Query Composer, scroll down to find and open `pages`, then find `edges`, then `node`. The node presents a single page. 
+
+      <img class="acf-image" src="https://res.cloudinary.com/glinkaco/image/upload/f_auto,q_auto/v1685986730/pages-query_wa8oqn.png" alt="GraphQL Query Page">
+
+      Find and open `sections` and then click the checkbox `sections`. We'll now see all ACF page sections.
+
+      <img class="acf-image" src="https://res.cloudinary.com/glinkaco/image/upload/f_auto,q_auto/v1685986730/sections-query_f2l0ce.png" alt="GraphQL Query Sections">
+
+      Click on `Page_Sections_Sections_Media` and open `media`. We'll see the four fields groups `commonSectionFields`, `cta`, `image` and `text`, as well as the `mediaPosition` checkbox. We can now open all field groups and arrive at the complete schema for the media section.
+
+      <img class="acf-image" src="https://res.cloudinary.com/glinkaco/image/upload/f_auto,q_auto/v1685986730/media-section-schema_hegj71.png" alt="GraphQL Query Media">
+
+      This schema represents the settings of the example media section that [we reviewed in the previous blog post](/blog/minneapolis-building-wp-section/).
+
+      This is how we can build our queries which will be part of the GraphQL requests that are sent to the WordPress site at 
+      ```html
+        https://dev-mpls.pantheonsite.io/graphql/<query string here>
+      ```
+
+      The query string needs to include all known page sections so it will be quite long. In the next blog post, we will review the Metalsmith end and how the queries are assembled, and the content is fetched.
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
