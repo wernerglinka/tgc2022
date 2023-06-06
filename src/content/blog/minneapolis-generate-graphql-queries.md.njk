@@ -78,7 +78,8 @@ sections:
     backgroundColor: ""
     targetId: ""
     prose: |-
-      At this stage of our project review, we have successfully installed and configured our WordPress site. We have defined the different sections of our pages and demonstrated how these sections can be utilized to compose an [engaging home page](https://dev-mpls.pantheonsite.io/). In this blog post, our focus will be on explaining the process of creating queries to retrieve content data for Metalsmith, our chosen static site generator.
+      At this stage of our project review, we have successfully installed and configured our WordPress site. We have defined the different sections of our pages and demonstrated how these sections can be utilized to compose an [engaging home page](https://dev-mpls.pantheonsite.io/wordpressPwd!
+      ). In this blog post, our focus will be on explaining the process of creating queries to retrieve content data for Metalsmith, our chosen static site generator.
 
       During the setup of our WordPress site, we made use of the WP GraphQL plugin. This powerful plugin offers an extendable GraphQL schema and API that seamlessly integrates with our WordPress site. Additionally, we needed to access the Advanced Custom Fields (ACF) and utilize any available SEO information provided by the Yoast plugin. To achieve this, we employed the WPGraphQL for Advanced Custom Fields plugin and the Add WPGraphQL SEO plugin.
 
@@ -142,6 +143,58 @@ sections:
       <img class="acf-image" src="https://res.cloudinary.com/glinkaco/image/upload/f_auto,q_auto/v1685986730/media-section-schema_hegj71.png" alt="GraphQL Query Media">
 
       This schema represents the settings of the example media section that [we reviewed in the previous blog post](/blog/minneapolis-building-wp-section/).
+
+      And this is the response we get when we run the query for a media section.
+
+      ```javascript
+      {
+        "media": {
+          "commonSectionFields": {
+            "backgroundColor": null,
+            "hasBackground": true,
+            "isDark": null,
+            "sectionClasses": null,
+            "settings": [
+              "in_container"
+            ],
+            "usage": "default",
+            "wrapperElement": "section",
+            "backgroundImage": {
+              "url": null
+            }
+          },
+          "cta": {
+            "buttonType": "primary",
+            "ctaClasses": null,
+            "isButton": true,
+            "isExternal": null,
+            "label": "Read More",
+            "target": {
+              "url": "https://www.minneapolisparks.org/parks-destinations/parks-lakes/lake_of_the_isles_park/"
+            }
+          },
+          "image": {
+            "altText": "Lake of the Isles",
+            "credits": "Sollicitudin Venenatis Aenean",
+            "url": {
+              "mediaItemUrl": "https://res.cloudinary.com/djd0plux8/images/w_2560,h_1707/f_auto,q_auto/v1681925514/minneapolis/rod-m-uvPm9PsAWz4-unsplash/rod-m-uvPm9PsAWz4-unsplash.jpg?_i=AA",
+              "mediaDetails": {
+                "file": "2023/04/rod-m-uvPm9PsAWz4-unsplash-scaled.jpg",
+                "height": 1707,
+                "width": 2560
+              }
+            }
+          },
+          "text": {
+            "headingLevel": "h2",
+            "prose": "<p>The name of the lake, referring to the islands in the lake, was used from the earliest days of the settlement of Minneapolis. At one time the lake contained four islands. Two islands near the south shore of the lake were converted to land as the lake was developed.</p>\n",
+            "subTitle": null,
+            "title": "<p>Lake of the Isles</p>\n"
+          },
+          "mediaPosition": "media_right"
+        }
+      }
+      ```
 
       This is how we can build our queries which will be part of the GraphQL requests that are sent to the WordPress site at 
       ```html
