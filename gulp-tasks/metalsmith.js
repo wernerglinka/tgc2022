@@ -9,6 +9,7 @@ const processLinks = require('metalsmith-safe-links');
 const prism = require('metalsmith-prism');
 const blogLists = require('metalsmith-blog-lists');
 const writeMetadata = require('metalsmith-writemetadata');
+const sitemap = require('metalsmith-sitemap');
 
 //const blogLists = require('../local_modules/blog-lists');
 
@@ -117,6 +118,12 @@ module.exports = function metalsmith(callback) {
         bufferencoding: 'utf8',
       })
     )
+
+    .use(sitemap({
+      hostname: "https://glinka.co",
+      omitIndex: true,
+      omitExtension: true,
+    }))
 
     .build(err => {
       if (err) {
