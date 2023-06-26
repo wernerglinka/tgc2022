@@ -1,0 +1,442 @@
+---
+layout: sections-with-sidebar.njk
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Minneapolis - building the WordPress source plugin for Metalsmith | Werner Glinka
+  description: "This post will review integrating WordPress content into the Metalsmith static site generation process. We must build a Metalsmith WordPress source plugin. "
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1646849499/tgc2022/social_yitz6j.png"
+  canonicalOverwrite: ""
+
+blogTitle: "Minneapolis - building the WordPress source plugin for Metalsmith"
+date: "2023-06-26T12:00:00Z"
+author: ""
+image: ""
+featuredBlogpost: true
+featuredBlogpostOrder: 2
+excerpt: |-
+  This post will review integrating WordPress content into the Metalsmith static site generation process. We must build a Metalsmith WordPress source plugin. 
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: "2023-06-26T12:00:00Z"
+    title: "Minneapolis - building the WordPress source plugin for Metalsmith"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1687815985/minneapolis-downtown-skyline_ub97k1.jpg"
+      alt: "minneapolis stone bridge"
+      aspectRatio: "25"
+      caption: Photo by [Wasin PUMMARIN](https://www.vecteezy.com/members/stocktosol119541) on Vecteezy
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      In the last blog post, we saw how to create GraphQL queries representing our site content. While our WordPress website is fully functional, it also makes the content available at the WordPress API URL.
+      
+      ```html
+      https://dev-mpls.pantheonsite.io/graphql/
+      ```
+      If you are new to GraphQL, I'd recommend reviewing this [introduction to WpGraphQL](https://www.wpgraphql.com/docs/introduction) before continuing.
+
+      This post will review integrating WordPress content into the Metalsmith static site generation process. We must build a Metalsmith WordPress source plugin. This source plugin will fetch the content from the WordPress API and convert it into Metalsmith file objects. Metalsmith will then build all static pages.
+
+      The plugin will fetch the navigation metadata and the content for posts and pages as specified in the plugin options. We are doing this in metalsmith.js like so:
+
+      ```javascript
+      const wordpressSource = require("./local_modules/wordpress-source");
+      ...
+
+      .use(
+            wordpressSource({
+              source: "https://dev-mpls.pantheonsite.io/graphql/",
+              contentTypes: ["posts", "pages"],
+            })
+          )
+
+      ```
+
+      For this project, we are using only Posts and Pages, but custom post types can as easily be used.
+
+      For a great introduction to writing Metalsmith plugins please review [this](https://metalsmith.io/docs/writing-plugins/).
+
+      The source plugin will read the options and validate the requested content types. It will then fetch and add the navigation metadata to the metalsmith metadata object. 
+
+      Then it will fetch all posts, builds the Metalsmith file and adds the file to the files object. Then it will repeat this process for all pages.
+
+      Let's have a look at how we get the pages content. 
+      
+      ```javascript
+      const fetch = require('node-fetch');
+      const queryString = require('./queries/pages');
+      const flatten = require('./flatten');
+
+      /**
+      * getPages()
+      * Function to fetch all pages from a WordPress site.
+      * @returns {Array} contentTypes
+      */
+
+      module.exports = async function getPages(sourceURL) {
+        const res = await fetch(sourceURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: queryString,
+          }),
+        });
+
+        const rawData = await res.json();
+
+        const pages = rawData.data.pages.nodes
+          .filter((node) => node.sections.sections.length > 0)
+          .map((node) => node);
+
+        // flatten section objects
+        for (let i = 0; i < pages.length; i++) {  
+          flatten(pages[i].sections.sections);
+        } 
+        
+        return pages;
+      };
+
+      ```
+      Here we fetch all page data from a source URL, parsing the response body text as JSON, which gives us a javascript object rawData, then we extract an array with all pages while discarding empty sections. 
+      Finally, we simplify image and CTA data. For example:
+
+      ```javascript
+      {
+          obj.image.height = obj.image.url?.mediaDetails?.height;
+          obj.image.width = obj.image.url?.mediaDetails?.width;
+          obj.image.url = obj.image.url?.mediaItemUrl;
+      }
+      ```
+      At this point we have a simple array with all pages.
+
+      ```javascript
+      [
+        {
+          seo: {
+            title: 'Home',
+            metaDesc: 'A headless Wordpress - proof of concept site with GraphQL to feed Metalsmith',
+            canonical: 'https://dev-mpls.pantheonsite.io/',
+            opengraphTitle: 'Minneapolis',
+            opengraphDescription: 'For Facebook - A headless WordPress - proof of concept site with GraphQL to feed Metalsmith',
+            opengraphAuthor: '',
+            opengraphModifiedTime: '2023-06-26T22:12:33+00:00',
+            opengraphImage: [Object],
+            opengraphUrl: 'https://dev-mpls.pantheonsite.io/',
+            twitterTitle: 'Minneapolis',
+            twitterDescription: 'For Twitter - A headless WordPress - proof of concept site with GraphQL to feed Metalsmith',
+            twitterImage: [Object]
+          },
+          slug: 'home',
+          title: 'Home',
+          parent: null,
+          uri: '/',
+          sections: { sections: [Array] },
+          footerContent: { footerContent: null }
+        },    
+        {
+            ...next page
+        },	
+        {
+            ...next page
+        }
+      ]
+      ```
+
+      Before we continue, let's step back and look at the query string we imported at the top of getPages.js as this file is the key to what we want from the WordPress API.
+
+      ```javascript
+      const queryString = require('./queries/pages');
+
+      ```
+      `pages.js` defines a query string that requests all page sections data which we build with advanced custom fields in the WordPress backend. 
+
+      ```javascript
+      
+      const seo = require('./seo');
+      const ctaBanner = require('./ctaBanner');
+      const defaultFooter = require('./defaultFooter');
+      const featuredLogos = require('./featuredLogos');
+      const featuredResources = require('./featuredResources');
+      const fullPageBanner = require('./fullPageBanner');
+      const longText = require('./longText');
+      const media = require('./media');
+      const multiMedia = require('./multiMedia');
+      const minimalBanner = require('./minimalBanner');
+      const richFooter = require('./richFooter');
+      const imageOnly = require('./imageOnly');
+      const keyPoints = require('./keyPoints');
+      const videoOnly = require('./videoOnly');
+      const imageGallery = require('./imageGallery');
+      const tabs = require('./tabs');
+
+      module.exports = `
+        {
+          pages {
+            nodes {
+              ${seo}
+              slug
+              title
+              parent {
+                node {
+                  slug
+                }
+              }
+              uri
+              sections {
+                sections { 
+                  ${ctaBanner} }
+                  ${defaultFooter}
+                  ${featuredLogos}
+                  ${featuredResources}
+                  ${fullPageBanner}
+                  ${imageOnly}
+                  ${longText}
+                  ${media}
+                  ${multiMedia}
+                  ${minimalBanner}
+                  ${richFooter}
+                  ${keyPoints}
+                  ${videoOnly}
+                  ${imageGallery}
+                  ${tabs}
+                }
+              }
+              footerContent {
+                footerContent {
+                  ... on Embed {
+                    content
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+      ```
+      
+      To make this query code manageable, I use string fragments for each page section. But if you compare the string to what we reviewed in our [last blogpost](/blog/minneapolis-generate-graphql-queries/), you'll see that the structures are identical.
+
+      The following code shows all one the above in context.
+
+      ```javascript
+      const getPosts = require('./getPosts');
+      const getPages = require('./getPages');
+      const getSiteMetadata = require('./getSiteMetadata');
+
+      /**************************************************************************
+      * @typedef Options
+      * @property {String} <key></key>
+      *************************************************************************/
+
+      /** @type {Options} */
+      const defaults = {
+        source: "",
+        contentTypes: ["pages"],
+      };
+
+      /** @type {ContentTypes} */
+      const knownContentTypes = ["posts", "pages"];
+
+      /**************************************************************************
+      * Normalize plugin options
+      * @param {Options} [options]
+      * @returns {Object}
+      *************************************************************************/
+      function normalizeOptions(options) {
+        return Object.assign({}, defaults, options);
+      }
+
+      /**************************************************************************
+      * A Metalsmith plugin to fetch content from WordPress
+      *
+      * @param {Options} option
+      * @returns {import('metalsmith').Plugin}
+      **************************************************************************/
+      function initWordPressSource(options) {
+        options = normalizeOptions(options);
+
+        return async function metalsmithSourceWordPress(files, metalsmith, done) {
+          const debug = metalsmith.debug('metalsmith-source-wordpress');
+          debug('Running with options: %O', options);
+
+          /**************************************************************************
+          * Check if contentTypes are known
+          **************************************************************************/
+          for (const contentType of options.contentTypes) {
+            if (!knownContentTypes.includes(contentType)) {
+              throw new Error(
+                `Unknown content type: ${contentType}. Known content types are: ${knownContentTypes.join(', ')}`
+              );
+            }
+          }
+
+          const sourceURL = options.source;
+
+          /**************************************************************************
+          * Get site metadata
+          **************************************************************************/
+          const siteMetadata = await getSiteMetadata(sourceURL);
+          // add site metadata to metalsmith metadata object
+          metalsmith.metadata().nav = siteMetadata.nav;
+
+          /**************************************************************************
+          * Get all posts
+          **************************************************************************/
+          if (options.contentTypes.includes('posts')) {
+            const allPosts = await getPosts(sourceURL);
+
+            // loop over all posts and get the content for each post
+            for (const post of allPosts) {
+              // get the post name
+              const postName = post.uri.substring(1, post.uri.length - 1);
+              // add this post to the files object
+              const fileName = postName + '.md';
+              files[fileName] = {
+                title: post.title,
+                date: post.date,
+                featuredImage: post.featuredImage,
+                excerpt: post.excerpt,
+                footerContent: post.footerContent.footerContent.content,
+                layout: 'posts.njk',
+                contents: post.content,
+                mode: '0644',
+                stats: {},
+              };
+            }
+          }
+          
+          /**************************************************************************
+          * Get all pages
+          **************************************************************************/
+          if (options.contentTypes.includes('pages')) {
+            const allPages = await getPages(sourceURL);
+
+            // loop over all pages and get the content for each page
+            for (const page of allPages) {
+              // loop over all sections and get the content for each section
+              let pageSections = [];
+
+              for (const section of page.sections.sections) {
+                // disregard empty sections
+                if (Object.keys(section).length !== 0) {
+                  // get the section type
+                  const sectionType = Object.keys(section)[0];
+                  const thisSection = { section : sectionType, ...section[sectionType]};
+                  
+                  // assemble the pageSections object
+                  pageSections.push(thisSection);
+                }
+              }
+
+              // get the page name
+              const pageName = !!page.uri ? page.uri.substring(1, page.uri.length - 1) : page.slug;
+              // add this page to the files object
+              const fileName = page.uri === "/" ? 'index.md' : pageName + '.md';
+              files[fileName] = {
+                title: page.title,
+                seo: page.seo,
+                sections: pageSections,
+                footerContent: page.footerContent.footerContent ? page.footerContent.footerContent.content : '',
+                layout: page.slug == 'blog' ? 'blog.njk' : 'sections.njk',
+                contents: Buffer.from(''),
+                mode: '0644',
+                stats: {},
+              };
+            }
+          }
+
+          /**************************************************************************
+          * Done
+          **************************************************************************/ 
+          done();
+        }
+      }
+
+      module.exports =  initWordPressSource;
+      ```
+
+
+
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
