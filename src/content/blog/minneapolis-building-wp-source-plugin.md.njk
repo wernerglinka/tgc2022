@@ -78,17 +78,23 @@ sections:
     backgroundColor: ""
     targetId: ""
     prose: |-
-      In the last blog post, we saw how to create GraphQL queries representing our site content. While our WordPress website is fully functional, it also makes the content available at the WordPress API URL.
+      In the [last blog post](/blog/minneapolis-generate-graphql-queries/), we saw how to create GraphQL queries representing our site content. This post will review integrating WordPress content into the Metalsmith static site generation process. This includes building a Metalsmith WordPress source plugin to fetch the site content from the WordPress API and convert it into Metalsmith file objects. Metalsmith will then build all static pages.
+      
+      While our WordPress website is fully functional, it also makes the content available at the WordPress API URL.
       
       ```html
       https://dev-mpls.pantheonsite.io/graphql/
       ```
-      If you are new to GraphQL, I'd recommend reviewing this [introduction to WpGraphQL](https://www.wpgraphql.com/docs/introduction) before continuing.
+      _If you are new to GraphQL, I'd recommend reviewing this [introduction to WpGraphQL](https://www.wpgraphql.com/docs/introduction) before continuing._
 
-      This post will review integrating WordPress content into the Metalsmith static site generation process. We must build a Metalsmith WordPress source plugin. This source plugin will fetch the content from the WordPress API and convert it into Metalsmith file objects. Metalsmith will then build all static pages.
+      ## Metalsmith WordPress source plugin
+      For this project, we only use Posts and Pages. However, custom post types can be effortlessly incorporated as well. To gain valuable insights into crafting Metalsmith plugins, I recommend reviewing [this resource](https://metalsmith.io/docs/writing-plugins/) for an excellent introduction.
 
-      The plugin will fetch the navigation metadata and the content for posts and pages as specified in the plugin options. We are doing this in metalsmith.js like so:
+      ### Plugin options
+      In our plugin, we retrieve the navigation metadata and content for both posts and pages, as specified within the plugin options. The source plugin reads these options and verifies the requested content types. Subsequently, it fetches the necessary data and appends the navigation metadata to the Metalsmith metadata object. The implementation is carried out in the metalsmith.js file, exemplified as follows:
 
+
+      **metalsmith.js**
       ```javascript
       const wordpressSource = require("./local_modules/wordpress-source");
       ...
@@ -101,17 +107,12 @@ sections:
           )
 
       ```
+      Here we provide the API source adress and tell the plugin to fetch all posts and pages.
 
-      For this project, we are using only Posts and Pages, but custom post types can as easily be used.
-
-      For a great introduction to writing Metalsmith plugins please review [this](https://metalsmith.io/docs/writing-plugins/).
-
-      The source plugin will read the options and validate the requested content types. It will then fetch and add the navigation metadata to the metalsmith metadata object. 
-
-      Then it will fetch all posts, builds the Metalsmith file and adds the file to the files object. Then it will repeat this process for all pages.
-
+      ### Getting Pages
       Let's have a look at how we get the pages content. 
       
+      **getPages.js**
       ```javascript
       const fetch = require('node-fetch');
       const queryString = require('./queries/pages');
@@ -149,9 +150,11 @@ sections:
       };
 
       ```
-      Here we fetch all page data from a source URL, parsing the response body text as JSON, which gives us a javascript object rawData, then we extract an array with all pages while discarding empty sections. 
-      Finally, we simplify image and CTA data. For example:
+      Here we fetch all page data from a source URL, parsing the response body text as JSON, which gives us a javascript object `rawData`, then we extract an array with all pages while discarding empty sections. 
+      
+      Finally, we flatten/simplify image and CTA data.
 
+      **flatten.js**
       ```javascript
       {
           obj.image.height = obj.image.url?.mediaDetails?.height;
@@ -159,7 +162,7 @@ sections:
           obj.image.url = obj.image.url?.mediaItemUrl;
       }
       ```
-      At this point we have a simple array with all pages.
+      At this point we have build the `files` array with all pages.
 
       ```javascript
       [
@@ -194,13 +197,14 @@ sections:
       ]
       ```
 
-      Before we continue, let's step back and look at the query string we imported at the top of getPages.js as this file is the key to what we want from the WordPress API.
+      ### Building the GraphQL queries
+      Before we continue, let's step back and look at the query string we imported at the top of `getPages.js` as this file is the key to what we request from the WordPress API.
 
       ```javascript
       const queryString = require('./queries/pages');
 
       ```
-      `pages.js` defines a query string that requests all page sections data which we build with advanced custom fields in the WordPress backend. 
+      `pages.js` defines a query string that requests all page sections data which we built with ACF Flexible Content fields in the WordPress backend. 
 
       ```javascript
       
@@ -266,10 +270,12 @@ sections:
       `;
       ```
       
-      To make this query code manageable, I use string fragments for each page section. But if you compare the string to what we reviewed in our [last blogpost](/blog/minneapolis-generate-graphql-queries/), you'll see that the structures are identical.
+      To make this query code manageable, we'll' use string fragments for each page section. If we compare the string with what we reviewed in our [last blogpost](/blog/minneapolis-generate-graphql-queries/), we see that the structures are identical.
 
-      The following code shows all one the above in context.
+      ### The plugin code
+      Now let's put this all together and look at the complete plugin code.
 
+      **index.js**
       ```javascript
       const getPosts = require('./getPosts');
       const getPages = require('./getPages');
@@ -406,6 +412,10 @@ sections:
 
       module.exports =  initWordPressSource;
       ```
+
+      The plugin can be broken down into three parts. First, we normalize the plugin options and validate the the post types are known. Second, we get the site metadata and add them to the Metalsmith metadata. And third, we get the content for each page and post, build their respective file objects and add it to the `files` object.
+
+      The complete site code, including the plugin code can be found in the [Github Repository](https://github.com/wernerglinka/minneapolis).
 
 
 
