@@ -78,7 +78,7 @@ sections:
     backgroundColor: ""
     targetId: ""
     prose: |-
-      In the [last blog post](/blog/minneapolis-generate-graphql-queries/), we saw how to create GraphQL queries representing our site content. This post will review integrating WordPress content into the Metalsmith static site generation process. This includes building a Metalsmith WordPress source plugin to fetch the site content from the WordPress API and convert it into Metalsmith file objects. Metalsmith will then build all static pages.
+      In the [last blog post](/blog/minneapolis-generate-graphql-queries/), we saw how to create GraphQL queries representing our site content. This post will review integrating WordPress content into the Metalsmith static site generation process. This includes building a Metalsmith WordPress source plugin to fetch the site content from the WordPress API and convert it into Metalsmith file objects. Metalsmith will then create all static pages.
       
       While our WordPress website is fully functional, it also makes the content available at the WordPress API URL.
       
@@ -270,7 +270,7 @@ sections:
       `;
       ```
       
-      To make this query code manageable, we'll' use string fragments for each page section. If we compare the string with what we reviewed in our [last blogpost](/blog/minneapolis-generate-graphql-queries/), we see that the structures are identical.
+      To make this query code manageable, we'll' use string fragments for each page section. If we compare the string with what we reviewed in our [last blog post](/blog/minneapolis-generate-graphql-queries/), we see that the structures are identical.
 
       ### The plugin code
       Now let's put this all together and look at the complete plugin code.
