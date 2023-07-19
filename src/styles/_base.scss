@@ -162,3 +162,19 @@ img {
   display: block;
   margin: 0 auto;
 }
+
+#clampCalculator {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1.14;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}

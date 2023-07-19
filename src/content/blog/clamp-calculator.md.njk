@@ -1,0 +1,225 @@
+---
+layout: sections-with-sidebar.njk
+draft: false
+pageType: "blog-post"
+disableDefaultFooter: true
+
+seo:
+  title: Simplifying Responsive Font Sizing with a Clamp Calculator | Werner Glinka
+  description: "This handy tool makes it easy to calculate and generate CSS clamp functions for responsive font sizing. And it also works great for padding and margins."
+  socialImage: "https://res.cloudinary.com/glinkaco/image/upload/v1689804403/clamp_twhjdw.jpg"
+  canonicalOverwrite: ""
+
+blogTitle: "Simplifying Responsive Font Sizing with a Clamp Calculator"
+date: 2023-07-10T12:00:00Z
+author: ""
+image: ""
+featuredBlogpost: false
+featuredBlogpostOrder: 1
+excerpt: |-
+  clamp() is a powerful tool for creating responsive designs that work across a wide range of devices and screen sizes. It allows us to create linear transitions between two viewport widths, and it has been supported by major browsers since 2020. By using clamp() in our CSS, we can create more flexible and maintainable designs that adapt to the needs of our users.
+
+sections:
+  - component: blog-banner
+    animateSection: true
+    inContainer: true
+    hasBackground: false
+    bgColor: ""
+    bgIsDark: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    reverse: true
+    date: 2023-07-10T12:00:00Z
+    title: "Simplifying Responsive Font Sizing with a Clamp Calculator"
+    header: "h1"
+    headerClass: ""
+    subTitle: ""
+    prose: ""
+    hasCtas: false
+    ctas:
+      - label: ""
+        icon: ""
+        url: ""
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+    mediaType: Image
+    video:
+      src: youtube
+      id: ""
+      tn: ""
+      aspectRatio: ""
+    image:
+      src: "v1689804403/clamp_twhjdw.jpg"
+      alt: "a clamp"
+      aspectRatio: "25"
+      caption: ""
+    lottieData:
+      src: ""
+      control:
+        autoplay: true
+        loop: true
+    icon: ""
+    audio:
+      bgImage: ""
+      aspectRatio: ""
+      ogg: ""
+      mpeg: ""
+
+  - component: long-text
+    disabled: false
+    animateSection: false
+    inContainer: true
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    prose: |-
+      This post follows an earlier post [Better Responsive Websites with Clamp](/blog/using-clamp-in-responsive-design/).
+
+      While working on the Minneapolis project, using WordPress as a CMS that feeds content to a Metalsmith Static Site Generator, I reviewed several articles about fluid type scale. I used what I had learned in my [typography](https://github.com/wernerglinka/minneapolis/blob/main/src/scss/_typography.scss). I also found an interesting article on CSS-Tricks,  [Linearly Scale font-size with CSS clamp() Based on the Viewport
+      ](https://css-tricks.com/linearly-scale-font-size-with-css-clamp-based-on-the-viewport/), which describes a tool to calculate the clamp function. I forked the calculator and implemented it in pure javascript.
+
+      This handy tool makes it easy to calculate and generate CSS clamp functions for responsive font sizing. And it also works great for padding and margins.
+
+      ## What is the Clamp Calculator?
+
+      The "Clamp Calculator" widget is a user-friendly tool that helps web developers define CSS clamp functions for responsive font sizing, padding and margins. It calculates the optimal CSS clamp function by inputting minimum and maximum viewport widths and font-size values. The clamp function ensures that the font size smoothly adjusts between the minimum and maximum values based on the viewport width.
+
+      <div id="clampCalculator">
+        <iframe id="clampCalculator" src="https://css-clamp-calculator.netlify.app/"></iframe>
+      </div>
+
+      ## Understanding the Clamp Calculator Code
+
+      The "Clamp Calculator" widget is built with HTML, CSS, and vanilla JavaScript, and it uses a straightforward structure with essential styling for user interface elements.
+
+      ### Input Section
+
+      The input section comprises various form elements to input the parameters for the clamp function. These parameters include:
+
+      - Minimum Viewport Width (`minWidth`)
+      - Maximum Viewport Width (`maxWidth`)
+      - Minimum Font Size (`minFontSize`)
+      - Maximum Font Size (`maxFontSize`)
+      - Pixels per Rem (`pxPerRem`)
+
+      ```html
+      <!-- Input Section -->
+      <div class="form-wrapper">
+        <form>
+          <!-- Form groups for each input -->
+          <div class="form-group">
+            <label for="minWidth">Min Viewport Width:</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="minWidth" 
+              value=""
+              onInput="updateResult(this.value, this.id)"
+            ><span>px</span>
+          </div>
+          <!-- More form groups for other parameters -->
+          <!-- ... -->
+        </form>
+      </div>
+      ```
+
+      ### Output Section
+
+      The output section showcases the calculated clamp function that ensures responsive font sizing based on the provided parameters.
+
+      ```html
+      <!-- Output Section -->
+      <div id="result"></div>
+      ```
+
+      ### Calculating the Clamp Function
+
+      The JavaScript code calculates the clamp function using the input parameters. It then updates the result div with the calculated clamp function.
+
+      ```javascript
+      const parameters = {
+        minWidth: 320,
+        maxWidth: 1200,
+        minFontSize: 2,
+        maxFontSize: 4,
+        pxPerRem: 10,
+      };
+
+      function calculateClampFunc() {
+        // Calculate the clamp function parameters
+        // ...
+
+        // Update the result div with the calculated clamp function
+        document.querySelector('#result').innerHTML = clampFunc;
+      }
+
+      function updateResult(value, id) {
+        // Update the parameters object
+        parameters[id] = value;
+        // Calculate the clamp function parameters and update the result div
+        calculateClampFunc();
+      }
+      ```
+
+      ### Copy to Clipboard
+
+      A copy button is provided to copy the generated clamp function to the clipboard.
+
+      ```html
+      <!-- Copy to Clipboard -->
+      <div class="copy-wrapper">
+        <svg viewBox="-40 0 512 512" id="copyThis">
+          <!-- SVG Path for the copy icon -->
+        </svg>
+      </div>
+      ```
+
+      The JavaScript code handles the copy action when the copy button is clicked.
+
+      ### Styling
+
+      The widget has minimal but effective styling to ensure a clean and user-friendly interface.
+
+      ## Conclusion
+
+      The "Clamp Calculator" widget is valuable for web developers who want to streamline responsive font sizing in their projects. By providing essential parameters and instantly generating the CSS clamp function, the widget simplifies creating a responsive and harmonious typographic experience.
+
+      The "Clamp Calculator" can be found online here: https://css-clamp-calculator.netlify.app/. The code can be found on GitHub: https://github.com/wernerglinka/clamp-calculator.
+
+
+  - component: contact-footer
+    disabled: false
+    animateSection: false
+    inContainer: false
+    marginTop: false
+    marginBottom: false
+    paddingTop: false
+    paddingBottom: false
+    backgroundColor: ""
+    targetId: ""
+    image:
+      src: ""
+      alt: ""
+      aspectRatio: "56.25"
+    hasCtas: true
+    ctas:
+      - label: "LinkedIn"
+        icon: linkedin
+        url: "https://www.linkedin.com/in/werner-glinka-2a427/"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+      - label: "Github"
+        icon: github
+        url: "https://github.com/wernerglinka"
+        isVideoTrigger: false
+        isButton: false
+        buttonStyle: ""
+
+---
