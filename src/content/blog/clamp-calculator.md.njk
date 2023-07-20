@@ -86,7 +86,7 @@ sections:
 
       This handy tool makes it easy to calculate and generate CSS clamp functions for responsive font sizing. And it also works great for padding and margins.
 
-      ## What is the Clamp Calculator?
+      ## The Clamp Calculator
 
       The "Clamp Calculator" widget is a user-friendly tool that helps web developers define CSS clamp functions for responsive font sizing, padding and margins. It calculates the optimal CSS clamp function by inputting minimum and maximum viewport widths and font-size values. The clamp function ensures that the font size smoothly adjusts between the minimum and maximum values based on the viewport width.
 
@@ -94,9 +94,7 @@ sections:
         <iframe id="clampCalculator" src="https://css-clamp-calculator.netlify.app/"></iframe>
       </div>
 
-      ## Understanding the Clamp Calculator Code
-
-      The "Clamp Calculator" widget is built with HTML, CSS, and vanilla JavaScript, and it uses a straightforward structure with essential styling for user interface elements.
+      The widget is built with HTML, CSS, and vanilla JavaScript, and it uses a straightforward structure with essential styling for user interface elements.
 
       ### Input Section
 
@@ -131,7 +129,7 @@ sections:
 
       ### Output Section
 
-      The output section showcases the calculated clamp function that ensures responsive font sizing based on the provided parameters.
+      The output section shows the calculated clamp function that ensures responsive font sizing based on the provided parameters.
 
       ```html
       <!-- Output Section -->
@@ -152,11 +150,15 @@ sections:
       };
 
       function calculateClampFunc() {
-        // Calculate the clamp function parameters
-        // ...
-
-        // Update the result div with the calculated clamp function
-        document.querySelector('#result').innerHTML = clampFunc;
+        function calculateClampFunc() {
+          const minWidth = parameters.minWidth / parameters.pxPerRem;
+          const maxWidth = parameters.maxWidth / parameters.pxPerRem;
+          const slope = Number((parameters.maxFontSize - parameters.minFontSize) / (maxWidth - minWidth));
+          const yAxisIntersection = Number(-minWidth * slope + parameters.minFontSize);
+          const clampFunc = `clamp(${parameters.minFontSize}rem, ${yAxisIntersection.toFixed(4)}rem + ${(slope * 100).toFixed(4)}vw, ${parameters.maxFontSize}rem)`;
+          // update the result div
+          document.querySelector('#result').innerHTML = clampFunc;
+        }
       }
 
       function updateResult(value, id) {
@@ -179,12 +181,26 @@ sections:
         </svg>
       </div>
       ```
+      This JavaScript code handles the copy action when the copy button is clicked.
+      ```javascript
+      document.querySelector('#copyThis').addEventListener('click', () => {
+        const txt = document.querySelector('#result').innerHTML;
+        const t = document.createElement("textarea");
+        t.value = txt;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand("copy");
+        document.body.removeChild(t);
 
-      The JavaScript code handles the copy action when the copy button is clicked.
+        alert(`${txt} Copied to clipboard!`);
+      });
+      ```
+
+      
 
       ### Styling
 
-      The widget has minimal but effective styling to ensure a clean and user-friendly interface.
+      The widget has minimal styling to ensure a clean and user-friendly interface.
 
       ## Conclusion
 
