@@ -152,16 +152,16 @@ sections:
       function calculateClampFunc() {
         const minWidth = parameters.minWidth / parameters.pxPerRem;
         const maxWidth = parameters.maxWidth / parameters.pxPerRem;
-        const slope = Number.parseFloat((parameters.maxFontSize - parameters.minFontSize) / (maxWidth - minWidth)).toFixed(2);
-        const yAxisIntersection = Number.parseFloat(-minWidth * slope + parameters.minFontSize).toFixed(2);
-        const clampFunc = `clamp(${parameters.minFontSize}rem, ${yAxisIntersection}rem + ${slope * 100}vw, ${parameters.maxFontSize}rem)`;
+        const slope = (parameters.maxFontSize - parameters.minFontSize) / (maxWidth - minWidth);
+        const yAxisIntersection = -minWidth * slope + parameters.minFontSize;
+        const clampFunc = `clamp(${parameters.minFontSize}rem, ${yAxisIntersection.toFixed(4)}rem + ${(slope * 100).toFixed(4)}vw, ${parameters.maxFontSize}rem)`;
         // update the result div
         document.querySelector('#result').innerHTML = clampFunc;
       }
 
       function updateResult(value, id) {
         // Update the parameters object
-        parameters[id] = value;
+        parameters[id] = Number(value);
         // Calculate the clamp function parameters and update the result div
         calculateClampFunc();
       }
